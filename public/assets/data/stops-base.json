@@ -1,0 +1,4690 @@
+[
+  {
+    "id": "1332005:1392084",
+    "designator": 1,
+    "name": "BIERÓWKA 1",
+    "lat": 49.774162,
+    "lng": 21.559992,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332005:1392085",
+    "designator": 2,
+    "name": "BIERÓWKA 1",
+    "lat": 49.774458,
+    "lng": 21.55873,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332006:1392086",
+    "designator": 3,
+    "name": "BIERÓWKA 2",
+    "lat": 49.772206,
+    "lng": 21.566367,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332006:1392087",
+    "designator": 4,
+    "name": "BIERÓWKA 2",
+    "lat": 49.772471,
+    "lng": 21.565861,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332007:1392088",
+    "designator": 5,
+    "name": "BIERÓWKA 3 Dom Ludowy",
+    "lat": 49.771311,
+    "lng": 21.570901,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332007:1392089",
+    "designator": 6,
+    "name": "BIERÓWKA 3 Dom Ludowy",
+    "lat": 49.7713,
+    "lng": 21.57084,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1690636:1759866",
+    "designator": 591,
+    "name": "BIERÓWKA Hajdaczek",
+    "lat": 49.773337,
+    "lng": 21.581992,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332008:1392090",
+    "designator": 7,
+    "name": "BIERÓWKA I skrzyżowanie",
+    "lat": 49.771219,
+    "lng": 21.574726,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332008:1392091",
+    "designator": 8,
+    "name": "BIERÓWKA I skrzyżowanie",
+    "lat": 49.771266,
+    "lng": 21.575307,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332009:1392092",
+    "designator": 9,
+    "name": "BIERÓWKA II Podlas",
+    "lat": 49.770629,
+    "lng": 21.583201,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332009:1392093",
+    "designator": 10,
+    "name": "BIERÓWKA II Podlas",
+    "lat": 49.770471,
+    "lng": 21.582371,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332010:1392094",
+    "designator": 11,
+    "name": "BIERÓWKA III ŁĄKI",
+    "lat": 49.766636,
+    "lng": 21.589072,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332010:1392095",
+    "designator": 12,
+    "name": "BIERÓWKA III ŁĄKI",
+    "lat": 49.766514,
+    "lng": 21.589547,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723357:1791261",
+    "designator": 592,
+    "name": "BŁAŻKOWA Biadoszyce",
+    "lat": 49.833196,
+    "lng": 21.393505,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723357:1791262",
+    "designator": 593,
+    "name": "BŁAŻKOWA Biadoszyce",
+    "lat": 49.833552,
+    "lng": 21.393252,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723358:1791263",
+    "designator": 594,
+    "name": "BŁAŻKOWA Chorzówka",
+    "lat": 49.839947,
+    "lng": 21.38833,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723358:1791264",
+    "designator": 595,
+    "name": "BŁAŻKOWA Chorzówka",
+    "lat": 49.84037,
+    "lng": 21.387698,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723359:1791265",
+    "designator": 596,
+    "name": "BŁAŻKOWA skrzyżowanie",
+    "lat": 49.847323,
+    "lng": 21.386563,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723359:1791266",
+    "designator": 597,
+    "name": "BŁAŻKOWA skrzyżowanie",
+    "lat": 49.847638,
+    "lng": 21.386448,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723360:1791267",
+    "designator": 598,
+    "name": "BŁAŻKOWA SORYS 1",
+    "lat": 49.840597,
+    "lng": 21.385725,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723360:1791268",
+    "designator": 599,
+    "name": "BŁAŻKOWA SORYS 1",
+    "lat": 49.840505,
+    "lng": 21.385286,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723361:1791269",
+    "designator": 600,
+    "name": "BŁAŻKOWA SORYS 2",
+    "lat": 49.840178,
+    "lng": 21.377376,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723361:1791270",
+    "designator": 601,
+    "name": "BŁAŻKOWA SORYS 2",
+    "lat": 49.840153,
+    "lng": 21.377033,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723362:1791271",
+    "designator": 602,
+    "name": "BŁAŻKOWA SORYS 3",
+    "lat": 49.842254,
+    "lng": 21.369136,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723362:1791272",
+    "designator": 603,
+    "name": "BŁAŻKOWA SORYS 3",
+    "lat": 49.842299,
+    "lng": 21.369546,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723363:1791274",
+    "designator": 605,
+    "name": "BŁAŻKOWA SORYS 4",
+    "lat": 49.841516,
+    "lng": 21.362346,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332012:1392098",
+    "designator": 15,
+    "name": "BŁAŻKOWA szkoła",
+    "lat": 49.850149,
+    "lng": 21.371719,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332012:1392099",
+    "designator": 16,
+    "name": "BŁAŻKOWA szkoła",
+    "lat": 49.850237,
+    "lng": 21.371279,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723364:1791275",
+    "designator": 606,
+    "name": "BŁAŻKOWA-MŁYNY",
+    "lat": 49.829658,
+    "lng": 21.405074,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332013:1392100",
+    "designator": 17,
+    "name": "BRZEZÓWKA",
+    "lat": 49.731841,
+    "lng": 21.613106,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332013:1392101",
+    "designator": 18,
+    "name": "BRZEZÓWKA",
+    "lat": 49.731784,
+    "lng": 21.612877,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332013:1517655",
+    "designator": 565,
+    "name": "BRZEZÓWKA",
+    "lat": 49.731765,
+    "lng": 21.612886,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332014:1392102",
+    "designator": 19,
+    "name": "BRZEZÓWKA Na Górce",
+    "lat": 49.733531,
+    "lng": 21.599051,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332014:1392103",
+    "designator": 20,
+    "name": "BRZEZÓWKA Na Górce",
+    "lat": 49.733661,
+    "lng": 21.599537,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723365:1791276",
+    "designator": 607,
+    "name": "BRZYSKA",
+    "lat": 49.823503,
+    "lng": 21.380151,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723365:1791277",
+    "designator": 608,
+    "name": "BRZYSKA",
+    "lat": 49.82081,
+    "lng": 21.379854,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723366:1791278",
+    "designator": 609,
+    "name": "BRZYSKA BIADOSZYCE 1",
+    "lat": 49.832216,
+    "lng": 21.391104,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723366:1791279",
+    "designator": 610,
+    "name": "BRZYSKA BIADOSZYCE 1",
+    "lat": 49.832277,
+    "lng": 21.391688,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723367:1791280",
+    "designator": 611,
+    "name": "BRZYSKA BIADOSZYCE 2",
+    "lat": 49.831073,
+    "lng": 21.38496,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723367:1791281",
+    "designator": 612,
+    "name": "BRZYSKA BIADOSZYCE 2",
+    "lat": 49.831066,
+    "lng": 21.384493,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723368:1791282",
+    "designator": 613,
+    "name": "BRZYSKA BIADOSZYCE 3",
+    "lat": 49.832165,
+    "lng": 21.367028,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723368:1791283",
+    "designator": 614,
+    "name": "BRZYSKA BIADOSZYCE 3",
+    "lat": 49.832165,
+    "lng": 21.367329,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723369:1791284",
+    "designator": 615,
+    "name": "BRZYSKA BIADOSZYCE 4",
+    "lat": 49.829823,
+    "lng": 21.357185,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723369:1791285",
+    "designator": 616,
+    "name": "BRZYSKA BIADOSZYCE 4",
+    "lat": 49.830082,
+    "lng": 21.35725,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723370:1791286",
+    "designator": 617,
+    "name": "BRZYSKA BIADOSZYCE 5",
+    "lat": 49.827623,
+    "lng": 21.351774,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723370:1791287",
+    "designator": 618,
+    "name": "BRZYSKA BIADOSZYCE 5",
+    "lat": 49.82764,
+    "lng": 21.352056,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344798:1405263",
+    "designator": 538,
+    "name": "BRZYSKA Krzemyk",
+    "lat": 49.815923,
+    "lng": 21.394821,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344798:1405264",
+    "designator": 539,
+    "name": "BRZYSKA Krzemyk",
+    "lat": 49.814866,
+    "lng": 21.395674,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344802:1405268",
+    "designator": 543,
+    "name": "BRZYSKA Liwocz",
+    "lat": 49.819426,
+    "lng": 21.362617,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1368524:1428903",
+    "designator": 554,
+    "name": "BRZYSKA Młyny",
+    "lat": 49.827697,
+    "lng": 21.393942,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1368524:1428904",
+    "designator": 555,
+    "name": "BRZYSKA Młyny",
+    "lat": 49.827059,
+    "lng": 21.393755,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344800:1405266",
+    "designator": 541,
+    "name": "BRZYSKA Nagórze Dół",
+    "lat": 49.824349,
+    "lng": 21.372027,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344803:1405269",
+    "designator": 544,
+    "name": "BRZYSKA Nagórze Lewe",
+    "lat": 49.820979,
+    "lng": 21.372585,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1368525:1428905",
+    "designator": 556,
+    "name": "BRZYSKA Nagórze Lewe Dół",
+    "lat": 49.820813,
+    "lng": 21.379927,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344801:1405267",
+    "designator": 542,
+    "name": "BRZYSKA Nagórze Prawe",
+    "lat": 49.822699,
+    "lng": 21.363351,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344799:1405265",
+    "designator": 540,
+    "name": "BRZYSKA skrzyż.",
+    "lat": 49.819615,
+    "lng": 21.395266,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344799:1405270",
+    "designator": 545,
+    "name": "BRZYSKA skrzyż.",
+    "lat": 49.818706,
+    "lng": 21.39453,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344799:1428906",
+    "designator": 557,
+    "name": "BRZYSKA skrzyż.",
+    "lat": 49.81915,
+    "lng": 21.395608,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1344799:1428907",
+    "designator": 558,
+    "name": "BRZYSKA skrzyż.",
+    "lat": 49.821216,
+    "lng": 21.391174,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332015:1392105",
+    "designator": 22,
+    "name": "BRZYSKA staw",
+    "lat": 49.82052,
+    "lng": 21.391176,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332016:1392106",
+    "designator": 23,
+    "name": "BRZYSKA Szkoła",
+    "lat": 49.819485,
+    "lng": 21.388865,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332017:1392107",
+    "designator": 24,
+    "name": "BRZYSKA-UJAZD",
+    "lat": 49.810447,
+    "lng": 21.400099,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332017:1392108",
+    "designator": 25,
+    "name": "BRZYSKA-UJAZD",
+    "lat": 49.810589,
+    "lng": 21.400137,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332018:1392109",
+    "designator": 26,
+    "name": "BRZYŚCIE k/Piekarza",
+    "lat": 49.720288,
+    "lng": 21.431044,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332018:1392110",
+    "designator": 27,
+    "name": "BRZYŚCIE k/Piekarza",
+    "lat": 49.720288,
+    "lng": 21.431044,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332019:1392111",
+    "designator": 28,
+    "name": "BRZYŚCIE sklep",
+    "lat": 49.72112,
+    "lng": 21.437014,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332019:1392112",
+    "designator": 29,
+    "name": "BRZYŚCIE sklep",
+    "lat": 49.721144,
+    "lng": 21.436987,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332020:1392113",
+    "designator": 30,
+    "name": "CHRZĄSTÓWKA 03",
+    "lat": 49.766667,
+    "lng": 21.615443,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332021:1392114",
+    "designator": 31,
+    "name": "CHRZĄSTÓWKA Dom Ludowy",
+    "lat": 49.767373,
+    "lng": 21.622529,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332021:1392115",
+    "designator": 32,
+    "name": "CHRZĄSTÓWKA Dom Ludowy",
+    "lat": 49.767468,
+    "lng": 21.622418,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332021:1759864",
+    "designator": 589,
+    "name": "CHRZĄSTÓWKA Dom Ludowy",
+    "lat": 49.76755,
+    "lng": 21.622284,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332022:1392116",
+    "designator": 33,
+    "name": "CHRZĄSTÓWKA II",
+    "lat": 49.766707,
+    "lng": 21.616058,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332022:1759865",
+    "designator": 590,
+    "name": "CHRZĄSTÓWKA II",
+    "lat": 49.766642,
+    "lng": 21.615422,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332023:1392118",
+    "designator": 35,
+    "name": "CHRZĄSTÓWKA III",
+    "lat": 49.761151,
+    "lng": 21.625934,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1690632:1759857",
+    "designator": 582,
+    "name": "CHRZĄSTÓWKA koniec",
+    "lat": 49.77324,
+    "lng": 21.646085,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332024:1392119",
+    "designator": 36,
+    "name": "CIEKLIN",
+    "lat": 49.651034,
+    "lng": 21.385915,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332024:1392120",
+    "designator": 37,
+    "name": "CIEKLIN",
+    "lat": 49.650751,
+    "lng": 21.386089,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332025:1392121",
+    "designator": 38,
+    "name": "CIEKLIN Remiza",
+    "lat": 49.64792,
+    "lng": 21.388867,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332026:1392122",
+    "designator": 39,
+    "name": "CZELUŚNICA Centrum",
+    "lat": 49.727416,
+    "lng": 21.533913,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332026:1392123",
+    "designator": 40,
+    "name": "CZELUŚNICA Centrum",
+    "lat": 49.727798,
+    "lng": 21.534623,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332027:1392124",
+    "designator": 41,
+    "name": "DĄBRÓWKA II",
+    "lat": 49.782119,
+    "lng": 21.404264,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332027:1392125",
+    "designator": 42,
+    "name": "DĄBRÓWKA II",
+    "lat": 49.78214,
+    "lng": 21.404543,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1494387:1556744",
+    "designator": 577,
+    "name": "Dąbrówka Kościół",
+    "lat": 49.77363,
+    "lng": 21.40904,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332028:1392126",
+    "designator": 43,
+    "name": "DĄBRÓWKA Park",
+    "lat": 49.776276,
+    "lng": 21.406261,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332028:1392127",
+    "designator": 44,
+    "name": "DĄBRÓWKA Park",
+    "lat": 49.776366,
+    "lng": 21.40654,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332029:1392128",
+    "designator": 45,
+    "name": "DĘBOWIEC Biblioteka",
+    "lat": 49.688212,
+    "lng": 21.465216,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332030:1392129",
+    "designator": 46,
+    "name": "DĘBOWIEC Centrum",
+    "lat": 49.682125,
+    "lng": 21.459922,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332030:1392130",
+    "designator": 47,
+    "name": "DĘBOWIEC Centrum",
+    "lat": 49.681906,
+    "lng": 21.459576,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332031:1392131",
+    "designator": 48,
+    "name": "DĘBOWIEC Cmentarz",
+    "lat": 49.67742,
+    "lng": 21.458598,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332031:1392132",
+    "designator": 49,
+    "name": "DĘBOWIEC Cmentarz",
+    "lat": 49.676988,
+    "lng": 21.458172,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332032:1392133",
+    "designator": 50,
+    "name": "DĘBOWIEC górka",
+    "lat": 49.681552,
+    "lng": 21.443926,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332032:1392134",
+    "designator": 51,
+    "name": "DĘBOWIEC górka",
+    "lat": 49.681927,
+    "lng": 21.443516,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332033:1392135",
+    "designator": 52,
+    "name": "DĘBOWIEC mostek",
+    "lat": 49.700049,
+    "lng": 21.463109,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332033:1392136",
+    "designator": 53,
+    "name": "DĘBOWIEC mostek",
+    "lat": 49.699668,
+    "lng": 21.463215,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332034:1392137",
+    "designator": 54,
+    "name": "DĘBOWIEC Ośrodek",
+    "lat": 49.685964,
+    "lng": 21.461175,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332035:1392138",
+    "designator": 55,
+    "name": "DĘBOWIEC Rynek",
+    "lat": 49.682537,
+    "lng": 21.463975,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332036:1392140",
+    "designator": 57,
+    "name": "DĘBOWIEC skrzyżowanie",
+    "lat": 49.679785,
+    "lng": 21.458335,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332036:1392141",
+    "designator": 58,
+    "name": "DĘBOWIEC skrzyżowanie",
+    "lat": 49.67963,
+    "lng": 21.457301,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332036:1392142",
+    "designator": 59,
+    "name": "DĘBOWIEC skrzyżowanie",
+    "lat": 49.690761,
+    "lng": 21.463246,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332036:1392143",
+    "designator": 60,
+    "name": "DĘBOWIEC skrzyżowanie",
+    "lat": 49.691852,
+    "lng": 21.463609,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332037:1392144",
+    "designator": 61,
+    "name": "DZIELEC pod Dębiną",
+    "lat": 49.663734,
+    "lng": 21.372077,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332037:1392145",
+    "designator": 62,
+    "name": "DZIELEC pod Dębiną",
+    "lat": 49.663189,
+    "lng": 21.371659,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332038:1392146",
+    "designator": 63,
+    "name": "DZIELEC stadion",
+    "lat": 49.666956,
+    "lng": 21.374278,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332038:1392147",
+    "designator": 64,
+    "name": "DZIELEC stadion",
+    "lat": 49.666804,
+    "lng": 21.374101,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332039:1392148",
+    "designator": 65,
+    "name": "DZIELEC-CIEKLIN (granica)",
+    "lat": 49.660519,
+    "lng": 21.37709,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332039:1392149",
+    "designator": 66,
+    "name": "DZIELEC-CIEKLIN (granica)",
+    "lat": 49.660896,
+    "lng": 21.376985,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332040:1392150",
+    "designator": 67,
+    "name": "GĄSÓWKA Dom Ludowy",
+    "lat": 49.72003,
+    "lng": 21.528522,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332040:1392151",
+    "designator": 68,
+    "name": "GĄSÓWKA Dom Ludowy",
+    "lat": 49.720932,
+    "lng": 21.529015,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332041:1392152",
+    "designator": 69,
+    "name": "GĄSÓWKA pod gruszą",
+    "lat": 49.717283,
+    "lng": 21.535237,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332041:1392153",
+    "designator": 70,
+    "name": "GĄSÓWKA pod gruszą",
+    "lat": 49.717318,
+    "lng": 21.534471,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332042:1392154",
+    "designator": 71,
+    "name": "GLINIK POLSKI Dom Ludowy",
+    "lat": 49.697098,
+    "lng": 21.554109,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332042:1392155",
+    "designator": 72,
+    "name": "GLINIK POLSKI Dom Ludowy",
+    "lat": 49.696622,
+    "lng": 21.554258,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2263812:2349661",
+    "designator": 659,
+    "name": "GLINIK POLSKI Podlas",
+    "lat": 49.695497,
+    "lng": 21.534985,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332043:1392156",
+    "designator": 73,
+    "name": "GLINIK POLSKI przy Krzyżu",
+    "lat": 49.689517,
+    "lng": 21.547532,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332043:1392157",
+    "designator": 74,
+    "name": "GLINIK POLSKI przy Krzyżu",
+    "lat": 49.6892,
+    "lng": 21.547486,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332044:1392158",
+    "designator": 75,
+    "name": "GLINIK POLSKI sklep",
+    "lat": 49.69195,
+    "lng": 21.550904,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332044:1392159",
+    "designator": 76,
+    "name": "GLINIK POLSKI sklep",
+    "lat": 49.692332,
+    "lng": 21.551136,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332045:1392160",
+    "designator": 77,
+    "name": "GLINIK POLSKI stawy",
+    "lat": 49.702842,
+    "lng": 21.552522,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332045:1392161",
+    "designator": 78,
+    "name": "GLINIK POLSKI stawy",
+    "lat": 49.702555,
+    "lng": 21.5527,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332046:1392162",
+    "designator": 79,
+    "name": "GORAJOWICE I",
+    "lat": 49.763339,
+    "lng": 21.485529,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332046:1392163",
+    "designator": 80,
+    "name": "GORAJOWICE I",
+    "lat": 49.76334,
+    "lng": 21.48552,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332047:1392164",
+    "designator": 81,
+    "name": "GORAJOWICE II",
+    "lat": 49.768268,
+    "lng": 21.488067,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332047:1392165",
+    "designator": 82,
+    "name": "GORAJOWICE II",
+    "lat": 49.767958,
+    "lng": 21.488157,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332048:1392166",
+    "designator": 83,
+    "name": "GORAJOWICE III koniec",
+    "lat": 49.77045,
+    "lng": 21.488446,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332050:1392168",
+    "designator": 85,
+    "name": "JARENIÓWKA IV",
+    "lat": 49.750958,
+    "lng": 21.429185,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332050:1392169",
+    "designator": 86,
+    "name": "JARENIÓWKA IV",
+    "lat": 49.751427,
+    "lng": 21.427207,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332051:1392170",
+    "designator": 87,
+    "name": "JARENIÓWKA sklep",
+    "lat": 49.750982,
+    "lng": 21.440111,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332051:1392171",
+    "designator": 88,
+    "name": "JARENIÓWKA sklep",
+    "lat": 49.751298,
+    "lng": 21.441233,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332052:1392172",
+    "designator": 89,
+    "name": "JARENIÓWKA skrzyżowanie",
+    "lat": 49.749047,
+    "lng": 21.433592,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332052:1392173",
+    "designator": 90,
+    "name": "JARENIÓWKA skrzyżowanie",
+    "lat": 49.749153,
+    "lng": 21.433677,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332053:1392174",
+    "designator": 91,
+    "name": "JARENIÓWKA Szpakówka",
+    "lat": 49.752315,
+    "lng": 21.446857,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332053:1392175",
+    "designator": 92,
+    "name": "JARENIÓWKA Szpakówka",
+    "lat": 49.752294,
+    "lng": 21.447232,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332161:1392345",
+    "designator": 262,
+    "name": "JASŁO-GOLESZ",
+    "lat": 49.780392,
+    "lng": 21.42349,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332163:1392347",
+    "designator": 264,
+    "name": "JASŁO-Podzamcze",
+    "lat": 49.775162,
+    "lng": 21.444058,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332054:1392176",
+    "designator": 93,
+    "name": "JASŁO,ul.17 STYCZNIA",
+    "lat": 49.754116,
+    "lng": 21.47357,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332054:1392177",
+    "designator": 94,
+    "name": "JASŁO,ul.17 STYCZNIA",
+    "lat": 49.753787,
+    "lng": 21.473479,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332055:1392178",
+    "designator": 95,
+    "name": "JASŁO,ul.3 MAJA 01",
+    "lat": 49.739563,
+    "lng": 21.46755,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332056:1392179",
+    "designator": 96,
+    "name": "JASŁO,ul.3 MAJA 02",
+    "lat": 49.741332,
+    "lng": 21.468173,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332057:1392180",
+    "designator": 97,
+    "name": "JASŁO,ul.3 MAJA 03",
+    "lat": 49.736811,
+    "lng": 21.466872,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332058:1392181",
+    "designator": 98,
+    "name": "JASŁO,ul.3 MAJA 04",
+    "lat": 49.737519,
+    "lng": 21.466272,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332059:1392182",
+    "designator": 99,
+    "name": "JASŁO,ul.3 MAJA Poczta",
+    "lat": 49.74373,
+    "lng": 21.470364,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332060:1392183",
+    "designator": 100,
+    "name": "JASŁO,ul.3 MAJA Pohulanka",
+    "lat": 49.73207,
+    "lng": 21.463654,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332060:1392184",
+    "designator": 101,
+    "name": "JASŁO,ul.3 MAJA Pohulanka",
+    "lat": 49.733347,
+    "lng": 21.464602,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332061:1392185",
+    "designator": 102,
+    "name": "JASŁO,ul.3 MAJA Rafineria",
+    "lat": 49.725222,
+    "lng": 21.446191,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332061:1392186",
+    "designator": 103,
+    "name": "JASŁO,ul.3 MAJA Rafineria",
+    "lat": 49.725261,
+    "lng": 21.44686,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332061:1392187",
+    "designator": 104,
+    "name": "JASŁO,ul.3 MAJA Rafineria",
+    "lat": 49.726493,
+    "lng": 21.450667,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332061:1392188",
+    "designator": 105,
+    "name": "JASŁO,ul.3 MAJA Rafineria",
+    "lat": 49.727532,
+    "lng": 21.45502,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332063:1392190",
+    "designator": 107,
+    "name": "JASŁO,ul.BACZYŃSKIEGO 01",
+    "lat": 49.738101,
+    "lng": 21.464415,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332065:1392193",
+    "designator": 110,
+    "name": "JASŁO,ul.DWORCOWA 01",
+    "lat": 49.740321,
+    "lng": 21.470761,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1993037:2065299",
+    "designator": 627,
+    "name": "JASŁO,ul.FABRYCZNA",
+    "lat": 49.750092,
+    "lng": 21.533265,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1993037:2068793",
+    "designator": 628,
+    "name": "JASŁO,ul.FABRYCZNA",
+    "lat": 49.750236,
+    "lng": 21.534459,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332066:1392194",
+    "designator": 111,
+    "name": "JASŁO,ul.FABRYCZNA 02",
+    "lat": 49.755265,
+    "lng": 21.541439,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332067:1392195",
+    "designator": 112,
+    "name": "JASŁO,ul.FABRYCZNA 04",
+    "lat": 49.753364,
+    "lng": 21.5405,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332068:1392196",
+    "designator": 113,
+    "name": "JASŁO,ul.FLORIAŃSKA PGNiG",
+    "lat": 49.738989,
+    "lng": 21.485856,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332068:1392197",
+    "designator": 114,
+    "name": "JASŁO,ul.FLORIAŃSKA PGNiG",
+    "lat": 49.739175,
+    "lng": 21.485183,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332069:1392198",
+    "designator": 115,
+    "name": "JASŁO,ul.FLORIAŃSKA skrz. Żniw",
+    "lat": 49.731391,
+    "lng": 21.499293,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332069:1392199",
+    "designator": 116,
+    "name": "JASŁO,ul.FLORIAŃSKA skrz. Żniw",
+    "lat": 49.731584,
+    "lng": 21.49871,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332070:1392200",
+    "designator": 117,
+    "name": "JASŁO,ul.FLORIAŃSKA skrz.SOBN.",
+    "lat": 49.732428,
+    "lng": 21.492532,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332070:1392201",
+    "designator": 118,
+    "name": "JASŁO,ul.FLORIAŃSKA skrz.SOBN.",
+    "lat": 49.73274,
+    "lng": 21.492171,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332071:1392202",
+    "designator": 119,
+    "name": "JASŁO,ul.FLORIAŃSKA stadion",
+    "lat": 49.736092,
+    "lng": 21.490031,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332071:1392203",
+    "designator": 120,
+    "name": "JASŁO,ul.FLORIAŃSKA stadion",
+    "lat": 49.736387,
+    "lng": 21.489452,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332072:1392204",
+    "designator": 121,
+    "name": "JASŁO,ul.GAJOWA",
+    "lat": 49.712721,
+    "lng": 21.449759,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1347309:1407591",
+    "designator": 546,
+    "name": "JASŁO,ul.GAJOWA Cmentarz",
+    "lat": 49.716988,
+    "lng": 21.452601,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332073:1392205",
+    "designator": 122,
+    "name": "JASŁO,ul.GĄDKI 02",
+    "lat": 49.73697,
+    "lng": 21.44548,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332073:1392206",
+    "designator": 123,
+    "name": "JASŁO,ul.GĄDKI 02",
+    "lat": 49.737112,
+    "lng": 21.445604,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332074:1392207",
+    "designator": 124,
+    "name": "JASŁO,ul.GĄDKI 04",
+    "lat": 49.736324,
+    "lng": 21.442892,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332075:1392208",
+    "designator": 125,
+    "name": "JASŁO,ul.GRANICZNA Centrum",
+    "lat": 49.727542,
+    "lng": 21.472686,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332076:1392209",
+    "designator": 126,
+    "name": "JASŁO,ul.GRANICZNA I",
+    "lat": 49.72788,
+    "lng": 21.476656,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332076:1392210",
+    "designator": 127,
+    "name": "JASŁO,ul.GRANICZNA I",
+    "lat": 49.728031,
+    "lng": 21.476668,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332077:1392211",
+    "designator": 128,
+    "name": "JASŁO,ul.GRANICZNA II",
+    "lat": 49.72762,
+    "lng": 21.48335,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332077:1392212",
+    "designator": 129,
+    "name": "JASŁO,ul.GRANICZNA II",
+    "lat": 49.727713,
+    "lng": 21.483297,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332078:1392213",
+    "designator": 130,
+    "name": "JASŁO,ul.GRANICZNA III",
+    "lat": 49.72631,
+    "lng": 21.4904,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332078:1392214",
+    "designator": 131,
+    "name": "JASŁO,ul.GRANICZNA III",
+    "lat": 49.72674,
+    "lng": 21.489278,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332079:1392215",
+    "designator": 132,
+    "name": "JASŁO,ul.GROTA ROWECKIEGO",
+    "lat": 49.74049,
+    "lng": 21.462752,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332080:1418860",
+    "designator": 552,
+    "name": "JASŁO,ul.GRUNWALDZKA Klasztor",
+    "lat": 49.739533,
+    "lng": 21.47741,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332081:1392219",
+    "designator": 136,
+    "name": "JASŁO,ul.GRUNWALDZKA MPM",
+    "lat": 49.730159,
+    "lng": 21.472436,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332081:1428908",
+    "designator": 559,
+    "name": "JASŁO,ul.GRUNWALDZKA MPM",
+    "lat": 49.729799,
+    "lng": 21.472245,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332082:1392220",
+    "designator": 137,
+    "name": "JASŁO,ul.GRUNWALDZKA Pomnik",
+    "lat": 49.735845,
+    "lng": 21.472846,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332082:1392221",
+    "designator": 138,
+    "name": "JASŁO,ul.GRUNWALDZKA Pomnik",
+    "lat": 49.735907,
+    "lng": 21.472949,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332083:1392222",
+    "designator": 139,
+    "name": "JASŁO,ul.HANKÓWKA 02",
+    "lat": 49.74189,
+    "lng": 21.499128,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332084:1392223",
+    "designator": 140,
+    "name": "JASŁO,ul.HANKÓWKA 04",
+    "lat": 49.740194,
+    "lng": 21.506189,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332085:1392224",
+    "designator": 141,
+    "name": "JASŁO,ul.HANKÓWKA 06",
+    "lat": 49.740259,
+    "lng": 21.510294,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332086:1392225",
+    "designator": 142,
+    "name": "JASŁO,ul.HANKÓWKA 08",
+    "lat": 49.740844,
+    "lng": 21.516286,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332088:1392228",
+    "designator": 145,
+    "name": "JASŁO,ul.JANA Z DUKLI Szkoła",
+    "lat": 49.717617,
+    "lng": 21.470989,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332088:1392229",
+    "designator": 146,
+    "name": "JASŁO,ul.JANA Z DUKLI Szkoła",
+    "lat": 49.718838,
+    "lng": 21.471353,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332089:1392230",
+    "designator": 147,
+    "name": "JASŁO,ul.JANA Z DUKLI Wodociąg",
+    "lat": 49.720899,
+    "lng": 21.471385,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332089:1392231",
+    "designator": 148,
+    "name": "JASŁO,ul.JANA Z DUKLI Wodociąg",
+    "lat": 49.721735,
+    "lng": 21.471652,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332087:1392226",
+    "designator": 143,
+    "name": "JASŁO,ul.J.PAWŁA II Galeria",
+    "lat": 49.745615,
+    "lng": 21.48237,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332087:1392227",
+    "designator": 144,
+    "name": "JASŁO,ul.J.PAWŁA II Galeria",
+    "lat": 49.745555,
+    "lng": 21.481778,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332091:1392233",
+    "designator": 150,
+    "name": "JASŁO,ul.KACZOROWY 01",
+    "lat": 49.753065,
+    "lng": 21.455569,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332091:1392234",
+    "designator": 151,
+    "name": "JASŁO,ul.KACZOROWY 01",
+    "lat": 49.753006,
+    "lng": 21.455617,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332092:1392235",
+    "designator": 152,
+    "name": "JASŁO,ul.KACZOROWY 02",
+    "lat": 49.766715,
+    "lng": 21.458361,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332093:1392236",
+    "designator": 153,
+    "name": "JASŁO,ul.KACZOROWY 03",
+    "lat": 49.756454,
+    "lng": 21.456798,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332093:1392237",
+    "designator": 154,
+    "name": "JASŁO,ul.KACZOROWY 03",
+    "lat": 49.756428,
+    "lng": 21.456915,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332094:1392238",
+    "designator": 155,
+    "name": "JASŁO,ul.KACZOROWY 05",
+    "lat": 49.76138,
+    "lng": 21.458802,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332094:1392239",
+    "designator": 156,
+    "name": "JASŁO,ul.KACZOROWY 05",
+    "lat": 49.761741,
+    "lng": 21.4587,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332095:1392240",
+    "designator": 157,
+    "name": "JASŁO,ul.KOŁŁĄTAJA 01",
+    "lat": 49.744057,
+    "lng": 21.471392,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332096:1392241",
+    "designator": 158,
+    "name": "JASŁO,ul.KOŚCIUSZKI 01",
+    "lat": 49.743644,
+    "lng": 21.473518,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332097:1392242",
+    "designator": 159,
+    "name": "JASŁO,ul.KRAJOWICKA 01",
+    "lat": 49.776635,
+    "lng": 21.415242,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332097:1517658",
+    "designator": 566,
+    "name": "JASŁO,ul.KRAJOWICKA 01",
+    "lat": 49.776636,
+    "lng": 21.415015,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332098:1392244",
+    "designator": 161,
+    "name": "JASŁO,ul.KRAJOWICKA 02",
+    "lat": 49.780702,
+    "lng": 21.42126,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332099:1392245",
+    "designator": 162,
+    "name": "JASŁO,ul.KRAJOWICKA most",
+    "lat": 49.773973,
+    "lng": 21.409742,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332101:1392248",
+    "designator": 165,
+    "name": "JASŁO,ul.KRAKOWSKA I",
+    "lat": 49.760675,
+    "lng": 21.470485,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332101:1392249",
+    "designator": 166,
+    "name": "JASŁO,ul.KRAKOWSKA I",
+    "lat": 49.761455,
+    "lng": 21.470352,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332102:1392250",
+    "designator": 167,
+    "name": "JASŁO,ul.KRAKOWSKA II",
+    "lat": 49.770923,
+    "lng": 21.463611,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332102:1392251",
+    "designator": 168,
+    "name": "JASŁO,ul.KRAKOWSKA II",
+    "lat": 49.771583,
+    "lng": 21.461775,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332103:1392252",
+    "designator": 169,
+    "name": "JASŁO,ul.KRAKOWSKA III",
+    "lat": 49.777389,
+    "lng": 21.430791,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332103:1392253",
+    "designator": 170,
+    "name": "JASŁO,ul.KRAKOWSKA III",
+    "lat": 49.777227,
+    "lng": 21.430856,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332100:1392246",
+    "designator": 163,
+    "name": "JASŁO,ul.KRAKOWSKA (Kowalowy)",
+    "lat": 49.768247,
+    "lng": 21.467162,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332100:1392247",
+    "designator": 164,
+    "name": "JASŁO,ul.KRAKOWSKA (Kowalowy)",
+    "lat": 49.769022,
+    "lng": 21.467072,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332090:1392232",
+    "designator": 149,
+    "name": "JASŁO,ul.K.WIELKIEGO",
+    "lat": 49.748007,
+    "lng": 21.47384,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332104:1392254",
+    "designator": 171,
+    "name": "JASŁO,ul.LWOWSKA Szpital",
+    "lat": 49.752918,
+    "lng": 21.47898,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332104:1392255",
+    "designator": 172,
+    "name": "JASŁO,ul.LWOWSKA Szpital",
+    "lat": 49.753292,
+    "lng": 21.479855,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332105:1392256",
+    "designator": 173,
+    "name": "JASŁO,ul.LWOWSKA-BRZYSZCZKI DL",
+    "lat": 49.756655,
+    "lng": 21.501002,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332105:1392257",
+    "designator": 174,
+    "name": "JASŁO,ul.LWOWSKA-BRZYSZCZKI DL",
+    "lat": 49.757069,
+    "lng": 21.499293,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332106:1392258",
+    "designator": 175,
+    "name": "JASŁO,ul.LWOWSKA-BRZYSZCZKI SZ",
+    "lat": 49.755595,
+    "lng": 21.491647,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332106:1392259",
+    "designator": 176,
+    "name": "JASŁO,ul.LWOWSKA-BRZYSZCZKI SZ",
+    "lat": 49.755679,
+    "lng": 21.492838,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332107:1392260",
+    "designator": 177,
+    "name": "JASŁO,ul.LWOWSKA-KAUFLAND",
+    "lat": 49.753924,
+    "lng": 21.484543,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1454691:1517659",
+    "designator": 567,
+    "name": "JASŁO,ul.METZGERA PKP",
+    "lat": 49.738654,
+    "lng": 21.471794,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332108:1392261",
+    "designator": 178,
+    "name": "JASŁO,ul.MICKIEWICZA 01",
+    "lat": 49.745418,
+    "lng": 21.469766,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332109:1392262",
+    "designator": 179,
+    "name": "JASŁO,ul.MICKIEWICZA 02",
+    "lat": 49.745437,
+    "lng": 21.47022,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332110:1392263",
+    "designator": 180,
+    "name": "JASŁO,ul.MICKIEWICZA Bogumił",
+    "lat": 49.747697,
+    "lng": 21.462994,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332110:1392264",
+    "designator": 181,
+    "name": "JASŁO,ul.MICKIEWICZA Bogumił",
+    "lat": 49.749109,
+    "lng": 21.461059,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1494386:1392267",
+    "designator": 184,
+    "name": "JASŁO,ul.MICKIEWICZA Bryły D.L",
+    "lat": 49.761128,
+    "lng": 21.437756,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1494386:1392268",
+    "designator": 185,
+    "name": "JASŁO,ul.MICKIEWICZA Bryły D.L",
+    "lat": 49.761342,
+    "lng": 21.437531,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1494385:1392265",
+    "designator": 182,
+    "name": "JASŁO,ul.MICKIEWICZA Bryły I",
+    "lat": 49.758397,
+    "lng": 21.442258,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1494385:1392266",
+    "designator": 183,
+    "name": "JASŁO,ul.MICKIEWICZA Bryły I",
+    "lat": 49.758735,
+    "lng": 21.441507,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332113:1392269",
+    "designator": 186,
+    "name": "JASŁO,ul.MICKIEWICZA CM.GÓRNY",
+    "lat": 49.756633,
+    "lng": 21.4459,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332114:1392271",
+    "designator": 188,
+    "name": "JASŁO,ul.MICKIEWICZA Gamrat B.",
+    "lat": 49.769147,
+    "lng": 21.413889,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332114:1392272",
+    "designator": 189,
+    "name": "JASŁO,ul.MICKIEWICZA Gamrat B.",
+    "lat": 49.76927,
+    "lng": 21.41405,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332115:1392273",
+    "designator": 190,
+    "name": "JASŁO,ul.MICKIEWICZA Gamrat Os",
+    "lat": 49.766897,
+    "lng": 21.421196,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332115:1392274",
+    "designator": 191,
+    "name": "JASŁO,ul.MICKIEWICZA Gamrat Os",
+    "lat": 49.766834,
+    "lng": 21.420956,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332116:1392275",
+    "designator": 192,
+    "name": "JASŁO,ul.MICKIEWICZA Gamrat Pł",
+    "lat": 49.762804,
+    "lng": 21.425578,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332116:1392276",
+    "designator": 193,
+    "name": "JASŁO,ul.MICKIEWICZA Gamrat Pł",
+    "lat": 49.763895,
+    "lng": 21.424836,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332117:1392277",
+    "designator": 194,
+    "name": "JASŁO,ul.MICKIEWICZA Kaczorowy",
+    "lat": 49.752829,
+    "lng": 21.4551,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332117:1392278",
+    "designator": 195,
+    "name": "JASŁO,ul.MICKIEWICZA Kaczorowy",
+    "lat": 49.753087,
+    "lng": 21.4527,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332118:1392279",
+    "designator": 196,
+    "name": "JASŁO,ul.MICKIEWICZA N.Cment.",
+    "lat": 49.753712,
+    "lng": 21.449082,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332118:1392280",
+    "designator": 197,
+    "name": "JASŁO,ul.MICKIEWICZA N.Cment.",
+    "lat": 49.753852,
+    "lng": 21.449294,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332119:1392281",
+    "designator": 198,
+    "name": "JASŁO,ul.NA KOTLINĘ",
+    "lat": 49.75445,
+    "lng": 21.484367,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332119:1392282",
+    "designator": 199,
+    "name": "JASŁO,ul.NA KOTLINĘ",
+    "lat": 49.754409,
+    "lng": 21.484394,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332120:1392283",
+    "designator": 200,
+    "name": "JASŁO,ul.NIEGŁOWICKA Naftobud.",
+    "lat": 49.71821,
+    "lng": 21.454304,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332120:1392284",
+    "designator": 201,
+    "name": "JASŁO,ul.NIEGŁOWICKA Naftobud.",
+    "lat": 49.718547,
+    "lng": 21.454345,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332121:1392285",
+    "designator": 202,
+    "name": "JASŁO,ul.NIEGŁOWICKA Szkoła",
+    "lat": 49.716274,
+    "lng": 21.461471,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332121:1392286",
+    "designator": 203,
+    "name": "JASŁO,ul.NIEGŁOWICKA Szkoła",
+    "lat": 49.717164,
+    "lng": 21.461766,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332123:1428909",
+    "designator": 560,
+    "name": "JASŁO,ul.PIŁSUDSKIEGO",
+    "lat": 49.748292,
+    "lng": 21.49889,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332124:1392289",
+    "designator": 206,
+    "name": "JASŁO,ul.PODZAMCZE 02",
+    "lat": 49.774695,
+    "lng": 21.45215,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332125:1392291",
+    "designator": 208,
+    "name": "JASŁO,ul.PODZAMCZE 04",
+    "lat": 49.776867,
+    "lng": 21.445192,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332126:1392293",
+    "designator": 210,
+    "name": "JASŁO,ul.PODZAMCZE 06",
+    "lat": 49.775909,
+    "lng": 21.440421,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332127:1392295",
+    "designator": 212,
+    "name": "JASŁO,ul.PRZEMYSŁOWA 01",
+    "lat": 49.751329,
+    "lng": 21.493518,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332128:1392297",
+    "designator": 214,
+    "name": "JASŁO,ul.PRZEMYSŁOWA 02",
+    "lat": 49.751126,
+    "lng": 21.497183,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332129:1392299",
+    "designator": 216,
+    "name": "JASŁO,ul.PRZEMYSŁOWA 04",
+    "lat": 49.750883,
+    "lng": 21.499303,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332129:1392300",
+    "designator": 217,
+    "name": "JASŁO,ul.PRZEMYSŁOWA 04",
+    "lat": 49.750973,
+    "lng": 21.499467,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332122:1392287",
+    "designator": 204,
+    "name": "JASŁO,ul.P.SKARGI  UM",
+    "lat": 49.747133,
+    "lng": 21.476147,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332122:2349660",
+    "designator": 658,
+    "name": "JASŁO,ul.P.SKARGI  UM",
+    "lat": 49.747124,
+    "lng": 21.476143,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332130:1392301",
+    "designator": 218,
+    "name": "JASŁO,ul.RAFINERYJNA 01",
+    "lat": 49.729259,
+    "lng": 21.449251,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332131:1392302",
+    "designator": 219,
+    "name": "JASŁO,ul.RAFINERYJNA 02",
+    "lat": 49.727441,
+    "lng": 21.451425,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332133:1392304",
+    "designator": 221,
+    "name": "JASŁO,ul.RYNEK 02",
+    "lat": 49.747532,
+    "lng": 21.473672,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332132:1392303",
+    "designator": 220,
+    "name": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+    "lat": 49.747475,
+    "lng": 21.4744,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332134:1392305",
+    "designator": 222,
+    "name": "JASŁO,ul.RZEMIEŚLNICZA 01",
+    "lat": 49.744347,
+    "lng": 21.506935,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332135:1392306",
+    "designator": 223,
+    "name": "JASŁO,ul.RZEMIEŚLNICZA 03",
+    "lat": 49.744163,
+    "lng": 21.512429,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332136:1392307",
+    "designator": 224,
+    "name": "JASŁO,ul.RZEMIEŚLNICZA 05",
+    "lat": 49.745193,
+    "lng": 21.517997,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332137:1392308",
+    "designator": 225,
+    "name": "JASŁO,ul.SIKORSKIEGO 01",
+    "lat": 49.74279,
+    "lng": 21.459031,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332138:1392309",
+    "designator": 226,
+    "name": "JASŁO,ul.SIKORSKIEGO 03 Basen",
+    "lat": 49.744427,
+    "lng": 21.457039,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332139:1392310",
+    "designator": 227,
+    "name": "JASŁO,ul.SŁONECZNA 01",
+    "lat": 49.73352,
+    "lng": 21.45162,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332139:1392311",
+    "designator": 228,
+    "name": "JASŁO,ul.SŁONECZNA 01",
+    "lat": 49.73359,
+    "lng": 21.451674,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332140:1392312",
+    "designator": 229,
+    "name": "JASŁO,ul.SŁONECZNA 02",
+    "lat": 49.738168,
+    "lng": 21.44969,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332140:1392313",
+    "designator": 230,
+    "name": "JASŁO,ul.SŁONECZNA 02",
+    "lat": 49.738195,
+    "lng": 21.449755,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332141:1392314",
+    "designator": 231,
+    "name": "JASŁO,ul.SOBNIOWSKA",
+    "lat": 49.724549,
+    "lng": 21.495185,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332141:1392315",
+    "designator": 232,
+    "name": "JASŁO,ul.SOBNIOWSKA",
+    "lat": 49.724719,
+    "lng": 21.495735,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332142:1392316",
+    "designator": 233,
+    "name": "JASŁO,ul.SOBNIOWSKA Kościół",
+    "lat": 49.729529,
+    "lng": 21.491096,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332142:1392317",
+    "designator": 234,
+    "name": "JASŁO,ul.SOBNIOWSKA Kościół",
+    "lat": 49.729788,
+    "lng": 21.491444,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332143:1392318",
+    "designator": 235,
+    "name": "JASŁO,ul.SOBNIOWSKA Szkoła",
+    "lat": 49.727472,
+    "lng": 21.492967,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332143:1392319",
+    "designator": 236,
+    "name": "JASŁO,ul.SOBNIOWSKA Szkoła",
+    "lat": 49.727563,
+    "lng": 21.492728,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332144:1392320",
+    "designator": 237,
+    "name": "JASŁO,ul.SZAJNOCHY 02",
+    "lat": 49.749266,
+    "lng": 21.470263,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332145:1392321",
+    "designator": 238,
+    "name": "JASŁO,ul.SZAJNOCHY 04",
+    "lat": 49.749879,
+    "lng": 21.463804,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332146:1392322",
+    "designator": 239,
+    "name": "JASŁO,ul.SZKOLNA 03",
+    "lat": 49.7464,
+    "lng": 21.46106,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332146:1392323",
+    "designator": 240,
+    "name": "JASŁO,ul.SZKOLNA 03",
+    "lat": 49.746453,
+    "lng": 21.46101,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332147:1392324",
+    "designator": 241,
+    "name": "JASŁO,ul.TOWAROWA 01",
+    "lat": 49.754025,
+    "lng": 21.489172,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332147:1392325",
+    "designator": 242,
+    "name": "JASŁO,ul.TOWAROWA 01",
+    "lat": 49.754011,
+    "lng": 21.489017,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332148:1392326",
+    "designator": 243,
+    "name": "JASŁO,ul.TOWAROWA 02",
+    "lat": 49.749128,
+    "lng": 21.495084,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332148:1392327",
+    "designator": 244,
+    "name": "JASŁO,ul.TOWAROWA 02",
+    "lat": 49.749155,
+    "lng": 21.495246,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332149:1392328",
+    "designator": 245,
+    "name": "JASŁO,ul.TOWAROWA I",
+    "lat": 49.74471,
+    "lng": 21.498386,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332149:1392329",
+    "designator": 246,
+    "name": "JASŁO,ul.TOWAROWA I",
+    "lat": 49.74472,
+    "lng": 21.498274,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332150:1392330",
+    "designator": 247,
+    "name": "JASŁO,ul.TOWAROWA II",
+    "lat": 49.742565,
+    "lng": 21.497228,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332150:2065297",
+    "designator": 625,
+    "name": "JASŁO,ul.TOWAROWA II",
+    "lat": 49.742863,
+    "lng": 21.497389,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332151:1392331",
+    "designator": 248,
+    "name": "JASŁO,ul.TOWAROWA III",
+    "lat": 49.737025,
+    "lng": 21.499413,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332151:2065296",
+    "designator": 624,
+    "name": "JASŁO,ul.TOWAROWA III",
+    "lat": 49.736816,
+    "lng": 21.50054,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332152:1392332",
+    "designator": 249,
+    "name": "JASŁO,ul.ULASZOWICE 01",
+    "lat": 49.753331,
+    "lng": 21.477822,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332153:1392333",
+    "designator": 250,
+    "name": "JASŁO,ul.ULASZOWICE 02",
+    "lat": 49.753962,
+    "lng": 21.477685,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332154:1392334",
+    "designator": 251,
+    "name": "JASŁO,ul.ULASZOWICE 03",
+    "lat": 49.756653,
+    "lng": 21.477144,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332155:1392335",
+    "designator": 252,
+    "name": "JASŁO,ul.ULASZOWICE 04",
+    "lat": 49.756738,
+    "lng": 21.477274,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332156:1392336",
+    "designator": 253,
+    "name": "JASŁO,ul.ULASZOWICE 06",
+    "lat": 49.759231,
+    "lng": 21.477098,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332157:1392337",
+    "designator": 254,
+    "name": "JASŁO,ul.W.POLSKIEGO Lichtarz",
+    "lat": 49.728851,
+    "lng": 21.465464,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332157:1392338",
+    "designator": 255,
+    "name": "JASŁO,ul.W.POLSKIEGO Lichtarz",
+    "lat": 49.728922,
+    "lng": 21.465747,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332158:1392339",
+    "designator": 256,
+    "name": "JASŁO,ul.W.POLSKIEGO Zacisze",
+    "lat": 49.727628,
+    "lng": 21.470116,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332158:1392340",
+    "designator": 257,
+    "name": "JASŁO,ul.W.POLSKIEGO Zacisze",
+    "lat": 49.727754,
+    "lng": 21.470314,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332159:1392341",
+    "designator": 258,
+    "name": "JASŁO,ul.W.WITOSA 01",
+    "lat": 49.768145,
+    "lng": 21.467684,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332159:1392342",
+    "designator": 259,
+    "name": "JASŁO,ul.W.WITOSA 01",
+    "lat": 49.768145,
+    "lng": 21.467684,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332160:1392343",
+    "designator": 260,
+    "name": "JASŁO,ul.W.WITOSA 03",
+    "lat": 49.769742,
+    "lng": 21.469068,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332160:1392344",
+    "designator": 261,
+    "name": "JASŁO,ul.W.WITOSA 03",
+    "lat": 49.769742,
+    "lng": 21.469068,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332164:1392349",
+    "designator": 266,
+    "name": "KŁODAWA skrzyżowanie",
+    "lat": 49.813794,
+    "lng": 21.415097,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332164:1392350",
+    "designator": 267,
+    "name": "KŁODAWA skrzyżowanie",
+    "lat": 49.814103,
+    "lng": 21.4143,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723371:1791288",
+    "designator": 619,
+    "name": "KOŁACZYCE Rynek",
+    "lat": 49.807443,
+    "lng": 21.433742,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723372:1791290",
+    "designator": 621,
+    "name": "KOŁACZYCE stadion",
+    "lat": 49.805648,
+    "lng": 21.429413,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1723372:1791291",
+    "designator": 622,
+    "name": "KOŁACZYCE stadion",
+    "lat": 49.805915,
+    "lng": 21.4292,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332165:1392351",
+    "designator": 268,
+    "name": "KOWALOWY",
+    "lat": 49.770794,
+    "lng": 21.479331,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332166:1392353",
+    "designator": 270,
+    "name": "KOWALOWY-Remiza",
+    "lat": 49.769656,
+    "lng": 21.47391,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332166:1392354",
+    "designator": 271,
+    "name": "KOWALOWY-Remiza",
+    "lat": 49.769817,
+    "lng": 21.475084,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332167:1392355",
+    "designator": 272,
+    "name": "LIPNICA Dolna Górki",
+    "lat": 49.784435,
+    "lng": 21.391006,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332168:1392356",
+    "designator": 273,
+    "name": "LIPNICA DOLNA koniec",
+    "lat": 49.780928,
+    "lng": 21.37456,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332168:1392357",
+    "designator": 274,
+    "name": "LIPNICA DOLNA koniec",
+    "lat": 49.78085,
+    "lng": 21.376102,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332169:1392358",
+    "designator": 275,
+    "name": "LIPNICA DOLNA Szkoła",
+    "lat": 49.783062,
+    "lng": 21.386003,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332169:1392359",
+    "designator": 276,
+    "name": "LIPNICA DOLNA Szkoła",
+    "lat": 49.783585,
+    "lng": 21.387133,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332170:1392360",
+    "designator": 277,
+    "name": "ŁAJSCE Cechówki",
+    "lat": 49.681473,
+    "lng": 21.543465,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332170:1392361",
+    "designator": 278,
+    "name": "ŁAJSCE Cechówki",
+    "lat": 49.68183,
+    "lng": 21.543468,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332171:1392362",
+    "designator": 279,
+    "name": "ŁAJSCE Dom Ludowy",
+    "lat": 49.66692,
+    "lng": 21.541615,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332172:1392363",
+    "designator": 280,
+    "name": "ŁAJSCE krzyżówki",
+    "lat": 49.672116,
+    "lng": 21.543027,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332172:1517660",
+    "designator": 568,
+    "name": "ŁAJSCE krzyżówki",
+    "lat": 49.672106,
+    "lng": 21.542903,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332173:1392364",
+    "designator": 281,
+    "name": "ŁAJSCE na górce",
+    "lat": 49.670742,
+    "lng": 21.552863,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332173:1392365",
+    "designator": 282,
+    "name": "ŁAJSCE na górce",
+    "lat": 49.670844,
+    "lng": 21.554385,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262653:2348482",
+    "designator": 629,
+    "name": "Łajsce Podbuczyna",
+    "lat": 49.67288,
+    "lng": 21.52487,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262653:2348483",
+    "designator": 630,
+    "name": "Łajsce Podbuczyna",
+    "lat": 49.67279,
+    "lng": 21.52483,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262654:2348484",
+    "designator": 631,
+    "name": "Łajsce Szkoła",
+    "lat": 49.67108,
+    "lng": 21.53645,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262654:2348485",
+    "designator": 632,
+    "name": "Łajsce Szkoła",
+    "lat": 49.67101,
+    "lng": 21.53742,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332174:1392366",
+    "designator": 283,
+    "name": "ŁASKI 3",
+    "lat": 49.714689,
+    "lng": 21.493314,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332175:1392367",
+    "designator": 284,
+    "name": "ŁASKI 4",
+    "lat": 49.71483,
+    "lng": 21.500608,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332176:1392368",
+    "designator": 285,
+    "name": "ŁASKI 5",
+    "lat": 49.712899,
+    "lng": 21.503951,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332177:1392369",
+    "designator": 286,
+    "name": "ŁASKI Góra",
+    "lat": 49.712407,
+    "lng": 21.506615,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332178:1392370",
+    "designator": 287,
+    "name": "ŁASKI Las",
+    "lat": 49.710667,
+    "lng": 21.508057,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332178:1392371",
+    "designator": 288,
+    "name": "ŁASKI Las",
+    "lat": 49.710512,
+    "lng": 21.508522,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332179:1392372",
+    "designator": 289,
+    "name": "ŁASKI sklep",
+    "lat": 49.718413,
+    "lng": 21.502483,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332179:1392373",
+    "designator": 290,
+    "name": "ŁASKI sklep",
+    "lat": 49.718541,
+    "lng": 21.502652,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332180:1392374",
+    "designator": 291,
+    "name": "ŁASKI Stanula",
+    "lat": 49.714287,
+    "lng": 21.506097,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332180:1392375",
+    "designator": 292,
+    "name": "ŁASKI Stanula",
+    "lat": 49.715623,
+    "lng": 21.504914,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332181:1392376",
+    "designator": 293,
+    "name": "ŁAZY DĘBOWIECKIE Góra",
+    "lat": 49.689336,
+    "lng": 21.424405,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332181:1392377",
+    "designator": 294,
+    "name": "ŁAZY DĘBOWIECKIE Góra",
+    "lat": 49.68949,
+    "lng": 21.423279,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332182:1392378",
+    "designator": 295,
+    "name": "ŁAZY DĘBOWIECKIE Szkoła",
+    "lat": 49.688532,
+    "lng": 21.430031,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332182:1392379",
+    "designator": 296,
+    "name": "ŁAZY DĘBOWIECKIE Szkoła",
+    "lat": 49.688127,
+    "lng": 21.431604,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262661:2348498",
+    "designator": 645,
+    "name": "Łączki Jagiellońskie D.L.",
+    "lat": 49.78962,
+    "lng": 21.69059,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262661:2348499",
+    "designator": 646,
+    "name": "Łączki Jagiellońskie D.L.",
+    "lat": 49.7901,
+    "lng": 21.69029,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262662:2348500",
+    "designator": 647,
+    "name": "Łączki Jagiellońskie-k.Mostu",
+    "lat": 49.78465,
+    "lng": 21.68381,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262662:2348501",
+    "designator": 648,
+    "name": "Łączki Jagiellońskie-k.Mostu",
+    "lat": 49.78458,
+    "lng": 21.68388,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262657:2348490",
+    "designator": 637,
+    "name": "Łęki Strzyżowskie - Dom Strażaka",
+    "lat": 49.80561,
+    "lng": 21.66274,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262660:2348496",
+    "designator": 643,
+    "name": "Łęki Strzyżowskie-Granica",
+    "lat": 49.7949,
+    "lng": 21.6848,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262660:2348497",
+    "designator": 644,
+    "name": "Łęki Strzyżowskie-Granica",
+    "lat": 49.79472,
+    "lng": 21.68555,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262658:2348492",
+    "designator": 639,
+    "name": "Łęki Strzyżowskie-Lewiatan",
+    "lat": 49.8026,
+    "lng": 21.67151,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262658:2348493",
+    "designator": 640,
+    "name": "Łęki Strzyżowskie-Lewiatan",
+    "lat": 49.80231,
+    "lng": 21.67173,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262656:2348488",
+    "designator": 635,
+    "name": "Łęki Strzyżowskie-Most",
+    "lat": 49.80207,
+    "lng": 21.6707,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262656:2348489",
+    "designator": 636,
+    "name": "Łęki Strzyżowskie-Most",
+    "lat": 49.80121,
+    "lng": 21.6706,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262659:2348494",
+    "designator": 641,
+    "name": "Łęki Strzyżowskie-Skrzyż.",
+    "lat": 49.80028,
+    "lng": 21.67503,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262659:2348495",
+    "designator": 642,
+    "name": "Łęki Strzyżowskie-Skrzyż.",
+    "lat": 49.80036,
+    "lng": 21.67507,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332183:1392380",
+    "designator": 297,
+    "name": "ŁUBIENKO Centrum",
+    "lat": 49.651972,
+    "lng": 21.566939,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2263811:2349658",
+    "designator": 656,
+    "name": "ŁUBIENKO Jeżówka",
+    "lat": 49.654074,
+    "lng": 21.567246,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2263811:2349659",
+    "designator": 657,
+    "name": "ŁUBIENKO Jeżówka",
+    "lat": 49.654187,
+    "lng": 21.567284,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332184:1392381",
+    "designator": 298,
+    "name": "ŁUBNO OPACE Cmentarz",
+    "lat": 49.668951,
+    "lng": 21.577884,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332184:1392382",
+    "designator": 299,
+    "name": "ŁUBNO OPACE Cmentarz",
+    "lat": 49.668973,
+    "lng": 21.57867,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332185:1392383",
+    "designator": 300,
+    "name": "ŁUBNO OPACE koło Krzyża",
+    "lat": 49.668788,
+    "lng": 21.584354,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332186:1392385",
+    "designator": 302,
+    "name": "ŁUBNO OPACE wieś",
+    "lat": 49.671225,
+    "lng": 21.575311,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332187:1392387",
+    "designator": 304,
+    "name": "ŁUBNO SZLACHECKIE Dom Ludowy",
+    "lat": 49.667287,
+    "lng": 21.571746,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332187:1392388",
+    "designator": 305,
+    "name": "ŁUBNO SZLACHECKIE Dom Ludowy",
+    "lat": 49.667202,
+    "lng": 21.570583,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332188:1392389",
+    "designator": 306,
+    "name": "ŁUBNO SZLACHECKIE Granica",
+    "lat": 49.661254,
+    "lng": 21.565113,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332188:1392390",
+    "designator": 307,
+    "name": "ŁUBNO SZLACHECKIE Granica",
+    "lat": 49.661423,
+    "lng": 21.565236,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332189:1392391",
+    "designator": 308,
+    "name": "ŁUBNO SZLACHECKIE koło stawu",
+    "lat": 49.666904,
+    "lng": 21.56554,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332190:1392392",
+    "designator": 309,
+    "name": "ŁUBNO SZLACHECKIE sklep",
+    "lat": 49.669096,
+    "lng": 21.562331,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332190:1392393",
+    "designator": 310,
+    "name": "ŁUBNO SZLACHECKIE sklep",
+    "lat": 49.669151,
+    "lng": 21.561738,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332191:1392394",
+    "designator": 311,
+    "name": "ŁUBNO SZLACHECKIE Szkoła",
+    "lat": 49.667552,
+    "lng": 21.566665,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332192:1392395",
+    "designator": 312,
+    "name": "ŁUBNO SZLACHECKIE-szkoła",
+    "lat": 49.668496,
+    "lng": 21.564132,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1690633:1759859",
+    "designator": 584,
+    "name": "MODERÓWKA (PKP SZEBNIE)",
+    "lat": 49.756675,
+    "lng": 21.615187,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332193:1392396",
+    "designator": 313,
+    "name": "NIEGŁOWICE Bajdy",
+    "lat": 49.705861,
+    "lng": 21.459734,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332193:1392397",
+    "designator": 314,
+    "name": "NIEGŁOWICE Bajdy",
+    "lat": 49.706953,
+    "lng": 21.460375,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332194:1392398",
+    "designator": 315,
+    "name": "NIEGŁOWICE Krzyż",
+    "lat": 49.708329,
+    "lng": 21.453798,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2391775:2488447",
+    "designator": 661,
+    "name": "NIEGŁOWICE sklep",
+    "lat": 49.712367,
+    "lng": 21.461803,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2391775:2488448",
+    "designator": 662,
+    "name": "NIEGŁOWICE sklep",
+    "lat": 49.71274,
+    "lng": 21.46191,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332195:1392399",
+    "designator": 316,
+    "name": "NIEPLA",
+    "lat": 49.776747,
+    "lng": 21.611689,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332195:1392400",
+    "designator": 317,
+    "name": "NIEPLA",
+    "lat": 49.776944,
+    "lng": 21.611595,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332196:1392401",
+    "designator": 318,
+    "name": "NIEPLA 01",
+    "lat": 49.786893,
+    "lng": 21.622354,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332197:1392402",
+    "designator": 319,
+    "name": "NIEPLA 08",
+    "lat": 49.788551,
+    "lng": 21.629024,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332198:1392403",
+    "designator": 320,
+    "name": "NIEPLA CHRZĄSTÓWKA skrz",
+    "lat": 49.766359,
+    "lng": 21.610159,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332198:1392404",
+    "designator": 321,
+    "name": "NIEPLA CHRZĄSTÓWKA skrz",
+    "lat": 49.766315,
+    "lng": 21.610945,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332199:1392405",
+    "designator": 322,
+    "name": "NIEPLA Dół",
+    "lat": 49.78516,
+    "lng": 21.619428,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332199:1392406",
+    "designator": 323,
+    "name": "NIEPLA Dół",
+    "lat": 49.785128,
+    "lng": 21.61911,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332200:1392407",
+    "designator": 324,
+    "name": "NIEPLA Granice",
+    "lat": 49.764606,
+    "lng": 21.605622,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332200:1392408",
+    "designator": 325,
+    "name": "NIEPLA Granice",
+    "lat": 49.764606,
+    "lng": 21.605298,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332201:1392409",
+    "designator": 326,
+    "name": "NIEPLA k/Kardasia",
+    "lat": 49.787451,
+    "lng": 21.623606,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332202:1392410",
+    "designator": 327,
+    "name": "NIEPLA Podlas 1",
+    "lat": 49.781273,
+    "lng": 21.605447,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332202:1392411",
+    "designator": 328,
+    "name": "NIEPLA Podlas 1",
+    "lat": 49.781452,
+    "lng": 21.605925,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332203:1392412",
+    "designator": 329,
+    "name": "NIEPLA Podlas 2",
+    "lat": 49.779523,
+    "lng": 21.597133,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262665:2348506",
+    "designator": 653,
+    "name": "Niepla Podlas 3",
+    "lat": 49.78087,
+    "lng": 21.60139,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262665:2348507",
+    "designator": 654,
+    "name": "Niepla Podlas 3",
+    "lat": 49.781,
+    "lng": 21.60162,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332204:1392413",
+    "designator": 330,
+    "name": "NIEPLA Szkoła",
+    "lat": 49.782934,
+    "lng": 21.610676,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332204:1517662",
+    "designator": 570,
+    "name": "NIEPLA Szkoła",
+    "lat": 49.782888,
+    "lng": 21.610746,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332205:1392414",
+    "designator": 331,
+    "name": "NOWY GLINIK 1 Podlas",
+    "lat": 49.697342,
+    "lng": 21.507568,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332205:1392415",
+    "designator": 332,
+    "name": "NOWY GLINIK 1 Podlas",
+    "lat": 49.697144,
+    "lng": 21.508158,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332206:1392416",
+    "designator": 333,
+    "name": "NOWY GLINIK 2 Biały",
+    "lat": 49.693706,
+    "lng": 21.512474,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332206:1392417",
+    "designator": 334,
+    "name": "NOWY GLINIK 2 Biały",
+    "lat": 49.693941,
+    "lng": 21.512026,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332207:1392418",
+    "designator": 335,
+    "name": "NOWY GLINIK 3",
+    "lat": 49.691393,
+    "lng": 21.51516,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332207:1392419",
+    "designator": 336,
+    "name": "NOWY GLINIK 3",
+    "lat": 49.691009,
+    "lng": 21.515446,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332208:1392420",
+    "designator": 337,
+    "name": "NOWY GLINIK 4 Kościół",
+    "lat": 49.68842,
+    "lng": 21.5198,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332208:1392421",
+    "designator": 338,
+    "name": "NOWY GLINIK 4 Kościół",
+    "lat": 49.688744,
+    "lng": 21.519553,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332209:1392422",
+    "designator": 339,
+    "name": "NOWY GLINIK 5 Kapliczka",
+    "lat": 49.685397,
+    "lng": 21.519161,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332209:1392423",
+    "designator": 340,
+    "name": "NOWY GLINIK 5 Kapliczka",
+    "lat": 49.685085,
+    "lng": 21.51868,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332210:1392424",
+    "designator": 341,
+    "name": "NOWY GLINIK Centrum",
+    "lat": 49.686489,
+    "lng": 21.522325,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332210:1392425",
+    "designator": 342,
+    "name": "NOWY GLINIK Centrum",
+    "lat": 49.686493,
+    "lng": 21.522318,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332211:1392426",
+    "designator": 343,
+    "name": "NOWY GLINIK Dębczyna",
+    "lat": 49.69379,
+    "lng": 21.53062,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332211:1392427",
+    "designator": 344,
+    "name": "NOWY GLINIK Dębczyna",
+    "lat": 49.69379,
+    "lng": 21.53062,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332212:1392428",
+    "designator": 345,
+    "name": "NOWY GLINIK Podlas",
+    "lat": 49.695497,
+    "lng": 21.534985,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332212:1392429",
+    "designator": 346,
+    "name": "NOWY GLINIK Podlas",
+    "lat": 49.695431,
+    "lng": 21.535178,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332213:1392430",
+    "designator": 347,
+    "name": "NOWY GLINIK transformator",
+    "lat": 49.689331,
+    "lng": 21.526243,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332213:1392431",
+    "designator": 348,
+    "name": "NOWY GLINIK transformator",
+    "lat": 49.688929,
+    "lng": 21.526254,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332215:1392433",
+    "designator": 350,
+    "name": "OPACIE Dom Ludowy",
+    "lat": 49.762878,
+    "lng": 21.390232,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332215:1392434",
+    "designator": 351,
+    "name": "OPACIE Dom Ludowy",
+    "lat": 49.76272,
+    "lng": 21.390505,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332216:1392435",
+    "designator": 352,
+    "name": "OPACIE Szkoła",
+    "lat": 49.757155,
+    "lng": 21.404494,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332216:1392436",
+    "designator": 353,
+    "name": "OPACIE Szkoła",
+    "lat": 49.758403,
+    "lng": 21.401761,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332217:1392437",
+    "designator": 354,
+    "name": "OPACIE Wieś",
+    "lat": 49.760837,
+    "lng": 21.397689,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332217:1392438",
+    "designator": 355,
+    "name": "OPACIE Wieś",
+    "lat": 49.761122,
+    "lng": 21.397076,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332218:1392439",
+    "designator": 356,
+    "name": "OSOBNICA 1",
+    "lat": 49.687136,
+    "lng": 21.3875,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332218:1392440",
+    "designator": 357,
+    "name": "OSOBNICA 1",
+    "lat": 49.687094,
+    "lng": 21.387758,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332219:1392441",
+    "designator": 358,
+    "name": "OSOBNICA 2",
+    "lat": 49.686682,
+    "lng": 21.386531,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332219:1392442",
+    "designator": 359,
+    "name": "OSOBNICA 2",
+    "lat": 49.686473,
+    "lng": 21.386333,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332221:1392444",
+    "designator": 361,
+    "name": "OSOBNICA Bartusiówka Cmentarz",
+    "lat": 49.699311,
+    "lng": 21.40061,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332222:1392445",
+    "designator": 362,
+    "name": "OSOBNICA Bartusiówka I",
+    "lat": 49.696946,
+    "lng": 21.397348,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332223:1392446",
+    "designator": 363,
+    "name": "OSOBNICA Bartusiówka II",
+    "lat": 49.693894,
+    "lng": 21.390029,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332223:1680550",
+    "designator": 581,
+    "name": "OSOBNICA Bartusiówka II",
+    "lat": 49.693804,
+    "lng": 21.39012,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332224:1392447",
+    "designator": 364,
+    "name": "OSOBNICA Bartusiówka III",
+    "lat": 49.690097,
+    "lng": 21.380905,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332224:1392448",
+    "designator": 365,
+    "name": "OSOBNICA Bartusiówka III",
+    "lat": 49.6899,
+    "lng": 21.380756,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332225:1392449",
+    "designator": 366,
+    "name": "OSOBNICA Bartusiówka IV",
+    "lat": 49.687648,
+    "lng": 21.374539,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332226:1392450",
+    "designator": 367,
+    "name": "OSOBNICA Centrum",
+    "lat": 49.698787,
+    "lng": 21.40595,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332227:1392451",
+    "designator": 368,
+    "name": "OSOBNICA Gomułka",
+    "lat": 49.70866,
+    "lng": 21.407947,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332227:1392452",
+    "designator": 369,
+    "name": "OSOBNICA Gomułka",
+    "lat": 49.708303,
+    "lng": 21.407852,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332228:1392453",
+    "designator": 370,
+    "name": "OSOBNICA Górna",
+    "lat": 49.685042,
+    "lng": 21.380763,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332228:1392454",
+    "designator": 371,
+    "name": "OSOBNICA Górna",
+    "lat": 49.685186,
+    "lng": 21.380978,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332229:1392455",
+    "designator": 372,
+    "name": "OSOBNICA kiosk",
+    "lat": 49.716911,
+    "lng": 21.398238,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332229:1392456",
+    "designator": 373,
+    "name": "OSOBNICA kiosk",
+    "lat": 49.717239,
+    "lng": 21.398469,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332230:1392457",
+    "designator": 374,
+    "name": "OSOBNICA Kościół",
+    "lat": 49.69619,
+    "lng": 21.405704,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332230:1392458",
+    "designator": 375,
+    "name": "OSOBNICA Kościół",
+    "lat": 49.697018,
+    "lng": 21.405864,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1452305:1515148",
+    "designator": 564,
+    "name": "OSOBNICA k.Pyznara",
+    "lat": 49.684766,
+    "lng": 21.369923,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332231:1392459",
+    "designator": 376,
+    "name": "OSOBNICA Łęgi",
+    "lat": 49.71992,
+    "lng": 21.399132,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332231:1392460",
+    "designator": 377,
+    "name": "OSOBNICA Łęgi",
+    "lat": 49.720682,
+    "lng": 21.399116,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332232:1392461",
+    "designator": 378,
+    "name": "OSOBNICA MPM",
+    "lat": 49.70012,
+    "lng": 21.404756,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332233:1392462",
+    "designator": 379,
+    "name": "OSOBNICA Pieronek",
+    "lat": 49.711636,
+    "lng": 21.402034,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332233:1392463",
+    "designator": 380,
+    "name": "OSOBNICA Pieronek",
+    "lat": 49.711323,
+    "lng": 21.402082,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332237:1392470",
+    "designator": 387,
+    "name": "OSOBNICA skrzyżowanie",
+    "lat": 49.69585,
+    "lng": 21.40602,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332237:1392471",
+    "designator": 388,
+    "name": "OSOBNICA skrzyżowanie",
+    "lat": 49.69585,
+    "lng": 21.40602,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332238:1392472",
+    "designator": 389,
+    "name": "OSOBNICA stadion",
+    "lat": 49.694151,
+    "lng": 21.39913,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332238:1392473",
+    "designator": 390,
+    "name": "OSOBNICA stadion",
+    "lat": 49.693783,
+    "lng": 21.399001,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332239:1392474",
+    "designator": 391,
+    "name": "OSOBNICA Wiśniówki",
+    "lat": 49.693627,
+    "lng": 21.413828,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332239:1392475",
+    "designator": 392,
+    "name": "OSOBNICA Wiśniówki",
+    "lat": 49.693247,
+    "lng": 21.414687,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332240:1392476",
+    "designator": 393,
+    "name": "OSOBNICA Wysłanka 1",
+    "lat": 49.713094,
+    "lng": 21.420862,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332240:1392477",
+    "designator": 394,
+    "name": "OSOBNICA Wysłanka 1",
+    "lat": 49.713073,
+    "lng": 21.420718,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332241:1392478",
+    "designator": 395,
+    "name": "OSOBNICA Wysłanka 2",
+    "lat": 49.710477,
+    "lng": 21.420569,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332241:1392479",
+    "designator": 396,
+    "name": "OSOBNICA Wysłanka 2",
+    "lat": 49.710186,
+    "lng": 21.420332,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332242:1392480",
+    "designator": 397,
+    "name": "OSOBNICA Wysłanka 3-zakręt",
+    "lat": 49.706994,
+    "lng": 21.42029,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332243:1392481",
+    "designator": 398,
+    "name": "OSOBNICA Wysłanka 4-krzyżówka",
+    "lat": 49.70607,
+    "lng": 21.40932,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332244:1392483",
+    "designator": 400,
+    "name": "OSOBNICA-RADOŚĆ",
+    "lat": 49.678504,
+    "lng": 21.376694,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332244:1392484",
+    "designator": 401,
+    "name": "OSOBNICA-RADOŚĆ",
+    "lat": 49.678333,
+    "lng": 21.376464,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332245:1392485",
+    "designator": 402,
+    "name": "PAGÓREK Kościół",
+    "lat": 49.684863,
+    "lng": 21.357076,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332245:1392486",
+    "designator": 403,
+    "name": "PAGÓREK Kościół",
+    "lat": 49.684863,
+    "lng": 21.357076,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332246:1392487",
+    "designator": 404,
+    "name": "PAGÓREK mostek",
+    "lat": 49.68,
+    "lng": 21.365569,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332246:1392488",
+    "designator": 405,
+    "name": "PAGÓREK mostek",
+    "lat": 49.679854,
+    "lng": 21.365591,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332247:1392489",
+    "designator": 406,
+    "name": "PAGÓREK skrzyżowanie",
+    "lat": 49.688455,
+    "lng": 21.3468,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1690634:1759860",
+    "designator": 585,
+    "name": "PRZYBÓWKA-DOM STRAŻAKA",
+    "lat": 49.789822,
+    "lng": 21.64599,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1690635:1759862",
+    "designator": 587,
+    "name": "PRZYBÓWKA-SZKOŁA",
+    "lat": 49.791237,
+    "lng": 21.652511,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332248:1392491",
+    "designator": 408,
+    "name": "RADOŚĆ skrzyżowanie",
+    "lat": 49.677782,
+    "lng": 21.370031,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332248:1392492",
+    "designator": 409,
+    "name": "RADOŚĆ skrzyżowanie",
+    "lat": 49.677815,
+    "lng": 21.370612,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332249:1392493",
+    "designator": 410,
+    "name": "RADOŚĆ-DZIELEC granica",
+    "lat": 49.671092,
+    "lng": 21.370845,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332249:1392494",
+    "designator": 411,
+    "name": "RADOŚĆ-DZIELEC granica",
+    "lat": 49.67182,
+    "lng": 21.370198,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332250:1392495",
+    "designator": 412,
+    "name": "RZESZOWSKA k/dębu",
+    "lat": 49.772451,
+    "lng": 21.546281,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332250:1392496",
+    "designator": 413,
+    "name": "RZESZOWSKA k/dębu",
+    "lat": 49.772683,
+    "lng": 21.546369,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332251:1392497",
+    "designator": 414,
+    "name": "RZESZOWSKA Tomaszówki",
+    "lat": 49.764855,
+    "lng": 21.540507,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332251:1392498",
+    "designator": 415,
+    "name": "RZESZOWSKA Tomaszówki",
+    "lat": 49.764526,
+    "lng": 21.540215,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332252:1392499",
+    "designator": 416,
+    "name": "RZESZOWSKA zatoka",
+    "lat": 49.769174,
+    "lng": 21.542733,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332252:1392500",
+    "designator": 417,
+    "name": "RZESZOWSKA zatoka",
+    "lat": 49.769101,
+    "lng": 21.542304,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332252:1517663",
+    "designator": 571,
+    "name": "RZESZOWSKA zatoka",
+    "lat": 49.769095,
+    "lng": 21.543012,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332253:1392501",
+    "designator": 418,
+    "name": "SOBNIÓW Palacz",
+    "lat": 49.721745,
+    "lng": 21.499783,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332253:1392502",
+    "designator": 419,
+    "name": "SOBNIÓW Palacz",
+    "lat": 49.721374,
+    "lng": 21.499902,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332254:1392503",
+    "designator": 420,
+    "name": "SZEBNIE",
+    "lat": 49.760778,
+    "lng": 21.594739,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332254:1392504",
+    "designator": 421,
+    "name": "SZEBNIE",
+    "lat": 49.760489,
+    "lng": 21.595562,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332255:1392505",
+    "designator": 422,
+    "name": "SZEBNIE I Cmentarz",
+    "lat": 49.762015,
+    "lng": 21.597825,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332255:1392506",
+    "designator": 423,
+    "name": "SZEBNIE I Cmentarz",
+    "lat": 49.762215,
+    "lng": 21.598121,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332256:1392507",
+    "designator": 424,
+    "name": "SZEBNIE k/Słowika",
+    "lat": 49.754552,
+    "lng": 21.589566,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1354037:1414384",
+    "designator": 547,
+    "name": "SZEBNIE Szkoła",
+    "lat": 49.761496,
+    "lng": 21.589773,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1354037:1414385",
+    "designator": 548,
+    "name": "SZEBNIE Szkoła",
+    "lat": 49.761792,
+    "lng": 21.588922,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1354038:1414386",
+    "designator": 549,
+    "name": "SZEBNIE-BIERÓWKA",
+    "lat": 49.763733,
+    "lng": 21.574104,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1354038:1414387",
+    "designator": 550,
+    "name": "SZEBNIE-BIERÓWKA",
+    "lat": 49.763792,
+    "lng": 21.573186,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332257:1392508",
+    "designator": 425,
+    "name": "TARNOWIEC Kwatery",
+    "lat": 49.722619,
+    "lng": 21.562598,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332257:1392509",
+    "designator": 426,
+    "name": "TARNOWIEC Kwatery",
+    "lat": 49.722179,
+    "lng": 21.562069,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332258:1392510",
+    "designator": 427,
+    "name": "TARNOWIEC Park",
+    "lat": 49.730282,
+    "lng": 21.577472,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332259:1392511",
+    "designator": 428,
+    "name": "TRZCINICA Barzykówka",
+    "lat": 49.742869,
+    "lng": 21.430908,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332259:1392512",
+    "designator": 429,
+    "name": "TRZCINICA Barzykówka",
+    "lat": 49.743042,
+    "lng": 21.430999,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332261:1392516",
+    "designator": 433,
+    "name": "TRZCINICA Dom Ludowy",
+    "lat": 49.740354,
+    "lng": 21.411995,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332267:1392525",
+    "designator": 442,
+    "name": "TRZCINICA I",
+    "lat": 49.753255,
+    "lng": 21.418245,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332267:1392526",
+    "designator": 443,
+    "name": "TRZCINICA I",
+    "lat": 49.753174,
+    "lng": 21.418916,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332268:1392527",
+    "designator": 444,
+    "name": "TRZCINICA Kościół",
+    "lat": 49.737358,
+    "lng": 21.406689,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332268:1392528",
+    "designator": 445,
+    "name": "TRZCINICA Kościół",
+    "lat": 49.737211,
+    "lng": 21.406957,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332271:1392531",
+    "designator": 448,
+    "name": "TRZCINICA Park",
+    "lat": 49.73619,
+    "lng": 21.402152,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332271:1392532",
+    "designator": 449,
+    "name": "TRZCINICA Park",
+    "lat": 49.736231,
+    "lng": 21.402033,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332272:1392533",
+    "designator": 450,
+    "name": "TRZCINICA Szkoła",
+    "lat": 49.732329,
+    "lng": 21.407993,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332272:1392534",
+    "designator": 451,
+    "name": "TRZCINICA Szkoła",
+    "lat": 49.733484,
+    "lng": 21.407073,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332273:1392535",
+    "designator": 452,
+    "name": "TRZCINICA Topoliny",
+    "lat": 49.725315,
+    "lng": 21.436252,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332273:1392536",
+    "designator": 453,
+    "name": "TRZCINICA Topoliny",
+    "lat": 49.725293,
+    "lng": 21.438133,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332274:1392537",
+    "designator": 454,
+    "name": "TRZCINICA wieś",
+    "lat": 49.742815,
+    "lng": 21.418848,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332274:1392538",
+    "designator": 455,
+    "name": "TRZCINICA wieś",
+    "lat": 49.742708,
+    "lng": 21.418633,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1940724:2006825",
+    "designator": 623,
+    "name": "TRZCINICA wieś-mostek",
+    "lat": 49.742492,
+    "lng": 21.414748,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332275:1392539",
+    "designator": 456,
+    "name": "TRZCINICA Wilczak",
+    "lat": 49.724752,
+    "lng": 21.421113,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332275:1392540",
+    "designator": 457,
+    "name": "TRZCINICA Wilczak",
+    "lat": 49.725033,
+    "lng": 21.420436,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332276:1392542",
+    "designator": 459,
+    "name": "TRZCINICA Zagrody",
+    "lat": 49.739059,
+    "lng": 21.427776,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332278:1392545",
+    "designator": 462,
+    "name": "TRZCINICA-OSOBN.",
+    "lat": 49.729421,
+    "lng": 21.409781,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332278:1392546",
+    "designator": 463,
+    "name": "TRZCINICA-OSOBN.",
+    "lat": 49.729476,
+    "lng": 21.409986,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332279:1392547",
+    "designator": 464,
+    "name": "TRZCINICA-OSOBNICA",
+    "lat": 49.730601,
+    "lng": 21.409675,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332279:1392548",
+    "designator": 465,
+    "name": "TRZCINICA-OSOBNICA",
+    "lat": 49.730611,
+    "lng": 21.409676,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332282:1392551",
+    "designator": 468,
+    "name": "UJAZD",
+    "lat": 49.804537,
+    "lng": 21.403711,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332282:1392552",
+    "designator": 469,
+    "name": "UJAZD",
+    "lat": 49.805251,
+    "lng": 21.403204,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332284:1392554",
+    "designator": 471,
+    "name": "UMIESZCZ I",
+    "lat": 49.713691,
+    "lng": 21.554408,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332284:1517668",
+    "designator": 574,
+    "name": "UMIESZCZ I",
+    "lat": 49.713889,
+    "lng": 21.554157,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332285:1392556",
+    "designator": 473,
+    "name": "UMIESZCZ II",
+    "lat": 49.708078,
+    "lng": 21.553115,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332285:1392557",
+    "designator": 474,
+    "name": "UMIESZCZ II",
+    "lat": 49.708725,
+    "lng": 21.553389,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332286:1392558",
+    "designator": 475,
+    "name": "UMIESZCZ koło Kapliczki",
+    "lat": 49.718621,
+    "lng": 21.557506,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332286:1392559",
+    "designator": 476,
+    "name": "UMIESZCZ koło Kapliczki",
+    "lat": 49.718867,
+    "lng": 21.558385,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332287:1392560",
+    "designator": 477,
+    "name": "UMIESZCZ Stawki",
+    "lat": 49.71779,
+    "lng": 21.542238,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332287:1392561",
+    "designator": 478,
+    "name": "UMIESZCZ Stawki",
+    "lat": 49.71799,
+    "lng": 21.542996,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332288:1392562",
+    "designator": 479,
+    "name": "UMIESZCZ szkoła",
+    "lat": 49.716685,
+    "lng": 21.55496,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332288:1392563",
+    "designator": 480,
+    "name": "UMIESZCZ szkoła",
+    "lat": 49.716169,
+    "lng": 21.554617,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332289:1392564",
+    "designator": 481,
+    "name": "WARZYCE 1",
+    "lat": 49.761449,
+    "lng": 21.517308,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332289:1392565",
+    "designator": 482,
+    "name": "WARZYCE 1",
+    "lat": 49.761484,
+    "lng": 21.517263,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332290:1392566",
+    "designator": 483,
+    "name": "WARZYCE 2 k/Wrony",
+    "lat": 49.762765,
+    "lng": 21.521445,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332290:1392567",
+    "designator": 484,
+    "name": "WARZYCE 2 k/Wrony",
+    "lat": 49.76278,
+    "lng": 21.521488,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332291:1392568",
+    "designator": 485,
+    "name": "WARZYCE k/Czyżowicza",
+    "lat": 49.764315,
+    "lng": 21.535238,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332291:1392569",
+    "designator": 486,
+    "name": "WARZYCE k/Czyżowicza",
+    "lat": 49.764404,
+    "lng": 21.535293,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332292:1392570",
+    "designator": 487,
+    "name": "WARZYCE k/Irysa",
+    "lat": 49.761778,
+    "lng": 21.539912,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332294:1392573",
+    "designator": 490,
+    "name": "WARZYCE Kościół",
+    "lat": 49.769117,
+    "lng": 21.540528,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332294:1392574",
+    "designator": 491,
+    "name": "WARZYCE Kościół",
+    "lat": 49.769239,
+    "lng": 21.540673,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332293:1392571",
+    "designator": 488,
+    "name": "WARZYCE k/Pawłowskiego",
+    "lat": 49.763285,
+    "lng": 21.531425,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332293:1392572",
+    "designator": 489,
+    "name": "WARZYCE k/Pawłowskiego",
+    "lat": 49.763248,
+    "lng": 21.531325,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332295:1392575",
+    "designator": 492,
+    "name": "WARZYCE Szkoła",
+    "lat": 49.767076,
+    "lng": 21.540056,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332295:1392576",
+    "designator": 493,
+    "name": "WARZYCE Szkoła",
+    "lat": 49.766986,
+    "lng": 21.539981,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332064:1392191",
+    "designator": 108,
+    "name": "WARZYCE ul.BIESZCZADZKA",
+    "lat": 49.75919,
+    "lng": 21.52641,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332064:1392192",
+    "designator": 109,
+    "name": "WARZYCE ul.BIESZCZADZKA",
+    "lat": 49.75952,
+    "lng": 21.53041,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332296:1392577",
+    "designator": 494,
+    "name": "WARZYCE ul.BIESZCZADZKA MUROW.",
+    "lat": 49.76041,
+    "lng": 21.538339,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332296:1392578",
+    "designator": 495,
+    "name": "WARZYCE ul.BIESZCZADZKA MUROW.",
+    "lat": 49.760421,
+    "lng": 21.540718,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332297:1392579",
+    "designator": 496,
+    "name": "WARZYCE ul.BIESZCZADZKA-ŁĄKI",
+    "lat": 49.758328,
+    "lng": 21.517085,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332297:1392580",
+    "designator": 497,
+    "name": "WARZYCE ul.BIESZCZADZKA-ŁĄKI",
+    "lat": 49.75817,
+    "lng": 21.51816,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332298:1392581",
+    "designator": 498,
+    "name": "WARZYCE Wygon",
+    "lat": 49.763762,
+    "lng": 21.526319,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332298:1392582",
+    "designator": 499,
+    "name": "WARZYCE Wygon",
+    "lat": 49.763762,
+    "lng": 21.526319,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262663:2348502",
+    "designator": 649,
+    "name": "Wojaszówka",
+    "lat": 49.77907,
+    "lng": 21.66868,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262663:2348503",
+    "designator": 650,
+    "name": "Wojaszówka",
+    "lat": 49.77804,
+    "lng": 21.67,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262664:2348504",
+    "designator": 651,
+    "name": "Wojaszówka-Skrzyżowanie",
+    "lat": 49.77759,
+    "lng": 21.67138,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "2262664:2348505",
+    "designator": 652,
+    "name": "Wojaszówka-Skrzyżowanie",
+    "lat": 49.7776,
+    "lng": 21.67129,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332299:1392583",
+    "designator": 500,
+    "name": "WOLA DĘBOWIECKA",
+    "lat": 49.651344,
+    "lng": 21.451476,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332300:1392584",
+    "designator": 501,
+    "name": "WOLA DĘBOWIECKA I",
+    "lat": 49.659368,
+    "lng": 21.456662,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332300:1392585",
+    "designator": 502,
+    "name": "WOLA DĘBOWIECKA I",
+    "lat": 49.659142,
+    "lng": 21.456475,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332301:1392586",
+    "designator": 503,
+    "name": "WOLA DĘBOWIECKA II",
+    "lat": 49.656377,
+    "lng": 21.45556,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332301:1392587",
+    "designator": 504,
+    "name": "WOLA DĘBOWIECKA II",
+    "lat": 49.65587,
+    "lng": 21.455343,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332302:1392588",
+    "designator": 505,
+    "name": "WOLA DĘBOWIECKA Przedszkole",
+    "lat": 49.651635,
+    "lng": 21.452541,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332302:1392589",
+    "designator": 506,
+    "name": "WOLA DĘBOWIECKA Przedszkole",
+    "lat": 49.650794,
+    "lng": 21.452952,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332303:1392590",
+    "designator": 507,
+    "name": "WOLICA Dom Ludowy",
+    "lat": 49.729171,
+    "lng": 21.511605,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332303:1392591",
+    "designator": 508,
+    "name": "WOLICA Dom Ludowy",
+    "lat": 49.729421,
+    "lng": 21.511005,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332304:1392592",
+    "designator": 509,
+    "name": "WOLICA I",
+    "lat": 49.731413,
+    "lng": 21.508838,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332304:1392593",
+    "designator": 510,
+    "name": "WOLICA I",
+    "lat": 49.731856,
+    "lng": 21.511253,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332305:1392595",
+    "designator": 512,
+    "name": "WOLICA II",
+    "lat": 49.733224,
+    "lng": 21.515454,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332305:1680549",
+    "designator": 580,
+    "name": "WOLICA II",
+    "lat": 49.732156,
+    "lng": 21.513329,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332306:1392596",
+    "designator": 513,
+    "name": "WOLICA Kliniec",
+    "lat": 49.717259,
+    "lng": 21.511328,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332306:1392597",
+    "designator": 514,
+    "name": "WOLICA Kliniec",
+    "lat": 49.71723,
+    "lng": 21.510907,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332307:1392598",
+    "designator": 515,
+    "name": "WOLICA sklep",
+    "lat": 49.726265,
+    "lng": 21.512822,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332307:1392599",
+    "designator": 516,
+    "name": "WOLICA sklep",
+    "lat": 49.726692,
+    "lng": 21.512585,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332308:1392600",
+    "designator": 517,
+    "name": "WOLICA Walowice",
+    "lat": 49.722494,
+    "lng": 21.513403,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332308:1392601",
+    "designator": 518,
+    "name": "WOLICA Walowice",
+    "lat": 49.722561,
+    "lng": 21.513244,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1608495:1679416",
+    "designator": 579,
+    "name": "WOLICA-za torami",
+    "lat": 49.736922,
+    "lng": 21.511635,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1608494:1679415",
+    "designator": 578,
+    "name": "WOLICA-za torami 2",
+    "lat": 49.73694,
+    "lng": 21.512721,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332309:1392602",
+    "designator": 519,
+    "name": "WRÓBLOWA II",
+    "lat": 49.794465,
+    "lng": 21.398148,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332309:1392603",
+    "designator": 520,
+    "name": "WRÓBLOWA II",
+    "lat": 49.794652,
+    "lng": 21.398406,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332310:1392604",
+    "designator": 521,
+    "name": "WRÓBLOWA skrz.Lipnica Dolna",
+    "lat": 49.789072,
+    "lng": 21.398767,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332311:1392605",
+    "designator": 522,
+    "name": "WRÓBLOWA skrzyż.",
+    "lat": 49.789386,
+    "lng": 21.399366,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332311:1392606",
+    "designator": 523,
+    "name": "WRÓBLOWA skrzyż.",
+    "lat": 49.789663,
+    "lng": 21.39913,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332313:1392608",
+    "designator": 525,
+    "name": "ZAŁĘŻE",
+    "lat": 49.651743,
+    "lng": 21.467261,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332313:1392609",
+    "designator": 526,
+    "name": "ZAŁĘŻE",
+    "lat": 49.65176,
+    "lng": 21.467256,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332314:1392610",
+    "designator": 527,
+    "name": "ZARZECZE za Górami",
+    "lat": 49.681564,
+    "lng": 21.507982,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332315:1392611",
+    "designator": 528,
+    "name": "ZIMNA WODA",
+    "lat": 49.762548,
+    "lng": 21.560322,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332315:1392612",
+    "designator": 529,
+    "name": "ZIMNA WODA",
+    "lat": 49.762461,
+    "lng": 21.561318,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332316:1392613",
+    "designator": 530,
+    "name": "ZIMNA WODA 1",
+    "lat": 49.760444,
+    "lng": 21.562012,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332317:1392614",
+    "designator": 531,
+    "name": "ZIMNA WODA 2",
+    "lat": 49.754557,
+    "lng": 21.561762,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332318:1392615",
+    "designator": 532,
+    "name": "ZIMNA WODA 3",
+    "lat": 49.755222,
+    "lng": 21.564684,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332319:1392616",
+    "designator": 533,
+    "name": "ZIMNA WODA 4",
+    "lat": 49.759445,
+    "lng": 21.566101,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332320:1392617",
+    "designator": 534,
+    "name": "ŻÓŁKÓW 1",
+    "lat": 49.712523,
+    "lng": 21.47381,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332321:1392618",
+    "designator": 535,
+    "name": "ŻÓŁKÓW 2",
+    "lat": 49.710947,
+    "lng": 21.487144,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332322:1392619",
+    "designator": 536,
+    "name": "ŻÓŁKÓW, KAPLICZKA",
+    "lat": 49.708284,
+    "lng": 21.47236,
+    "onlyDisembarking": false
+  },
+  {
+    "id": "1332322:1392620",
+    "designator": 537,
+    "name": "ŻÓŁKÓW, KAPLICZKA",
+    "lat": 49.709758,
+    "lng": 21.472143,
+    "onlyDisembarking": false
+  }
+]

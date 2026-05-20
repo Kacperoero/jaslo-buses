@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://mksjaslo.kiedyprzyjedzie.pl",
+    "secure": true,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
