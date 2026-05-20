@@ -17,11 +17,15 @@ export interface Stop {
 /** Single departure row from the API */
 export interface Departure {
   /** Bus line number/name */
-  line: string;
-  /** Departure time (formatted string) */
+  line_name?: string;
+  line?: string;
+  /** Departure time (formatted string, e.g., "7 min") */
   time: string;
-  /** Direction / destination */
-  direction: string;
+  static_time?: string;
+  /** Direction / destination id */
+  direction_id?: number | string;
+  /** Resolved direction / destination (for internal mapping) */
+  direction?: string;
   /** Whether the time is estimated (real-time) or scheduled */
   is_estimated: boolean;
   /** Minutes until departure */
@@ -37,6 +41,7 @@ export interface DeparturesResponse {
   station_name: string;
   only_disembarking: boolean;
   rows?: Departure[];
+  directions?: Record<string, string>;
 }
 
 /** A direction/line serving a stop */

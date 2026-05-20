@@ -124,6 +124,7 @@ export class MapMarkerService {
 
   private buildDeparturePopup(stop: Stop, data: any): string {
     const rows = data.rows || [];
+    const directions = data.directions || {};
     let departures = '';
 
     if (rows.length === 0) {
@@ -144,10 +145,13 @@ export class MapMarkerService {
           ? `${row.minutes_to_departure} min`
           : row.time || '—';
 
+        const line = row.line_name || row.line || '?';
+        const direction = (row.direction_id && directions[row.direction_id]) || row.direction || 'Brak kierunku';
+
         departures += `
           <div class="departure-row">
-            <span class="dep-line">${row.line || '?'}</span>
-            <span class="dep-direction">${row.direction || 'Brak kierunku'}</span>
+            <span class="dep-line">${line}</span>
+            <span class="dep-direction">${direction}</span>
             <span class="dep-time">${timeDisplay}${estimatedBadge}</span>
           </div>
         `;
