@@ -1,55 +1,223 @@
-<!-- Search Bar -->
-<div class="search-overlay">
-  <div class="search-container" [class.search-open]="searchOpen()">
-    <div class="search-bar">
-      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="11" cy="11" r="8"/>
-        <path d="m21 21-4.3-4.3"/>
-      </svg>
-      <input
-        id="stop-search-input"
-        type="text"
-        placeholder="Szukaj przystanku…"
-        [value]="searchQuery()"
-        (input)="onSearchInput($event)"
-        (focus)="onSearchFocus()"
-        autocomplete="off"
-      />
-      @if (searchQuery()) {
-        <button class="clear-btn" (click)="clearSearch()" aria-label="Wyczyść">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-            <path d="M18 6 6 18M6 6l12 12"/>
-          </svg>
-        </button>
+<!-- Single Search Box (Default view) -->
+@if (!routePlannerOpen()) {
+  <div class="search-overlay">
+    <div class="search-container" [class.search-open]="searchOpen()">
+      <div class="search-bar">
+        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input
+          id="stop-search-input"
+          type="text"
+          placeholder="Szukaj przystanku…"
+          [value]="searchQuery()"
+          (input)="onSearchInput($event)"
+          (focus)="onSearchFocus()"
+          autocomplete="off"
+        />
+        @if (searchQuery()) {
+          <button class="clear-btn" (click)="clearSearch()" aria-label="Wyczyść">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M18 6 6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        }
+      </div>
+
+      @if (searchOpen() && filteredStops().length > 0) {
+        <ul class="search-results">
+          @for (stop of filteredStops(); track stop.id) {
+            <li (click)="selectStop(stop)">
+              <svg class="result-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <div class="result-text">
+                <span class="result-name">{{ stop.name }}</span>
+                @if (stop.onlyDisembarking) {
+                  <span class="result-badge">Tylko wysiadanie</span>
+                }
+              </div>
+            </li>
+          }
+        </ul>
+      }
+
+      @if (searchOpen() && searchQuery() && filteredStops().length === 0) {
+        <div class="search-empty">
+          <span>Nie znaleziono przystanku „{{ searchQuery() }}"</span>
+        </div>
       }
     </div>
+  </div>
+}
 
-    @if (searchOpen() && filteredStops().length > 0) {
-      <ul class="search-results">
-        @for (stop of filteredStops(); track stop.id) {
-          <li (click)="selectStop(stop)">
-            <svg class="result-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-              <circle cx="12" cy="10" r="3"/>
-            </svg>
-            <div class="result-text">
-              <span class="result-name">{{ stop.name }}</span>
-              @if (stop.onlyDisembarking) {
-                <span class="result-badge">Tylko wysiadanie</span>
-              }
-            </div>
-          </li>
+<!-- Route Planner Toggle Button -->
+<button class="route-planner-toggle" (click)="toggleRoutePlanner()" [class.active]="routePlannerOpen()" aria-label="Planer trasy" id="planner-toggle-btn">
+  @if (routePlannerOpen()) {
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+      <path d="M18 6 6 18M6 6l12 12"/>
+    </svg>
+  } @else {
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+      <path d="M9 18V5l12-2v13"/>
+      <circle cx="6" cy="18" r="3"/>
+      <circle cx="18" cy="16" r="3"/>
+    </svg>
+    <span>Planer Trasy A → B</span>
+  }
+</button>
+
+<!-- Route Planner Sidebar -->
+@if (routePlannerOpen()) {
+  <div class="planner-sidebar">
+    <div class="sidebar-header">
+      <span class="sidebar-title">Planer podróży</span>
+      <button class="clear-all-btn" (click)="clearAllRoutes()">Wyczyść</button>
+    </div>
+
+    <div class="inputs-container">
+      <!-- Input A: Start -->
+      <div class="input-group">
+        <label>Punkt startowy A</label>
+        <div class="input-with-actions">
+          <input
+            type="text"
+            placeholder="Wpisz przystanek lub wybierz z mapy…"
+            [ngModel]="searchQueryStart()"
+            (ngModelChange)="searchQueryStart.set($event)"
+            (focus)="startSuggestionsOpen.set(true)"
+            (input)="startSuggestionsOpen.set(true)"
+          />
+          <button class="map-pick-btn" [class.picking]="isPickingStart()" (click)="startPickingStart()" title="Wskaż na mapie">
+            📍
+          </button>
+          <button class="my-location-btn" (click)="useMyLocationForStart()" title="Użyj mojej lokalizacji">
+            🎯
+          </button>
+        </div>
+        @if (startSuggestionsOpen() && filteredStopsStart().length > 0) {
+          <ul class="suggestion-list">
+            @for (stop of filteredStopsStart(); track stop.id) {
+              <li (click)="selectStartStop(stop)">{{ stop.name }}</li>
+            }
+          </ul>
         }
-      </ul>
-    }
+      </div>
 
-    @if (searchOpen() && searchQuery() && filteredStops().length === 0) {
-      <div class="search-empty">
-        <span>Nie znaleziono przystanku „{{ searchQuery() }}"</span>
+      <!-- Swap Points Button -->
+      <button class="swap-btn" (click)="swapPoints()" title="Zamień punkty">
+        ↕️
+      </button>
+
+      <!-- Input B: End -->
+      <div class="input-group">
+        <label>Punkt docelowy B</label>
+        <div class="input-with-actions">
+          <input
+            type="text"
+            placeholder="Wpisz przystanek lub wybierz z mapy…"
+            [ngModel]="searchQueryEnd()"
+            (ngModelChange)="searchQueryEnd.set($event)"
+            (focus)="endSuggestionsOpen.set(true)"
+            (input)="endSuggestionsOpen.set(true)"
+          />
+          <button class="map-pick-btn" [class.picking]="isPickingEnd()" (click)="startPickingEnd()" title="Wskaż na mapie">
+            📍
+          </button>
+        </div>
+        @if (endSuggestionsOpen() && filteredStopsEnd().length > 0) {
+          <ul class="suggestion-list">
+            @for (stop of filteredStopsEnd(); track stop.id) {
+              <li (click)="selectEndStop(stop)">{{ stop.name }}</li>
+            }
+          </ul>
+        }
+      </div>
+
+      <button class="search-routes-btn" (click)="findConnection()" [disabled]="!startPoint() || !endPoint()">
+        Szukaj połączeń
+      </button>
+    </div>
+
+    <!-- Active Picking Hints -->
+    @if (isPickingStart()) {
+      <div class="picking-hint">
+        <span>Kliknij na mapie, aby ustawić punkt startowy A</span>
       </div>
     }
+    @if (isPickingEnd()) {
+      <div class="picking-hint">
+        <span>Kliknij na mapie, aby ustawić punkt docelowy B</span>
+      </div>
+    }
+
+    <!-- Search Results / Options -->
+    <div class="results-container">
+      @if (searchingConnections()) {
+        <div class="results-loading">
+          <div class="loading-spinner"></div>
+          <span>Szukanie najszybszych połączeń…</span>
+        </div>
+      }
+
+      @if (!searchingConnections() && connections().length > 0) {
+        <div class="results-header">Proponowane połączenia</div>
+        <div class="connection-list">
+          @for (conn of connections(); track $index) {
+            <div class="connection-card" [class.selected]="selectedConnectionIndex() === $index" (click)="selectConnection($index)">
+              <div class="card-left">
+                <span class="line-badge">{{ conn.line }}</span>
+                <span class="time-summary">{{ conn.totalTime }} min</span>
+                @if (conn.departureTimeAbs && conn.departureTimeAbs !== 'Brak kursu') {
+                  <span class="time-range">{{ conn.departureTimeAbs }} - {{ conn.arrivalTimeAbs }}</span>
+                }
+              </div>
+              <div class="card-details">
+                <div class="detail-step text-muted">
+                  🚶‍♂️ Idź do: <strong>{{ conn.startStop.name }}</strong> ({{ conn.walkTimeStart }} min)
+                </div>
+                @if (conn.nextDeparture) {
+                  <div class="detail-step wait-time-info text-warning">
+                    ⏳ Oczekiwanie na przystanku: <strong>{{ conn.waitingTimeAtStop }} min</strong>
+                  </div>
+                }
+                <div class="detail-step">
+                  🚌 Jedź do: <strong>{{ conn.endStop.name }}</strong> ({{ conn.busTime }} min)
+                  @if (conn.nextDeparture) {
+                    <div class="live-departure-time text-success">
+                      Odjazd: <strong>{{ conn.departureTimeAbs }}</strong> (za {{ conn.nextDeparture.time }})
+                      @if (conn.nextDeparture.is_estimated) {
+                        <span class="live-blink">● LIVE</span>
+                      }
+                    </div>
+                    <div class="arrival-time-info text-success">
+                      Przyjazd: <strong>{{ conn.arrivalTimeAbs }}</strong>
+                    </div>
+                  } @else {
+                    <div class="live-departure-time text-danger">
+                      ⚠️ Brak kursów o tej porze (noc)
+                    </div>
+                  }
+                </div>
+                <div class="detail-step text-muted">
+                  🚶‍♂️ Idź do celu ({{ conn.walkTimeEnd }} min)
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (!searchingConnections() && startPoint() && endPoint() && connections().length === 0) {
+        <div class="results-empty">
+          <span>Brak bezpośrednich połączeń autobusowych między tymi punktami. Spróbuj wybrać inne lokalizacje.</span>
+        </div>
+      }
+    </div>
   </div>
-</div>
+}
 
 <!-- Locate Me Button -->
 <button class="locate-btn" (click)="locateUser()" aria-label="Moja lokalizacja" id="locate-me-btn">

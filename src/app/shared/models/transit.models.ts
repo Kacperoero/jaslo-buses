@@ -32,6 +32,8 @@ export interface Departure {
   minutes_to_departure?: number;
   /** Vehicle attributes (e.g. low-floor) */
   vehicle_attributes?: string[];
+  /** Execution ID for real-time tracking of the specific trip */
+  trip_execution_id?: string;
 }
 
 /** Response from the departures API endpoint */
@@ -42,6 +44,41 @@ export interface DeparturesResponse {
   only_disembarking: boolean;
   rows?: Departure[];
   directions?: Record<string, string>;
+}
+
+/** Represents a stop in a trip execution sequence */
+export interface TripTime {
+  stop_name: string;
+  external: boolean;
+  designator: number;
+  place_id: string;
+  departure_time: string;
+  index: number;
+}
+
+/** Response from the trip execution API endpoint */
+export interface TripExecutionResponse {
+  trip: {
+    times: TripTime[];
+    direction: string;
+    current_station_id: number;
+    line: {
+      name: string;
+      type: string;
+      show_name: boolean;
+    };
+  };
+  canceled: any[];
+  vehicle_type: number;
+  estimated: boolean;
+  at_stop: boolean;
+  vehicle?: {
+    lon: number;
+    lat: number;
+  };
+  next_departure_index: number;
+  estimates: any[];
+  vehicle_trip_index: number;
 }
 
 /** A direction/line serving a stop */

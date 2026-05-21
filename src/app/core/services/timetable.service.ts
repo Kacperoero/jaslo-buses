@@ -4,7 +4,8 @@ import { Observable, map, catchError, of } from 'rxjs';
 import {
   DeparturesResponse,
   DirectionsResponse,
-  StopDirection
+  StopDirection,
+  TripExecutionResponse
 } from '../../shared/models/transit.models';
 
 @Injectable({
@@ -40,6 +41,17 @@ export class TimetableService {
     ).pipe(
       map(res => res.directions || []),
       catchError(() => of([]))
+    );
+  }
+
+  /**
+   * Fetch details of a specific trip by its execution ID.
+   * Encodes the ID in Base64 (using btoa) as required by the API.
+   */
+  getTripExecution(tripExecutionId: string): Observable<TripExecutionResponse> {
+    const encodedId = encodeURIComponent(btoa(tripExecutionId));
+    return this.http.get<TripExecutionResponse>(
+      `${this.baseUrl}/trip_execution/${encodedId}`
     );
   }
 }
