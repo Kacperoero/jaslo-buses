@@ -615,14 +615,32 @@ export class MainMapComponent implements OnInit, OnDestroy {
   private async getOSRMRoute(coords: [number, number][], profile: 'foot' | 'driving'): Promise<L.LatLng[]> {
     try {
       const coordsStr = coords.map(c => `${c[1]},${c[0]}`).join(';');
-      const res = await fetch(`https://router.project-osrm.org/route/v1/${profile}/${coordsStr}?overview=full&geometries=geojson`);
+      let url = '';
+      if (profile === 'foot') {
+        url = `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${coordsStr}?overview=full&geometries=geojson`;
+      } else {
+        url = `https://routing.openstreetmap.de/routed-car/route/v1/driving/${coordsStr}?overview=full&geometries=geojson`;
+      }
+      
+      const res = await fetch(url);
       const data = await res.json();
       if (data.routes && data.routes[0]) {
         const geojson = data.routes[0].geometry;
         return geojson.coordinates.map((c: any) => new L.LatLng(c[1], c[0]));
       }
     } catch (e) {
-      console.error('OSRM fetch failed, falling back to direct line', e);
+      console.error('FOSSGIS OSM route fetch failed, falling back to public OSRM demo', e);
+      try {
+        const coordsStr = coords.map(c => `${c[1]},${c[0]}`).join(';');
+        const res = await fetch(`https://router.project-osrm.org/route/v1/${profile}/${coordsStr}?overview=full&geometries=geojson`);
+        const data = await res.json();
+        if (data.routes && data.routes[0]) {
+          const geojson = data.routes[0].geometry;
+          return geojson.coordinates.map((c: any) => new L.LatLng(c[1], c[0]));
+        }
+      } catch (err) {
+        console.error('Public OSRM demo also failed, falling back to direct line', err);
+      }
     }
     return coords.map(c => new L.LatLng(c[0], c[1]));
   }
