@@ -526,8 +526,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
               }
             }
 
-            // Only break and stop searching if we successfully populated at least one valid connection!
-            if (pairHasValidConnection) {
+            // Keep searching and accumulating options until we have at least 5 valid connections!
+            if (foundConnections.length >= 5) {
               foundPair = true;
               break;
             }
@@ -536,7 +536,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
           console.error(`Failed candidate lookup for ${sCand.stop.name} and ${eCand.stop.name}`, err);
         }
       }
-      if (foundPair) break;
+      if (foundConnections.length >= 5) break;
     }
 
     // Now, split into active (has a real departure upcoming) and inactive (currently no bus)
