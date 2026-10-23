@@ -24,7 +24,14 @@ const S3 = stop('s3', 'TRZECI', 49.70, 21.42);
 const KONIEC = stop('k', 'KONIEC', 49.70, 21.45);
 const X = stop('x', 'CEL', 49.71, 21.50);
 const IKS = stop('i', 'IKS', 49.71, 21.55);
-const STOPS = [S1, S2, S3, KONIEC, X, IKS];
+// Second area (cases the old direction-name matching got wrong):
+//   line E4 is a loop: from P its sign says "PĘTLA", but it continues past PĘTLA to RYNEK
+//   line 22 ends at RYNEK and leaves only from the other platform of POCZĄTEK (P2)
+const P = stop('p', 'POCZĄTEK', 49.80, 21.40);
+const P2 = stop('p2', 'POCZĄTEK', 49.8005, 21.4005); // ~65 m away
+const Q = stop('q', 'PĘTLA', 49.80, 21.42);
+const R = stop('r', 'RYNEK', 49.80, 21.44);
+const STOPS = [S1, S2, S3, KONIEC, X, IKS, P, P2, Q, R];
 
 const dir = (line: string, direction: string): StopDirection => ({ line, direction, show_name: true, active: true });
 
@@ -34,7 +41,11 @@ const DIRECTIONS: Record<string, StopDirection[]> = {
   s3: [dir('1', 'KONIEC')],
   k: [],
   x: [dir('2', 'IKS')],
-  i: []
+  i: [],
+  p: [dir('E4', 'PĘTLA')],
+  p2: [dir('22', 'RYNEK')],
+  q: [dir('E4', 'RYNEK')],
+  r: [dir('E4', 'DALEJ')] // 22 ends here, so the API doesn't list it
 };
 
 const DEPARTURES: Record<string, DeparturesResponse> = {
@@ -43,12 +54,18 @@ const DEPARTURES: Record<string, DeparturesResponse> = {
   s3: board([{ line: '1', time: '9 min', dir: 'd1', trip: 't1' }], { d1: 'KONIEC' }),
   k: board([], {}),
   x: board([], {}),
-  i: board([], {})
+  i: board([], {}),
+  p: board([{ line: 'E4', time: '30 min', dir: 'e', trip: 'e4' }], { e: 'PĘTLA' }),
+  p2: board([{ line: '22', time: '32 min', dir: 'r', trip: 't22' }], { r: 'RYNEK' }),
+  q: board([], {}),
+  r: board([], {})
 };
 
 const TRIPS: Record<string, TripTime[]> = {
   t1: [time(S1, '07:35', 0), time(S2, '07:38', 1), time(S3, '07:42', 2), time(KONIEC, '07:50', 3)],
-  t2: [time(S2, '07:45', 0), time(X, '07:52', 1), time(IKS, '07:58', 2)]
+  t2: [time(S2, '07:45', 0), time(X, '07:52', 1), time(IKS, '07:58', 2)],
+  e4: [time(P, '08:00', 0), time(Q, '08:05', 1), time(R, '08:10', 2)],
+  t22: [time(P2, '08:02', 0), time(R, '08:06', 1)]
 };
 
 function board(rows: { line: string; time: string; dir: string; trip: string }[], directions: Record<string, string>): DeparturesResponse {
@@ -127,6 +144,31 @@ describe('RoutePlannerService', () => {
     expect(conn.legs?.map(l => [l.line, l.startStop.id, l.endStop.id])).toEqual([['1', 's1', 's2'], ['2', 's2', 'x']]);
   });
 
+  it('follows the real route of a loop line, even when its sign names another stop', async () => {
+    const conns = await planner.findConnections(at(P), at(R), STOPS);
+    const e4 = conns.find(c => c.line === 'E4');
+
+    expect(e4?.startStop.id).toBe('p');
+    expect(e4?.busTime).toBe(10); // 08:00 → 08:10
+  });
+
+  it('finds a line that ends at the destination, from the other platform of the start stop', async () => {
+    const conns = await planner.findConnections(at(P), at(R), STOPS);
+
+    expect(conns[0].line).toBe('22');
+    expect(conns[0].startStop.id).toBe('p2');
+    expect(conns[0].walkTimeStart).toBe(1);   // ~65 m to the other platform
+    expect(conns[0].arrivalTimeAbs).toBe('08:06');
+  });
+
+  it('shows each bus run once, boarded at the best nearby stop', async () => {
+    const point = (s: Stop): ConnectionPoint => ({ lat: s.lat, lng: s.lng, name: 'punkt' });
+    // From a map point at S1: run t1 can be boarded at S1, S2 or S3
+    const conns = await planner.findConnections(point(S1), point(S3), STOPS);
+
+    expect(conns.filter(c => c.line === '1').length).toBe(1);
+  });
+
   it('never requests the same departures or trip twice in one search', async () => {
     await planner.findConnections(at(S1), at(X), STOPS);
 
@@ -136,8 +178,17 @@ describe('RoutePlannerService', () => {
 
   it('asks for fresh departures on every search', async () => {
     await planner.findConnections(at(S1), at(S3), STOPS);
+    const firstSearch = calls.departures.filter(id => id === 's1').length;
     await planner.findConnections(at(S1), at(S3), STOPS);
 
-    expect(calls.departures.filter(id => id === 's1').length).toBe(2);
+    expect(firstSearch).toBeGreaterThan(0);
+    expect(calls.departures.filter(id => id === 's1').length).toBe(2 * firstSearch);
+  });
+
+  it('fetches live departures of a stop only once per search', async () => {
+    TestBed.inject(TravelTimeService).resetToNow();
+    await planner.findConnections(at(S1), at(X), STOPS); // runs both direct and transfer search
+
+    expect(calls.departures.filter(id => id === 's1').length).toBe(1);
   });
 });

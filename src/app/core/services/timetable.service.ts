@@ -32,8 +32,8 @@ export class TimetableService {
    */
   private readonly baseUrl = '/api';
 
-  /** Full-day timetables never change during a session, so cache them per stop + date. */
-  private dayTimetableCache = new Map<string, Observable<Departure[]>>();
+  /** A line's timetable at a stop never changes during a session – cached per stop + line + date. */
+  private lineDayCache = new Map<string, Observable<ScheduledRow[]>>();
   private directionsCache = new Map<string, Observable<StopDirection[]>>();
 
   constructor(private http: HttpClient) {}
@@ -41,9 +41,16 @@ export class TimetableService {
   /**
    * Departures for a stop: live ones when `at` is null ("now"),
    * otherwise planned ones from the timetable, starting at `at`.
+   * `lines` limits the result to those lines – for planned departures this also saves requests
+   * (the timetable is fetched per line); live departures come in one request anyway.
    */
-  getDepartures(stopId: string, at: Date | null): Observable<DeparturesResponse> {
-    return at ? this.getScheduledDepartures(stopId, at) : this.getDeparturesForStop(stopId);
+  getDepartures(stopId: string, at: Date | null, lines?: Iterable<string>): Observable<DeparturesResponse> {
+    if (at) return this.getScheduledDepartures(stopId, at, lines);
+    if (!lines) return this.getDeparturesForStop(stopId);
+    const wanted = new Set(lines);
+    return this.getDeparturesForStop(stopId).pipe(
+      map(res => ({ ...res, rows: (res.rows || []).filter(r => wanted.has(r.line_name || r.line || '')) }))
+    );
   }
 
   /**
@@ -61,11 +68,11 @@ export class TimetableService {
    * Planned departures from a stop starting at `at`, in the same shape as live departures:
    * `time` is "N min" relative to `at`, `static_time` is "HH:MM", `is_estimated` is false.
    */
-  getScheduledDepartures(stopId: string, at: Date): Observable<DeparturesResponse> {
+  getScheduledDepartures(stopId: string, at: Date, lines?: Iterable<string>): Observable<DeparturesResponse> {
     const fromSec = at.getHours() * 3600 + at.getMinutes() * 60;
     const toSec = fromSec + SCHEDULE_WINDOW_MIN * 60;
 
-    return this.getDayTimetable(stopId, toDateInputValue(at)).pipe(
+    return this.getDayTimetable(stopId, toDateInputValue(at), lines).pipe(
       map(all => {
         const rows = all
           .filter(d => {
@@ -169,32 +176,37 @@ export class TimetableService {
   }
 
   /**
-   * All planned departures from a stop on a date, sorted by time.
-   * The API has no per-stop endpoint that includes line names, so this asks
-   * for the day's lines and then fetches each line's timetable in parallel.
+   * All planned departures from a stop on a date (optionally only some lines), sorted by time.
+   * The API has no per-stop endpoint that includes line names, so this asks for the day's
+   * lines and then fetches each line's timetable in parallel.
    */
-  private getDayTimetable(stopId: string, date: string): Observable<Departure[]> {
-    const key = `${stopId}|${date}`;
-    const cached = this.dayTimetableCache.get(key);
+  private getDayTimetable(stopId: string, date: string, onlyLines?: Iterable<string>): Observable<Departure[]> {
+    const wanted = onlyLines ? new Set(onlyLines) : null;
+    return this.getDirectionsForStop(stopId, date).pipe(
+      switchMap(dirs => {
+        const lines = [...new Set(dirs.map(d => d.line))].filter(l => !wanted || wanted.has(l));
+        if (lines.length === 0) return of([] as ScheduledRow[][]);
+        return forkJoin(lines.map(line => this.getLineDay(stopId, line, date)));
+      }),
+      map(perLine => perLine.flat().sort((a, b) => a._sec - b._sec)),
+      catchError(() => of([] as Departure[]))
+    );
+  }
+
+  private getLineDay(stopId: string, line: string, date: string): Observable<ScheduledRow[]> {
+    const key = `${stopId}|${line}|${date}`;
+    const cached = this.lineDayCache.get(key);
     if (cached) return cached;
 
-    const request = this.getDirectionsForStop(stopId, date).pipe(
-      switchMap(dirs => {
-        const lines = [...new Set(dirs.map(d => d.line))];
-        if (lines.length === 0) return of([] as Departure[][]);
-        return forkJoin(lines.map(line =>
-          this.getLineTimetable(stopId, line, date).pipe(
-            map(tt => toDepartures(tt, line)),
-            catchError(() => of([] as Departure[]))
-          )
-        ));
+    const request = this.getLineTimetable(stopId, line, date).pipe(
+      map(tt => toDepartures(tt, line)),
+      catchError(() => {
+        this.lineDayCache.delete(key); // don't remember failures – retry next time
+        return of([] as ScheduledRow[]);
       }),
-      map(perLine => perLine.flat().sort((a, b) => (a as ScheduledRow)._sec - (b as ScheduledRow)._sec)),
-      catchError(() => of([] as Departure[])),
       shareReplay(1)
     );
-
-    this.dayTimetableCache.set(key, request);
+    this.lineDayCache.set(key, request);
     return request;
   }
 }

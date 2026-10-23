@@ -96,12 +96,15 @@ Do rysowania tras (dojście pieszo, przejazd autobusu) używane są publiczne se
 
 ## Jak działa wyszukiwanie połączeń
 
-1. **Kandydaci** – jeśli wybrano konkretny przystanek, brany jest tylko on; jeśli punkt na mapie – 10 najbliższych przystanków.
-2. **Połączenia bezpośrednie** – dla każdej pary (start, cel) szukane są wspólne linie. Kierunek jazdy sprawdzany jest najpierw po nazwie kierunku i położeniu, a potem dokładnie – po kolejności przystanków w `trip_execution`.
-3. **Przesiadki** – gdy połączeń bezpośrednich jest mniej niż 5, algorytm sprawdza kolejne przystanki kursów odjeżdżających ze startu i szuka tam linii jadącej do celu (min. 2 minuty na przesiadkę). Wyników jest maksymalnie 6.
-4. **Sortowanie** – najpierw połączenia z realnym najbliższym odjazdem, posortowane po łącznym czasie. Czas dojścia liczony jest jako 80 m/min w linii prostej.
+Algorytm siedzi w `RoutePlannerService`.
 
-Algorytm siedzi w `RoutePlannerService`. Zapytania do API idą równolegle: przed każdym krokiem planer prosi naraz o wszystkie dane, których ten krok będzie potrzebował (linie przystanków, odjazdy, przebiegi kursów). W etapie przesiadek pobiera z wyprzedzeniem tylko kilka kolejnych kursów i przystanków, bo wyszukiwanie zwykle kończy się wcześniej, po znalezieniu 6 połączeń. Te same zapytania nigdy nie są wysyłane dwa razy.
+1. **Kandydaci** – wybrany przystanek razem z jego drugim słupkiem (ta sama nazwa, do 400 m), albo 10 przystanków najbliższych punktu na mapie.
+2. **Połączenia bezpośrednie** – dla odjazdów z przystanków startowych planer pobiera przebieg kursu (listę przystanków z godzinami) i sprawdza, czy autobus dojeżdża później do któregoś przystanku docelowego. Nie porównuje nazw kierunków, bo wiele linii jeździ w pętli i zmienia tablicę po drodze (np. E4 „do Rynku” jedzie dalej, do Szpitala). Brane są tylko linie, które zatrzymują się przy celu albo kończą tam bieg. Każdy kurs autobusu pojawia się raz, z najlepszym przystankiem wsiadania i wysiadania.
+3. **Przesiadki** – szukane, gdy połączeń bezpośrednich jest mniej niż 3 albo na najlepsze trzeba czekać ponad 20 minut. Planer jedzie kursem ze startu i na kolejnych przystankach szuka autobusu, który według swojego przebiegu dojeżdża do celu (min. 2 minuty na przesiadkę). Pomija przesiadki, które nie mogą być szybsze od najlepszego połączenia bezpośredniego.
+4. **Brak kursów** – gdy nic nie odjeżdża, planer pokazuje linie łączące przystanki z dopiskiem „Brak kursu” (tu nadal na podstawie nazw kierunków).
+5. **Sortowanie** – po łącznym czasie (dojście + czekanie + jazda + dojście), maks. 8 wyników. Czas dojścia liczony jest jako 80 m/min w linii prostej.
+
+Zapytania do API idą równolegle, a te same nigdy nie są wysyłane dwa razy (przebieg kursu pobierany jest raz na kurs, niezależnie od przystanku). W trybie „Inny termin” rozkład pobierany jest tylko dla potrzebnych linii.
 
 ## Poprawianie pozycji przystanków
 
