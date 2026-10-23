@@ -1,17 +1,32 @@
-import { Injectable } from '@angular/core';
+import { Injectable, effect } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 import { Stop } from '../../../shared/models/transit.models';
 import { TimetableService } from '../../../core/services/timetable.service';
 import { escapeHtml } from '../../../shared/utils/text.utils';
 import { TravelTimeService } from '../../../core/services/travel-time.service';
+import { FavoritesService } from '../../../core/services/favorites.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapMarkerService {
   private markers: L.Marker[] = [];
+  private markerById = new Map<string, L.Marker>();
   private stops: Stop[] = [];
+
+  private readonly stopIcon = L.divIcon({
+    className: 'bus-stop-marker',
+    html: `<div class="marker-dot"></div>`,
+    iconSize: [14, 14],
+    iconAnchor: [7, 7]
+  });
+  private readonly favoriteIcon = L.divIcon({
+    className: 'bus-stop-marker favorite',
+    html: `<div class="marker-dot"></div>`,
+    iconSize: [16, 16],
+    iconAnchor: [8, 8]
+  });
 
   /** Whether markers are draggable (dev mode for position correction) */
   devMode = false;
@@ -19,8 +34,24 @@ export class MapMarkerService {
   constructor(
     private http: HttpClient,
     private timetableService: TimetableService,
-    private travelTime: TravelTimeService
-  ) {}
+    private travelTime: TravelTimeService,
+    private favorites: FavoritesService
+  ) {
+    // Favourite stops get a different marker – also when starred from the search list
+    let shown = new Set<string>();
+    effect(() => {
+      const now = new Set(this.favorites.favoriteStopIds());
+      for (const id of new Set([...shown, ...now])) {
+        if (shown.has(id) === now.has(id)) continue;
+        this.markerById.get(id)?.setIcon(this.iconFor(id)).setZIndexOffset(now.has(id) ? 500 : 0);
+      }
+      shown = now;
+    });
+  }
+
+  private iconFor(stopId: string): L.DivIcon {
+    return this.favorites.isFavorite(stopId) ? this.favoriteIcon : this.stopIcon;
+  }
 
   /**
    * Load stops from local JSON and render markers on the map.
@@ -33,16 +64,11 @@ export class MapMarkerService {
           this.stops = stops;
           this.clearMarkers();
 
-          const busIcon = L.divIcon({
-            className: 'bus-stop-marker',
-            html: `<div class="marker-dot"></div>`,
-            iconSize: [14, 14],
-            iconAnchor: [7, 7]
-          });
-
           for (const stop of stops) {
             const marker = L.marker([stop.lat, stop.lng], {
-              icon: busIcon,
+              icon: this.iconFor(stop.id),
+              // Favourites drawn above other stops
+              zIndexOffset: this.favorites.isFavorite(stop.id) ? 500 : 0,
               draggable: this.devMode,
               title: stop.name
             });
@@ -68,6 +94,7 @@ export class MapMarkerService {
 
             marker.addTo(map);
             this.markers.push(marker);
+            this.markerById.set(stop.id, marker);
           }
           resolve(stops);
         },
@@ -86,9 +113,12 @@ export class MapMarkerService {
   private clearMarkers(): void {
     this.markers.forEach(m => m.remove());
     this.markers = [];
+    this.markerById.clear();
   }
 
   private onStopClick(map: L.Map, marker: L.Marker, stop: Stop): void {
+    this.favorites.addRecentStop(stop.id);
+
     // Create a loading popup
     const popup = L.popup({
       maxWidth: 340,
@@ -98,25 +128,54 @@ export class MapMarkerService {
       .setLatLng(marker.getLatLng())
       .setContent(this.buildLoadingPopup(stop))
       .openOn(map);
+    this.bindFavoriteButton(popup, stop);
 
     // Live departures for "now", planned ones from the timetable for a chosen time
     this.timetableService.getDepartures(stop.id, this.travelTime.selected()).subscribe({
       next: (data) => {
         popup.setContent(this.buildDeparturePopup(stop, data));
+        this.bindFavoriteButton(popup, stop);
       },
       error: () => {
         popup.setContent(this.buildErrorPopup(stop));
+        this.bindFavoriteButton(popup, stop);
       }
+    });
+  }
+
+  private buildHeader(stop: Stop): string {
+    const fav = this.favorites.isFavorite(stop.id);
+    return `
+      <div class="popup-header">
+        <span class="popup-icon">🚏</span>
+        <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
+        ${stop.onlyDisembarking ? '<span class="badge-warn">Tylko wysiadanie</span>' : ''}
+        <button type="button" class="popup-fav${fav ? ' active' : ''}"
+                aria-pressed="${fav}" title="${fav ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'}">
+          ${fav ? '★' : '☆'}
+        </button>
+      </div>
+    `;
+  }
+
+  /** The popup is plain HTML, so the star's click handler is attached after each content update. */
+  private bindFavoriteButton(popup: L.Popup, stop: Stop): void {
+    const button = popup.getElement()?.querySelector<HTMLButtonElement>('.popup-fav');
+    if (!button) return;
+    L.DomEvent.disableClickPropagation(button);
+    button.addEventListener('click', () => {
+      const fav = this.favorites.toggleFavorite(stop.id);
+      button.classList.toggle('active', fav);
+      button.textContent = fav ? '★' : '☆';
+      button.title = fav ? 'Usuń z ulubionych' : 'Dodaj do ulubionych';
+      button.setAttribute('aria-pressed', String(fav));
     });
   }
 
   private buildLoadingPopup(stop: Stop): string {
     return `
       <div class="popup-content">
-        <div class="popup-header">
-          <span class="popup-icon">🚏</span>
-          <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
-        </div>
+        ${this.buildHeader(stop)}
         <div class="popup-loading">
           <div class="loading-spinner"></div>
           <span>Ładowanie odjazdów…</span>
@@ -168,11 +227,7 @@ export class MapMarkerService {
 
     return `
       <div class="popup-content">
-        <div class="popup-header">
-          <span class="popup-icon">🚏</span>
-          <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
-          ${stop.onlyDisembarking ? '<span class="badge-warn">Tylko wysiadanie</span>' : ''}
-        </div>
+        ${this.buildHeader(stop)}
         ${scheduled ? `<div class="popup-schedule-note">🕒 Rozkład: ${escapeHtml(this.travelTime.label())}</div>` : ''}
         ${departures}
       </div>
@@ -182,10 +237,7 @@ export class MapMarkerService {
   private buildErrorPopup(stop: Stop): string {
     return `
       <div class="popup-content">
-        <div class="popup-header">
-          <span class="popup-icon">🚏</span>
-          <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
-        </div>
+        ${this.buildHeader(stop)}
         <div class="popup-error">
           <span>⚠️</span>
           <p>Nie udało się pobrać odjazdów</p>

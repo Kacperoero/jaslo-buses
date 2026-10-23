@@ -25,24 +25,62 @@
         }
       </div>
 
-      @if (searchOpen() && filteredStops().length > 0) {
+      @if (searchOpen() && searchQuery().trim() && filteredStops().length > 0) {
         <ul class="search-results">
           @for (stop of filteredStops(); track stop.id) {
-            <li (click)="selectStop(stop)">
-              <svg class="result-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
-                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                <circle cx="12" cy="10" r="3"/>
-              </svg>
-              <div class="result-text">
-                <span class="result-name">{{ stop.name }}</span>
-                @if (stop.onlyDisembarking) {
-                  <span class="result-badge">Tylko wysiadanie</span>
-                }
-              </div>
-            </li>
+            <ng-container *ngTemplateOutlet="stopRow; context: { $implicit: stop }"></ng-container>
           }
         </ul>
       }
+
+      <!-- Empty query: favourite and recently viewed stops -->
+      @if (searchOpen() && !searchQuery().trim()) {
+        @if (favoriteStops().length > 0 || recentStops().length > 0) {
+          <div class="quick-lists">
+            @if (favoriteStops().length > 0) {
+              <div class="list-heading">★ Ulubione</div>
+              <ul class="search-results">
+                @for (stop of favoriteStops(); track stop.id) {
+                  <ng-container *ngTemplateOutlet="stopRow; context: { $implicit: stop }"></ng-container>
+                }
+              </ul>
+            }
+            @if (recentStops().length > 0) {
+              <div class="list-heading">Ostatnio oglądane</div>
+              <ul class="search-results">
+                @for (stop of recentStops(); track stop.id) {
+                  <ng-container *ngTemplateOutlet="stopRow; context: { $implicit: stop }"></ng-container>
+                }
+              </ul>
+            }
+          </div>
+        } @else {
+          <div class="search-empty">
+            <span>Dodaj przystanek do ulubionych gwiazdką ☆ w jego okienku z odjazdami.</span>
+          </div>
+        }
+      }
+
+      <ng-template #stopRow let-stop>
+        <li (click)="selectStop(stop)">
+          <svg class="result-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          <div class="result-text">
+            <span class="result-name">{{ stop.name }}</span>
+            @if (stop.onlyDisembarking) {
+              <span class="result-badge">Tylko wysiadanie</span>
+            }
+          </div>
+          <button type="button" class="row-fav" [class.active]="favorites.isFavorite(stop.id)"
+                  [attr.aria-pressed]="favorites.isFavorite(stop.id)"
+                  [attr.aria-label]="favorites.isFavorite(stop.id) ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'"
+                  (click)="toggleFavorite(stop, $event)">
+            {{ favorites.isFavorite(stop.id) ? '★' : '☆' }}
+          </button>
+        </li>
+      </ng-template>
 
       @if (searchOpen() && searchQuery() && filteredStops().length === 0) {
         <div class="search-empty">
@@ -100,10 +138,13 @@
             🎯
           </button>
         </div>
-        @if (startSuggestionsOpen() && filteredStopsStart().length > 0) {
+        @if (startSuggestionsOpen() && startSuggestions().length > 0) {
           <ul class="suggestion-list">
-            @for (stop of filteredStopsStart(); track stop.id) {
-              <li (click)="selectStartStop(stop)">{{ stop.name }}</li>
+            @for (stop of startSuggestions(); track stop.id) {
+              <li (click)="selectStartStop(stop)">
+                @if (favorites.isFavorite(stop.id)) { <span class="suggestion-fav">★</span> }
+                {{ stop.name }}
+              </li>
             }
           </ul>
         }
@@ -130,10 +171,13 @@
             📍
           </button>
         </div>
-        @if (endSuggestionsOpen() && filteredStopsEnd().length > 0) {
+        @if (endSuggestionsOpen() && endSuggestions().length > 0) {
           <ul class="suggestion-list">
-            @for (stop of filteredStopsEnd(); track stop.id) {
-              <li (click)="selectEndStop(stop)">{{ stop.name }}</li>
+            @for (stop of endSuggestions(); track stop.id) {
+              <li (click)="selectEndStop(stop)">
+                @if (favorites.isFavorite(stop.id)) { <span class="suggestion-fav">★</span> }
+                {{ stop.name }}
+              </li>
             }
           </ul>
         }
@@ -283,10 +327,26 @@
         </div>
       }
 
-      @if (!searchingConnections() && startPoint() && endPoint() && connections().length === 0) {
+      @if (searchDone() && connections().length === 0) {
         <div class="results-empty">
           <span>Brak połączeń autobusowych (nawet z przesiadką) między wybranymi punktami w najbliższym czasie.</span>
         </div>
+      }
+
+      @if (!searchingConnections() && connections().length === 0 && favorites.recentRoutes().length > 0) {
+        <div class="results-header">Ostatnie trasy</div>
+        <ul class="recent-routes">
+          @for (route of favorites.recentRoutes(); track $index) {
+            <li>
+              <button type="button" class="recent-route" (click)="useRecentRoute(route)">
+                <span class="route-point"><span class="pin-a">A</span>{{ route.from.name }}</span>
+                <span class="route-point"><span class="pin-b">B</span>{{ route.to.name }}</span>
+              </button>
+              <button type="button" class="recent-remove" aria-label="Usuń z ostatnich tras"
+                      (click)="removeRecentRoute(route, $event)">✕</button>
+            </li>
+          }
+        </ul>
       }
     </div>
   </div>

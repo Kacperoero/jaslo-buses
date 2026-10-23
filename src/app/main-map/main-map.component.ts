@@ -7,6 +7,7 @@ import { Stop } from '../shared/models/transit.models';
 import { escapeHtml } from '../shared/utils/text.utils';
 import { getNearestStops } from '../shared/utils/geo.utils';
 import { TravelTimeService } from '../core/services/travel-time.service';
+import { FavoritesService, RecentRoute } from '../core/services/favorites.service';
 import { TimePickerComponent } from '../shared/components/time-picker/time-picker.component';
 import { RoutePlannerService } from '../features/route-planner/route-planner.service';
 import { Connection, ConnectionPoint } from '../features/route-planner/route-planner.models';
@@ -76,6 +77,28 @@ export class MainMapComponent implements OnInit, OnDestroy {
   });
 
   /** Filtered stops for end input */
+  /** Stops by id, for the favourite and recent lists */
+  private stopById = computed(() => new Map(this.allStops().map(s => [s.id, s])));
+
+  /** Favourite stops (in the order they were added) */
+  favoriteStops = computed(() => this.favorites.favoriteStopIds()
+    .map(id => this.stopById().get(id))
+    .filter((s): s is Stop => !!s));
+
+  /** Recently viewed stops that are not favourites already */
+  recentStops = computed(() => this.favorites.recentStopIds()
+    .filter(id => !this.favorites.isFavorite(id))
+    .map(id => this.stopById().get(id))
+    .filter((s): s is Stop => !!s));
+
+  /** Planner fields: matching stops while typing, favourites and recent stops when empty */
+  startSuggestions = computed(() => this.searchQueryStart().trim() ? this.filteredStopsStart() : this.quickStops());
+  endSuggestions = computed(() => this.searchQueryEnd().trim() ? this.filteredStopsEnd() : this.quickStops());
+  private quickStops = computed(() => [...this.favoriteStops(), ...this.recentStops()].slice(0, 8));
+
+  /** True once a search finished for the current points & time (for the "nothing found" message) */
+  searchDone = signal(false);
+
   filteredStopsEnd = computed(() => {
     const q = this.searchQueryEnd().toLowerCase().trim();
     if (!q) return [];
@@ -90,7 +113,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
   constructor(
     private mapMarkerService: MapMarkerService,
     private routePlanner: RoutePlannerService,
-    readonly travelTime: TravelTimeService
+    readonly travelTime: TravelTimeService,
+    readonly favorites: FavoritesService
   ) {
     // Results are calculated for a specific moment – drop them when the user changes the time
     effect(() => {
@@ -103,6 +127,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   private clearResults(): void {
     this.searchCounter++;
     this.searchingConnections.set(false);
+    this.searchDone.set(false);
     this.connections.set([]);
     this.selectedConnectionIndex.set(null);
     this.routeLayerGroup.clearLayers();
@@ -166,10 +191,15 @@ export class MainMapComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** Opens the list – with an empty query it shows favourite and recent stops. */
   onSearchFocus(): void {
-    if (this.searchQuery().trim()) {
-      this.searchOpen.set(true);
-    }
+    this.searchOpen.set(true);
+  }
+
+  /** Star / unstar a stop from a list without selecting it. */
+  toggleFavorite(stop: Stop, event: Event): void {
+    event.stopPropagation();
+    this.favorites.toggleFavorite(stop.id);
   }
 
   clearSearch(): void {
@@ -221,6 +251,11 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   private handleMapClick(e: L.LeafletMouseEvent): void {
+    // Clicking the map closes open lists
+    this.searchOpen.set(false);
+    this.startSuggestionsOpen.set(false);
+    this.endSuggestionsOpen.set(false);
+
     if (this.isPickingStart()) {
       this.setPointFromCoords(e.latlng.lat, e.latlng.lng, 'start');
       this.isPickingStart.set(false);
@@ -234,18 +269,20 @@ export class MainMapComponent implements OnInit, OnDestroy {
   async useMyLocationForStart(): Promise<void> {
     this.map.locate({ setView: false });
     this.map.once('locationfound', (e: L.LocationEvent) => {
-      this.setPointFromCoords(e.latlng.lat, e.latlng.lng, 'start', 'Moja lokalizacja');
+      this.setPointFromCoords(e.latlng.lat, e.latlng.lng, 'start', 'Moja lokalizacja', true);
     });
   }
 
-  private setPointFromCoords(lat: number, lng: number, type: 'start' | 'end', customName?: string): void {
+  private setPointFromCoords(
+    lat: number, lng: number, type: 'start' | 'end', customName?: string, isUserLocation = false
+  ): void {
     // Find nearest stop for name, or use coords
     const nearest = getNearestStops(this.allStops(), lat, lng, 1)[0];
     const name = customName || (nearest && nearest.distance < 100 
       ? `Blisko: ${nearest.stop.name}` 
       : `Punkt na mapie (${lat.toFixed(4)}, ${lng.toFixed(4)})`);
 
-    const point: ConnectionPoint = { lat, lng, name };
+    const point: ConnectionPoint = isUserLocation ? { lat, lng, name, isUserLocation } : { lat, lng, name };
 
     if (type === 'start') {
       this.startPoint.set(point);
@@ -298,8 +335,13 @@ export class MainMapComponent implements OnInit, OnDestroy {
     const end = this.endPoint();
     if (!start || !end) return;
 
+    if (!start.isUserLocation && !end.isUserLocation) {
+      this.favorites.addRecentRoute(start, end);
+    }
+
     const searchId = ++this.searchCounter;
     this.searchingConnections.set(true);
+    this.searchDone.set(false);
     this.connections.set([]);
     this.selectedConnectionIndex.set(null);
     this.routeLayerGroup.clearLayers();
@@ -309,6 +351,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
       if (searchId !== this.searchCounter) return; // points or time changed meanwhile
 
       this.connections.set(found);
+      this.searchDone.set(true);
       if (found.length > 0) {
         this.selectConnection(0);
       }
@@ -317,6 +360,24 @@ export class MainMapComponent implements OnInit, OnDestroy {
     } finally {
       if (searchId === this.searchCounter) this.searchingConnections.set(false);
     }
+  }
+
+  /** Fills A and B from a recent route and searches again. */
+  useRecentRoute(route: RecentRoute): void {
+    this.startPoint.set({ ...route.from });
+    this.endPoint.set({ ...route.to });
+    this.searchQueryStart.set(route.from.name);
+    this.searchQueryEnd.set(route.to.name);
+    this.startSuggestionsOpen.set(false);
+    this.endSuggestionsOpen.set(false);
+    this.clearResults();
+    this.updateUserPointMarkers();
+    this.findConnection();
+  }
+
+  removeRecentRoute(route: RecentRoute, event: Event): void {
+    event.stopPropagation();
+    this.favorites.removeRecentRoute(route);
   }
 
   async selectConnection(index: number): Promise<void> {

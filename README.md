@@ -10,6 +10,7 @@ Dane o odjazdach pochodzą z publicznego API systemu [kiedyprzyjedzie.pl](https:
 - **Odjazdy na żywo** – kliknięcie przystanku otwiera dymek z najbliższymi 8 odjazdami (linia, kierunek, czas, znacznik `LIVE` dla czasów z GPS).
 - **Wyszukiwarka przystanków** – pole w lewym górnym rogu, po wybraniu mapa przelatuje do przystanku.
 - **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Teraz” oznacza odjazdy na żywo; „Inny termin” przełącza dymki i planer na rozkład jazdy dla wybranego dnia i godziny (do 60 dni naprzód). Przydaje się też do testowania w nocy, gdy autobusy nie kursują.
+- **Ulubione i ostatnie** – gwiazdka ☆ w okienku przystanku (ulubione mają na mapie żółtą kropkę). Po kliknięciu w puste pole wyszukiwarki widać ulubione i ostatnio oglądane przystanki. W planerze puste pola A/B podpowiadają ulubione, a pod formularzem jest lista ostatnich tras do powtórzenia jednym kliknięciem. Dane są zapisane w przeglądarce (`localStorage`); tras z „Moja lokalizacja” nie zapisujemy.
 - **Planer trasy A → B** – punkt startu/celu można wybrać z listy przystanków, kliknąć na mapie albo użyć swojej lokalizacji. Wyniki są sortowane po łącznym czasie podróży (dojście + czekanie + jazda + dojście), a wybrana trasa jest rysowana na mapie.
 - **Tryb korekty pozycji** – po ustawieniu `devMode = true` w `MapMarkerService` znaczniki można przeciągać, a nowe współrzędne lądują w konsoli.
 
@@ -62,7 +63,8 @@ src/app/
 │   └── main-map.component.ts            # Stan UI, rysowanie tras na mapie
 ├── core/services/
 │   ├── timetable.service.ts             # Klient API kiedyprzyjedzie.pl (na żywo + rozkład)
-│   └── travel-time.service.ts           # Wybrana data/godzina podróży (null = teraz)
+│   ├── travel-time.service.ts           # Wybrana data/godzina podróży (null = teraz)
+│   └── favorites.service.ts             # Ulubione, ostatnie przystanki i trasy (localStorage)
 ├── features/
 │   ├── map/services/map-marker.service.ts      # Rysowanie przystanków i dymków z odjazdami
 │   └── route-planner/route-planner.service.ts  # Algorytm wyszukiwania połączeń (+ testy)

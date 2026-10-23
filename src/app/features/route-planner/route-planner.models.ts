@@ -7,6 +7,8 @@ export interface ConnectionPoint {
   name: string;
   isStop?: boolean;
   stopId?: string;
+  /** The user's GPS position – never saved to recent routes */
+  isUserLocation?: boolean;
 }
 
 /** One bus ride within a transfer connection. */
