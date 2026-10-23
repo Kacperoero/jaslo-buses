@@ -125,6 +125,16 @@ html, body {
   letter-spacing: 0.03em;
 }
 
+.popup-schedule-note {
+  margin: 0 0 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.08);
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .badge-live {
   display: inline-flex;
   align-items: center;

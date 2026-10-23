@@ -9,6 +9,7 @@ Dane o odjazdach pochodzą z publicznego API systemu [kiedyprzyjedzie.pl](https:
 - **Mapa przystanków** – Leaflet + kafelki OpenStreetMap, wyśrodkowana na Jaśle; 586 słupków (ok. 350 unikalnych nazw).
 - **Odjazdy na żywo** – kliknięcie przystanku otwiera dymek z najbliższymi 8 odjazdami (linia, kierunek, czas, znacznik `LIVE` dla czasów z GPS).
 - **Wyszukiwarka przystanków** – pole w lewym górnym rogu, po wybraniu mapa przelatuje do przystanku.
+- **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Teraz” oznacza odjazdy na żywo; „Inny termin” przełącza dymki i planer na rozkład jazdy dla wybranego dnia i godziny (do 60 dni naprzód). Przydaje się też do testowania w nocy, gdy autobusy nie kursują.
 - **Planer trasy A → B** – punkt startu/celu można wybrać z listy przystanków, kliknąć na mapie albo użyć swojej lokalizacji. Wyniki są sortowane po łącznym czasie podróży (dojście + czekanie + jazda + dojście), a wybrana trasa jest rysowana na mapie.
 - **Tryb korekty pozycji** – po ustawieniu `devMode = true` w `MapMarkerService` znaczniki można przeciągać, a nowe współrzędne lądują w konsoli.
 
@@ -59,10 +60,13 @@ src/app/
 ├── app.config.ts                        # Providery: router, HttpClient
 ├── main-map/                            # Cały interfejs: mapa, wyszukiwarka, planer trasy
 │   └── main-map.component.ts            # Logika UI + algorytm wyszukiwania połączeń
-├── core/services/timetable.service.ts   # Klient API kiedyprzyjedzie.pl
+├── core/services/
+│   ├── timetable.service.ts             # Klient API kiedyprzyjedzie.pl (na żywo + rozkład)
+│   └── travel-time.service.ts           # Wybrana data/godzina podróży (null = teraz)
 ├── features/map/services/
 │   └── map-marker.service.ts            # Rysowanie przystanków i dymków z odjazdami
 └── shared/
+    ├── components/time-picker/          # Wybór „Teraz / Inny termin” (chip na mapie, sekcja w planerze)
     ├── models/transit.models.ts         # Typy: Stop, Departure, TripExecutionResponse…
     └── utils/text.utils.ts              # Porównywanie nazw (polskie znaki) i escapowanie HTML
 
@@ -80,7 +84,12 @@ Wszystkie zapytania idą przez `/api` (proxy). Identyfikator przystanku ma posta
 | --- | --- |
 | `GET /api/departures/{stopId}` | Najbliższe odjazdy z przystanku |
 | `GET /api/directions/{stopId}` | Linie i kierunki obsługujące przystanek |
-| `GET /api/trip_execution/{base64(tripId)}` | Pełna lista przystanków i godzin konkretnego kursu |
+| `GET /api/trip_execution/{base64(tripId)}` | Pełna lista przystanków i godzin konkretnego kursu (na żywo) |
+| `GET /api/directions/{stopId}?date=RRRR-MM-DD` | Linie kursujące przez przystanek w danym dniu |
+| `GET /api/timetable/{stopId}/{base64url(linia)}?date=RRRR-MM-DD` | Rozkład jednej linii na przystanku w danym dniu (czasy w sekundach od północy) |
+| `GET /api/trip/{tripId}/{index}` | Planowa lista przystanków kursu z rozkładu (`index` = pozycja przystanku w kursie) |
+
+W trybie „Inny termin” `TimetableService.getScheduledDepartures()` pobiera rozkłady wszystkich linii danego dnia równolegle i zamienia je na ten sam format, co odjazdy na żywo. Dzięki temu planer działa tak samo w obu trybach. Kursy z rozkładu mają identyfikator `trip:<tripId>:<index>`. Rozkład dnia jest zapamiętywany na czas sesji.
 
 Do rysowania tras (dojście pieszo, przejazd autobusu) używane są publiczne serwery OSRM: `routing.openstreetmap.de`, a w razie błędu `router.project-osrm.org`. Gdy oba zawiodą, rysowana jest linia prosta.
 

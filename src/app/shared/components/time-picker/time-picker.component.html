@@ -1,0 +1,54 @@
+@if (variant() === 'chip') {
+  <button
+    type="button"
+    class="time-chip"
+    [class.scheduled]="travelTime.isScheduled()"
+    (click)="togglePopover()"
+    [attr.aria-expanded]="popoverOpen()"
+    aria-label="Kiedy jedziesz? Zmień datę i godzinę"
+  >
+    <span aria-hidden="true">🕒</span>
+    <span class="chip-label">{{ travelTime.label() }}</span>
+    @if (travelTime.isScheduled()) {
+      <span class="chip-reset" role="button" aria-label="Wróć do teraz" (click)="useNow(); $event.stopPropagation()">✕</span>
+    }
+  </button>
+
+  @if (popoverOpen()) {
+    <div class="time-popover">
+      <ng-container *ngTemplateOutlet="controls"></ng-container>
+    </div>
+  }
+} @else {
+  <ng-container *ngTemplateOutlet="controls"></ng-container>
+}
+
+<ng-template #controls>
+  <div class="time-controls">
+    <div class="mode-toggle" role="radiogroup" aria-label="Kiedy">
+      <button type="button" role="radio" [attr.aria-checked]="!travelTime.isScheduled()"
+              [class.active]="!travelTime.isScheduled()" (click)="useNow()">
+        Teraz <span class="mode-hint">(na żywo)</span>
+      </button>
+      <button type="button" role="radio" [attr.aria-checked]="travelTime.isScheduled()"
+              [class.active]="travelTime.isScheduled()" (click)="useCustom()">
+        Inny termin
+      </button>
+    </div>
+
+    @if (travelTime.isScheduled()) {
+      <div class="datetime-row">
+        <input type="date" aria-label="Data" [min]="minDate" [max]="maxDate"
+               [value]="dateValue()" (change)="onDateChange($any($event.target).value)" />
+        <input type="time" aria-label="Godzina" step="300"
+               [value]="timeValue()" (change)="onTimeChange($any($event.target).value)" />
+      </div>
+      <div class="presets">
+        <button type="button" (click)="usePreset(0, 7)">Dziś 7:00</button>
+        <button type="button" (click)="usePreset(0, 15)">Dziś 15:00</button>
+        <button type="button" (click)="usePreset(1, 7)">Jutro 7:00</button>
+      </div>
+      <p class="schedule-note">Godziny z rozkładu jazdy – bez opóźnień na żywo.</p>
+    }
+  </div>
+</ng-template>

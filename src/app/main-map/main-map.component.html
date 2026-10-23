@@ -50,6 +50,9 @@
         </div>
       }
     </div>
+
+    <!-- When: live ("Teraz") or a chosen date & time -->
+    <app-time-picker class="map-time-picker" variant="chip"></app-time-picker>
   </div>
 }
 
@@ -136,6 +139,12 @@
         }
       </div>
 
+      <!-- When -->
+      <div class="input-group">
+        <label>Kiedy</label>
+        <app-time-picker variant="inline"></app-time-picker>
+      </div>
+
       <button class="search-routes-btn" (click)="findConnection()" [disabled]="!startPoint() || !endPoint()">
         Szukaj połączeń
       </button>
@@ -209,7 +218,7 @@
                       </div>
                     } @else {
                       <div class="live-departure-time text-danger">
-                        ⚠️ Brak kursów o tej porze (noc)
+                        ⚠️ Brak kursów w najbliższym czasie
                       </div>
                     }
                   </div>

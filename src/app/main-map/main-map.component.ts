@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, computed, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
@@ -7,6 +7,8 @@ import { TimetableService } from '../core/services/timetable.service';
 import { Stop, Departure, DeparturesResponse, TripExecutionResponse, StopDirection } from '../shared/models/transit.models';
 import { firstValueFrom } from 'rxjs';
 import { escapeHtml, namesMatch, normalizeName } from '../shared/utils/text.utils';
+import { TravelTimeService, toDateInputValue } from '../core/services/travel-time.service';
+import { TimePickerComponent } from '../shared/components/time-picker/time-picker.component';
 
 interface ConnectionPoint {
   lat: number;
@@ -53,7 +55,7 @@ interface Connection {
 @Component({
   selector: 'app-main-map',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TimePickerComponent],
   templateUrl: './main-map.component.html',
   styleUrl: './main-map.component.scss'
 })
@@ -69,12 +71,16 @@ export class MainMapComponent implements OnInit, OnDestroy {
   private tripExecutionsCache = new Map<string, TripExecutionResponse>();
 
   private async getCachedDirections(stopId: string): Promise<StopDirection[]> {
-    if (this.directionsCache.has(stopId)) {
-      return this.directionsCache.get(stopId)!;
+    // Lines differ between days (e.g. weekends), so cache per stop + chosen date
+    const selected = this.travelTime.selected();
+    const date = selected ? toDateInputValue(selected) : undefined;
+    const key = `${stopId}|${date ?? 'now'}`;
+    if (this.directionsCache.has(key)) {
+      return this.directionsCache.get(key)!;
     }
     try {
-      const dirs = await firstValueFrom(this.timetableService.getDirectionsForStop(stopId));
-      this.directionsCache.set(stopId, dirs);
+      const dirs = await firstValueFrom(this.timetableService.getDirectionsForStop(stopId, date));
+      this.directionsCache.set(key, dirs);
       return dirs;
     } catch (e) {
       console.error(`Failed to fetch directions for stop ${stopId}`, e);
@@ -87,7 +93,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
       return this.departuresCache.get(stopId)!;
     }
     try {
-      const deps = await firstValueFrom(this.timetableService.getDeparturesForStop(stopId));
+      const deps = await firstValueFrom(this.timetableService.getDepartures(stopId, this.travelTime.selected()));
       this.departuresCache.set(stopId, deps);
       return deps;
     } catch (e) {
@@ -173,8 +179,17 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
   constructor(
     private mapMarkerService: MapMarkerService,
-    private timetableService: TimetableService
-  ) {}
+    private timetableService: TimetableService,
+    readonly travelTime: TravelTimeService
+  ) {
+    // Results are calculated for a specific moment – drop them when the user changes the time
+    effect(() => {
+      this.travelTime.selected();
+      this.connections.set([]);
+      this.selectedConnectionIndex.set(null);
+      this.routeLayerGroup.clearLayers();
+    });
+  }
 
   ngOnInit(): void {
     this.initMap();
@@ -1024,7 +1039,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
       const hours = parseInt(hhmm[1], 10);
       const minutes = parseInt(hhmm[2], 10);
       
-      const now = new Date();
+      const now = this.travelTime.referenceTime();
       const depDate = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
       let diffMs = depDate.getTime() - now.getTime();
       if (diffMs < -12 * 60 * 60 * 1000) {
@@ -1037,7 +1052,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   private getAbsoluteTimeString(minutesFromNow: number): string {
-    const now = new Date();
+    const now = this.travelTime.referenceTime();
     const futureDate = new Date(now.getTime() + minutesFromNow * 60 * 1000);
     const hours = String(futureDate.getHours()).padStart(2, '0');
     const mins = String(futureDate.getMinutes()).padStart(2, '0');

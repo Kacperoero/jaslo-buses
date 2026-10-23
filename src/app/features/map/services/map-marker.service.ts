@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 import { Stop } from '../../../shared/models/transit.models';
 import { TimetableService } from '../../../core/services/timetable.service';
 import { escapeHtml } from '../../../shared/utils/text.utils';
+import { TravelTimeService } from '../../../core/services/travel-time.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class MapMarkerService {
 
   constructor(
     private http: HttpClient,
-    private timetableService: TimetableService
+    private timetableService: TimetableService,
+    private travelTime: TravelTimeService
   ) {}
 
   /**
@@ -97,8 +99,8 @@ export class MapMarkerService {
       .setContent(this.buildLoadingPopup(stop))
       .openOn(map);
 
-    // Fetch both departures and directions
-    this.timetableService.getDeparturesForStop(stop.id).subscribe({
+    // Live departures for "now", planned ones from the timetable for a chosen time
+    this.timetableService.getDepartures(stop.id, this.travelTime.selected()).subscribe({
       next: (data) => {
         popup.setContent(this.buildDeparturePopup(stop, data));
       },
@@ -126,14 +128,15 @@ export class MapMarkerService {
   private buildDeparturePopup(stop: Stop, data: any): string {
     const rows = data.rows || [];
     const directions = data.directions || {};
+    const scheduled = this.travelTime.isScheduled();
     let departures = '';
 
     if (rows.length === 0) {
       departures = `
         <div class="popup-empty">
           <span class="empty-icon">🌙</span>
-          <p>Brak najbliższych odjazdów</p>
-          <p class="empty-hint">Sprawdź ponownie w godzinach kursowania</p>
+          <p>${scheduled ? 'Brak odjazdów w ciągu 3 godzin' : 'Brak najbliższych odjazdów'}</p>
+          <p class="empty-hint">${scheduled ? 'Wybierz inną godzinę lub dzień' : 'Sprawdź ponownie w godzinach kursowania'}</p>
         </div>
       `;
     } else {
@@ -142,9 +145,12 @@ export class MapMarkerService {
         const estimatedBadge = row.is_estimated
           ? '<span class="badge-live">LIVE</span>'
           : '';
-        const timeDisplay = row.minutes_to_departure != null
-          ? `${row.minutes_to_departure} min`
-          : row.time || '—';
+        // Scheduled mode: clock time is more useful than "in N min" from a future moment
+        const timeDisplay = scheduled && row.static_time
+          ? row.static_time
+          : row.minutes_to_departure != null
+            ? `${row.minutes_to_departure} min`
+            : row.time || '—';
 
         const line = row.line_name || row.line || '?';
         const direction = (row.direction_id && directions[row.direction_id]) || row.direction || 'Brak kierunku';
@@ -167,6 +173,7 @@ export class MapMarkerService {
           <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
           ${stop.onlyDisembarking ? '<span class="badge-warn">Tylko wysiadanie</span>' : ''}
         </div>
+        ${scheduled ? `<div class="popup-schedule-note">🕒 Rozkład: ${escapeHtml(this.travelTime.label())}</div>` : ''}
         ${departures}
       </div>
     `;

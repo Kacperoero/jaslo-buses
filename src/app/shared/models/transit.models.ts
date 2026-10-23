@@ -97,3 +97,36 @@ export interface StopDirection {
 export interface DirectionsResponse {
   directions: StopDirection[];
 }
+
+// ─── Static timetable (planned schedule for a chosen date) ───
+
+/** One planned departure from GET /api/timetable/{stopId}/{line}?date=YYYY-MM-DD */
+export interface ScheduledDeparture {
+  /** Departure time in seconds after midnight of the requested date */
+  departure: number;
+  line?: string;
+  /** Symbols of non-default directions/notes for this departure (e.g. "B") */
+  symbols: string;
+  trip_id: number;
+  /** Index of this stop within the trip – needed by GET /api/trip/{tripId}/{index} */
+  index: number;
+}
+
+/** Response from GET /api/timetable/{stopId}/{base64url(line)}?date=YYYY-MM-DD */
+export interface LineTimetableResponse {
+  departures: ScheduledDeparture[];
+  /** Alternative directions, referenced by `symbols` on a departure */
+  directions: { name: string; symbol: string }[];
+  /** Default direction for departures without a direction symbol */
+  main_direction: { name: string; count: number; symbol: string | null };
+  show_line_name?: boolean;
+}
+
+/** Response from GET /api/trip/{tripId}/{index} (planned stop sequence of a trip) */
+export interface TripResponse {
+  times: TripTime[];
+  direction: string;
+  current_station_id: number;
+  line: { name: string; type: string; show_name: boolean };
+  vehicle_type: number;
+}
