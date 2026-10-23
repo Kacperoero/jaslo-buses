@@ -34,6 +34,7 @@ export class TimetableService {
 
   /** Full-day timetables never change during a session, so cache them per stop + date. */
   private dayTimetableCache = new Map<string, Observable<Departure[]>>();
+  private directionsCache = new Map<string, Observable<StopDirection[]>>();
 
   constructor(private http: HttpClient) {}
 
@@ -100,14 +101,25 @@ export class TimetableService {
    * Pass `date` ("YYYY-MM-DD") to get the lines running on that day.
    */
   getDirectionsForStop(stopId: string, date?: string): Observable<StopDirection[]> {
+    // Lines of a stop rarely change, and both the planner and the timetable loader ask for them
+    const key = `${stopId}|${date ?? 'now'}`;
+    const cached = this.directionsCache.get(key);
+    if (cached) return cached;
+
     const encodedId = encodeURIComponent(stopId);
     const params: Record<string, string> = date ? { date } : {};
-    return this.http.get<DirectionsResponse>(
+    const request = this.http.get<DirectionsResponse>(
       `${this.baseUrl}/directions/${encodedId}`, { params }
     ).pipe(
       map(res => res.directions || []),
-      catchError(() => of([]))
+      catchError(() => {
+        this.directionsCache.delete(key); // don't remember failures – retry next time
+        return of([]);
+      }),
+      shareReplay(1)
     );
+    this.directionsCache.set(key, request);
+    return request;
   }
 
   /**

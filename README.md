@@ -59,12 +59,13 @@ src/app/
 ├── app.ts / app.html                    # Główny komponent – renderuje tylko mapę
 ├── app.config.ts                        # Providery: router, HttpClient
 ├── main-map/                            # Cały interfejs: mapa, wyszukiwarka, planer trasy
-│   └── main-map.component.ts            # Logika UI + algorytm wyszukiwania połączeń
+│   └── main-map.component.ts            # Stan UI, rysowanie tras na mapie
 ├── core/services/
 │   ├── timetable.service.ts             # Klient API kiedyprzyjedzie.pl (na żywo + rozkład)
 │   └── travel-time.service.ts           # Wybrana data/godzina podróży (null = teraz)
-├── features/map/services/
-│   └── map-marker.service.ts            # Rysowanie przystanków i dymków z odjazdami
+├── features/
+│   ├── map/services/map-marker.service.ts      # Rysowanie przystanków i dymków z odjazdami
+│   └── route-planner/route-planner.service.ts  # Algorytm wyszukiwania połączeń (+ testy)
 └── shared/
     ├── components/time-picker/          # Wybór „Teraz / Inny termin” (chip na mapie, sekcja w planerze)
     ├── models/transit.models.ts         # Typy: Stop, Departure, TripExecutionResponse…
@@ -100,6 +101,8 @@ Do rysowania tras (dojście pieszo, przejazd autobusu) używane są publiczne se
 3. **Przesiadki** – gdy połączeń bezpośrednich jest mniej niż 5, algorytm sprawdza kolejne przystanki kursów odjeżdżających ze startu i szuka tam linii jadącej do celu (min. 2 minuty na przesiadkę). Wyników jest maksymalnie 6.
 4. **Sortowanie** – najpierw połączenia z realnym najbliższym odjazdem, posortowane po łącznym czasie. Czas dojścia liczony jest jako 80 m/min w linii prostej.
 
+Algorytm siedzi w `RoutePlannerService`. Zapytania do API idą równolegle: przed każdym krokiem planer prosi naraz o wszystkie dane, których ten krok będzie potrzebował (linie przystanków, odjazdy, przebiegi kursów). W etapie przesiadek pobiera z wyprzedzeniem tylko kilka kolejnych kursów i przystanków, bo wyszukiwanie zwykle kończy się wcześniej, po znalezieniu 6 połączeń. Te same zapytania nigdy nie są wysyłane dwa razy.
+
 ## Poprawianie pozycji przystanków
 
 1. W `map-marker.service.ts` ustaw `devMode = true`.
@@ -109,6 +112,5 @@ Do rysowania tras (dojście pieszo, przejazd autobusu) używane są publiczne se
 
 ## Znane ograniczenia
 
-- Planer wykonuje dziesiątki zapytań do API jedno po drugim, więc wyszukiwanie może trwać kilka–kilkanaście sekund.
+- Planer nadal potrzebuje kilkudziesięciu zapytań do API na jedno wyszukiwanie (ok. 2 s). Dalsze przyspieszenie wymagałoby własnego backendu albo danych GTFS.
 - Obsługiwana jest maksymalnie jedna przesiadka.
-- Testy obejmują na razie tylko komponent główny i helpery tekstowe – algorytm planera nie ma testów.
