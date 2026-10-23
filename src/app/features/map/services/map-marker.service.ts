@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 import { Stop } from '../../../shared/models/transit.models';
 import { TimetableService } from '../../../core/services/timetable.service';
+import { escapeHtml } from '../../../shared/utils/text.utils';
 
 @Injectable({
   providedIn: 'root'
@@ -112,7 +113,7 @@ export class MapMarkerService {
       <div class="popup-content">
         <div class="popup-header">
           <span class="popup-icon">🚏</span>
-          <h3 class="popup-title">${stop.name}</h3>
+          <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
         </div>
         <div class="popup-loading">
           <div class="loading-spinner"></div>
@@ -150,9 +151,9 @@ export class MapMarkerService {
 
         departures += `
           <div class="departure-row">
-            <span class="dep-line">${line}</span>
-            <span class="dep-direction">${direction}</span>
-            <span class="dep-time">${timeDisplay}${estimatedBadge}</span>
+            <span class="dep-line">${escapeHtml(line)}</span>
+            <span class="dep-direction">${escapeHtml(direction)}</span>
+            <span class="dep-time">${escapeHtml(timeDisplay)}${estimatedBadge}</span>
           </div>
         `;
       }
@@ -163,7 +164,7 @@ export class MapMarkerService {
       <div class="popup-content">
         <div class="popup-header">
           <span class="popup-icon">🚏</span>
-          <h3 class="popup-title">${stop.name}</h3>
+          <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
           ${stop.onlyDisembarking ? '<span class="badge-warn">Tylko wysiadanie</span>' : ''}
         </div>
         ${departures}
@@ -176,7 +177,7 @@ export class MapMarkerService {
       <div class="popup-content">
         <div class="popup-header">
           <span class="popup-icon">🚏</span>
-          <h3 class="popup-title">${stop.name}</h3>
+          <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
         </div>
         <div class="popup-error">
           <span>⚠️</span>

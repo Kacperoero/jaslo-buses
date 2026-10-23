@@ -1,59 +1,105 @@
-# Autobusy
+# JakDojadę Jasło (autobusy)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.11.
+Webowa aplikacja z mapą komunikacji miejskiej MKS Jasło. Pokazuje wszystkie przystanki na mapie, odjazdy na żywo dla wybranego przystanku i wyszukuje połączenia z punktu A do punktu B (bezpośrednie i z jedną przesiadką).
 
-## Development server
+Dane o odjazdach pochodzą z publicznego API systemu [kiedyprzyjedzie.pl](https://mksjaslo.kiedyprzyjedzie.pl). Pozycje przystanków są trzymane lokalnie w pliku JSON, żeby można je było ręcznie poprawiać.
 
-To start a local development server, run:
+## Funkcje
 
-```bash
-ng serve
-```
+- **Mapa przystanków** – Leaflet + kafelki OpenStreetMap, wyśrodkowana na Jaśle; 586 słupków (ok. 350 unikalnych nazw).
+- **Odjazdy na żywo** – kliknięcie przystanku otwiera dymek z najbliższymi 8 odjazdami (linia, kierunek, czas, znacznik `LIVE` dla czasów z GPS).
+- **Wyszukiwarka przystanków** – pole w lewym górnym rogu, po wybraniu mapa przelatuje do przystanku.
+- **Planer trasy A → B** – punkt startu/celu można wybrać z listy przystanków, kliknąć na mapie albo użyć swojej lokalizacji. Wyniki są sortowane po łącznym czasie podróży (dojście + czekanie + jazda + dojście), a wybrana trasa jest rysowana na mapie.
+- **Tryb korekty pozycji** – po ustawieniu `devMode = true` w `MapMarkerService` znaczniki można przeciągać, a nowe współrzędne lądują w konsoli.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Wymagania
 
-## Code scaffolding
+- Node.js w wersji obsługiwanej przez Angular 21 (20.19+, 22.12+ lub 24)
+- npm 11 (zgodnie z polem `packageManager`)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Uruchomienie
 
 ```bash
-ng generate --help
+npm install
 ```
-
-## Building
-
-To build the project run:
 
 ```bash
-ng build
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Aplikacja wystartuje pod `http://localhost:4200/` i przeładuje się sama po każdej zmianie w kodzie.
 
-## Running unit tests
+W trybie deweloperskim zapytania na `/api/*` są przekierowywane przez proxy (`proxy.conf.json`) do `https://mksjaslo.kiedyprzyjedzie.pl`. Dzięki temu przeglądarka nie blokuje ich przez CORS.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Pozostałe komendy
 
-```bash
-ng test
+| Komenda | Co robi |
+| --- | --- |
+| `npm run build` | Build produkcyjny do `dist/autobusy/browser` |
+| `npm run watch` | Build deweloperski w trybie obserwowania zmian |
+| `npm test` | Testy jednostkowe (Vitest) |
+
+## Wdrożenie produkcyjne
+
+Build to statyczne pliki, ale **aplikacja potrzebuje proxy dla `/api`** – w produkcji `proxy.conf.json` nie działa. Serwer (np. nginx) musi przekazywać `/api/` do kiedyprzyjedzie.pl, na przykład:
+
+```nginx
+location /api/ {
+    proxy_pass https://mksjaslo.kiedyprzyjedzie.pl/api/;
+    proxy_set_header Host mksjaslo.kiedyprzyjedzie.pl;
+    proxy_ssl_server_name on;
+}
 ```
 
-## Running end-to-end tests
+## Struktura projektu
 
-For end-to-end (e2e) testing, run:
+```
+src/app/
+├── app.ts / app.html                    # Główny komponent – renderuje tylko mapę
+├── app.config.ts                        # Providery: router, HttpClient
+├── main-map/                            # Cały interfejs: mapa, wyszukiwarka, planer trasy
+│   └── main-map.component.ts            # Logika UI + algorytm wyszukiwania połączeń
+├── core/services/timetable.service.ts   # Klient API kiedyprzyjedzie.pl
+├── features/map/services/
+│   └── map-marker.service.ts            # Rysowanie przystanków i dymków z odjazdami
+└── shared/
+    ├── models/transit.models.ts         # Typy: Stop, Departure, TripExecutionResponse…
+    └── utils/text.utils.ts              # Porównywanie nazw (polskie znaki) i escapowanie HTML
 
-```bash
-ng e2e
+public/assets/data/stops-base.json       # Lokalna baza przystanków
+proxy.conf.json                          # Proxy /api → kiedyprzyjedzie.pl (tylko dev)
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Przy wstawianiu danych z API do dymków Leaflet (`bindPopup`, `setContent`) zawsze używaj `escapeHtml()`. Nazwy przystanków i kierunków porównuj przez `namesMatch()`.
 
-## Additional Resources
+## Używane API
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Wszystkie zapytania idą przez `/api` (proxy). Identyfikator przystanku ma postać `1332005:1392084` i jest kodowany w URL.
+
+| Endpoint | Do czego |
+| --- | --- |
+| `GET /api/departures/{stopId}` | Najbliższe odjazdy z przystanku |
+| `GET /api/directions/{stopId}` | Linie i kierunki obsługujące przystanek |
+| `GET /api/trip_execution/{base64(tripId)}` | Pełna lista przystanków i godzin konkretnego kursu |
+
+Do rysowania tras (dojście pieszo, przejazd autobusu) używane są publiczne serwery OSRM: `routing.openstreetmap.de`, a w razie błędu `router.project-osrm.org`. Gdy oba zawiodą, rysowana jest linia prosta.
+
+## Jak działa wyszukiwanie połączeń
+
+1. **Kandydaci** – jeśli wybrano konkretny przystanek, brany jest tylko on; jeśli punkt na mapie – 10 najbliższych przystanków.
+2. **Połączenia bezpośrednie** – dla każdej pary (start, cel) szukane są wspólne linie. Kierunek jazdy sprawdzany jest najpierw po nazwie kierunku i położeniu, a potem dokładnie – po kolejności przystanków w `trip_execution`.
+3. **Przesiadki** – gdy połączeń bezpośrednich jest mniej niż 5, algorytm sprawdza kolejne przystanki kursów odjeżdżających ze startu i szuka tam linii jadącej do celu (min. 2 minuty na przesiadkę). Wyników jest maksymalnie 6.
+4. **Sortowanie** – najpierw połączenia z realnym najbliższym odjazdem, posortowane po łącznym czasie. Czas dojścia liczony jest jako 80 m/min w linii prostej.
+
+## Poprawianie pozycji przystanków
+
+1. W `map-marker.service.ts` ustaw `devMode = true`.
+2. Przeciągnij znacznik w miejsce, gdzie faktycznie stoi wiata.
+3. Skopiuj obiekt JSON z konsoli przeglądarki i podmień wpis w `public/assets/data/stops-base.json` (pole `id` musi zostać bez zmian).
+4. Przywróć `devMode = false`.
+
+## Znane ograniczenia
+
+- Planer wykonuje dziesiątki zapytań do API jedno po drugim, więc wyszukiwanie może trwać kilka–kilkanaście sekund.
+- Obsługiwana jest maksymalnie jedna przesiadka.
+- Testy obejmują na razie tylko komponent główny i helpery tekstowe – algorytm planera nie ma testów.
