@@ -83,8 +83,24 @@ export interface TripExecutionResponse {
     lat: number;
   };
   next_departure_index: number;
-  estimates: any[];
+  /** Expected arrivals, starting at the vehicle's next stop (`times[vehicle_trip_index]`) */
+  estimates: TripEstimate[];
   vehicle_trip_index: number;
+}
+
+/** Expected arrival at one of the next stops of a live trip */
+export interface TripEstimate {
+  /** "HH:MM" */
+  arrival_abs: string | null;
+  time_abs: string | null;
+  /** Minutes until arrival */
+  to_go: number;
+}
+
+/** Response from GET /api/departures?places=a,b,c (live departures of up to 6 stops) */
+export interface MultiDeparturesResponse {
+  status: string;
+  departures: { designator: number; rows: Departure[] }[];
 }
 
 /** A direction/line serving a stop */

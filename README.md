@@ -9,6 +9,7 @@ Dane o odjazdach pochodzą z publicznego API systemu [kiedyprzyjedzie.pl](https:
 - **Mapa przystanków** – Leaflet + kafelki OpenStreetMap, wyśrodkowana na Jaśle; 586 słupków (ok. 350 unikalnych nazw).
 - **Odjazdy na żywo** – kliknięcie przystanku otwiera dymek z najbliższymi 8 odjazdami (linia, kierunek, czas, znacznik `LIVE` dla czasów z GPS).
 - **Wyszukiwarka przystanków** – pole w lewym górnym rogu, po wybraniu mapa przelatuje do przystanku.
+- **Autobusy na żywo** – przycisk „🚌 Autobusy na żywo” (domyślnie wyłączony) pokazuje na mapie jadące autobusy z numerem linii, odświeżane co 20 s. Autobus spóźniony o 3+ min ma pomarańczową plakietkę. Po kliknięciu widać kierunek, następny przystanek z przewidywaną godziną i opóźnienie.
 - **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Teraz” oznacza odjazdy na żywo; „Inny termin” przełącza dymki i planer na rozkład jazdy dla wybranego dnia i godziny (do 60 dni naprzód). Przydaje się też do testowania w nocy, gdy autobusy nie kursują.
 - **Ulubione i ostatnie** – gwiazdka ☆ w okienku przystanku (ulubione mają na mapie żółtą kropkę). Po kliknięciu w puste pole wyszukiwarki widać ulubione i ostatnio oglądane przystanki. W planerze puste pola A/B podpowiadają ulubione, a pod formularzem jest lista ostatnich tras do powtórzenia jednym kliknięciem. Dane są zapisane w przeglądarce (`localStorage`); tras z „Moja lokalizacja” nie zapisujemy.
 - **Planer trasy A → B** – punkt startu/celu można wybrać z listy przystanków, kliknąć na mapie albo użyć swojej lokalizacji. Wyniki są sortowane po łącznym czasie podróży (dojście + czekanie + jazda + dojście), a wybrana trasa jest rysowana na mapie.
@@ -67,7 +68,8 @@ src/app/
 │   └── favorites.service.ts             # Ulubione, ostatnie przystanki i trasy (localStorage)
 ├── features/
 │   ├── map/services/map-marker.service.ts      # Rysowanie przystanków i dymków z odjazdami
-│   └── route-planner/route-planner.service.ts  # Algorytm wyszukiwania połączeń (+ testy)
+│   ├── route-planner/route-planner.service.ts  # Algorytm wyszukiwania połączeń (+ testy)
+│   └── vehicles/live-vehicles.service.ts       # Autobusy na żywo: wyszukiwanie i odświeżanie pozycji
 └── shared/
     ├── components/time-picker/          # Wybór „Teraz / Inny termin” (chip na mapie, sekcja w planerze)
     ├── models/transit.models.ts         # Typy: Stop, Departure, TripExecutionResponse…
@@ -90,6 +92,7 @@ Wszystkie zapytania idą przez `/api` (proxy). Identyfikator przystanku ma posta
 | `GET /api/trip_execution/{base64(trip_execution_id)}/{trip_index}` | Pełna lista przystanków i godzin konkretnego kursu (na żywo) + pozycja GPS pojazdu. Bez `trip_index` (pozycja przystanku w kursie, z odjazdu) API zwraca 404 |
 | `GET /api/directions/{stopId}?date=RRRR-MM-DD` | Linie kursujące przez przystanek w danym dniu |
 | `GET /api/timetable/{stopId}/{base64url(linia)}?date=RRRR-MM-DD` | Rozkład jednej linii na przystanku w danym dniu (czasy w sekundach od północy) |
+| `GET /api/departures?places=a,b,c` | Odjazdy na żywo kilku przystanków naraz – **maksymalnie 6** (więcej jest pomijane, ~150 daje 502) |
 | `GET /api/trip/{tripId}/{index}` | Planowa lista przystanków kursu z rozkładu (`index` = pozycja przystanku w kursie) |
 
 W trybie „Inny termin” `TimetableService.getScheduledDepartures()` pobiera rozkłady wszystkich linii danego dnia równolegle i zamienia je na ten sam format, co odjazdy na żywo. Dzięki temu planer działa tak samo w obu trybach. Kursy z rozkładu mają identyfikator `trip:<tripId>:<index>`. Rozkład dnia jest zapamiętywany na czas sesji.
@@ -119,3 +122,13 @@ Zapytania do API idą równolegle, a te same nigdy nie są wysyłane dwa razy (p
 
 - Planer nadal potrzebuje kilkudziesięciu zapytań do API na jedno wyszukiwanie (ok. 2 s). Dalsze przyspieszenie wymagałoby własnego backendu albo danych GTFS.
 - Obsługiwana jest maksymalnie jedna przesiadka.
+
+## Jak działają autobusy na żywo
+
+Publiczne API nie ma listy wszystkich pojazdów (`/api/vehicles` wymaga logowania). Dlatego `LiveVehiclesService` szuka autobusów przez odjazdy:
+
+1. Pyta przystanki w widocznym obszarze (z 20% marginesem), które autobusy przyjadą w ciągu 15 min. Po włączeniu pyta 72 przystanki najbliżej środka mapy (12 zapytań), a potem przy każdym odświeżeniu kolejne 24 (4 zapytania) – po kilku minutach przejdzie cały widok. Po przesunięciu mapy zaczyna od nowa od środka.
+2. Dla każdego znalezionego kursu pobiera `trip_execution`, które zawiera pozycję GPS, następny przystanek i przewidywane godziny. Kursy zakończone albo bez pozycji przestaje śledzić.
+
+Obciążenie: co 20 s ok. 4 zapytania o odjazdy plus jedno na każdy śledzony autobus (maks. 40). Odświeżanie wstrzymuje się, gdy karta przeglądarki jest ukryta.
+

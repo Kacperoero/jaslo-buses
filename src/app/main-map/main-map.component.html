@@ -352,6 +352,21 @@
   </div>
 }
 
+<!-- Live buses toggle -->
+<button class="vehicles-toggle" [class.active]="liveVehicles.enabled()" (click)="liveVehicles.toggle()"
+        [attr.aria-pressed]="liveVehicles.enabled()" aria-label="Autobusy na żywo"
+        title="Pokaż autobusy jadące teraz (pozycje GPS, odświeżane co 20 s)">
+  @if (liveVehicles.loading()) {
+    <span class="loading-spinner small"></span>
+  } @else {
+    <span aria-hidden="true">🚌</span>
+  }
+  <span class="toggle-label">Autobusy na żywo</span>
+  @if (liveVehicles.enabled() && !liveVehicles.loading()) {
+    <span class="vehicle-count">{{ liveVehicles.vehicles().length }}</span>
+  }
+</button>
+
 <!-- Locate Me Button -->
 <button class="locate-btn" (click)="locateUser()" aria-label="Moja lokalizacja" id="locate-me-btn">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">

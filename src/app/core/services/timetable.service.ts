@@ -5,6 +5,7 @@ import {
   Departure,
   DeparturesResponse,
   DirectionsResponse,
+  MultiDeparturesResponse,
   LineTimetableResponse,
   StopDirection,
   TripExecutionResponse,
@@ -21,6 +22,9 @@ const SCHEDULED_TRIP_PREFIX = 'trip:';
 /** How far ahead (minutes) and how many departures a scheduled board shows. */
 const SCHEDULE_WINDOW_MIN = 180;
 const SCHEDULE_MAX_ROWS = 15;
+
+/** /api/departures?places=… answers for at most this many stops. */
+export const MAX_STOPS_PER_MULTI_REQUEST = 6;
 
 @Injectable({
   providedIn: 'root'
@@ -61,6 +65,17 @@ export class TimetableService {
     const encodedId = encodeURIComponent(stopId);
     return this.http.get<DeparturesResponse>(
       `${this.baseUrl}/departures/${encodedId}`
+    );
+  }
+
+  /**
+   * Live departures of several stops in one request. The API answers for at most
+   * MAX_STOPS_PER_MULTI_REQUEST stops (more are silently dropped, too many fail), so call it
+   * with small groups. Rows are grouped by stop `designator`.
+   */
+  getDeparturesForStops(stopIds: string[]): Observable<MultiDeparturesResponse> {
+    return this.http.get<MultiDeparturesResponse>(
+      `${this.baseUrl}/departures`, { params: { places: stopIds.join(',') } }
     );
   }
 
