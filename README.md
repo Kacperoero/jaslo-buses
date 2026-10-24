@@ -132,3 +132,38 @@ Publiczne API nie ma listy wszystkich pojazdów (`/api/vehicles` wymaga logowani
 
 Obciążenie: co 20 s ok. 4 zapytania o odjazdy plus jedno na każdy śledzony autobus (maks. 40). Odświeżanie wstrzymuje się, gdy karta przeglądarki jest ukryta.
 
+
+## Do zrobienia
+
+### 1. Przejście na oficjalne dane MKS (GTFS) zamiast API kiedyprzyjedzie
+
+Kiedyprzyjedzie to płatny system informacji pasażerskiej, z którego korzysta MKS. Jego API nie jest udostępnione innym, więc nie chcemy z niego korzystać ani obciążać jego serwerów. MKS publikuje rozkład jako GTFS: [mksjaslo.pl → Strefa pasażera → GTFS](https://www.mksjaslo.pl/strefa-pasazera/gtfs).
+
+- Skrypt pobierający aktualny GTFS ze strony MKS i zamieniający go na pliki danych aplikacji (przystanki, kursy, kalendarz).
+- Odjazdy, tryb „Inny termin” i planer liczone w przeglądarce z GTFS – bez zapytań do cudzych serwerów; usunięcie proxy `/api`.
+- **Numery linii:** GTFS ich nie zawiera (trasy mają tylko nazwy typu „JASŁO - BIERÓWKA - NIEPLA”). Potrzebna tabela „trasa → numer linii” na podstawie stron [Linie miejskie](https://www.mksjaslo.pl/rozklad-jazdy/linie-miejskie) / [pozamiejskie](https://www.mksjaslo.pl/rozklad-jazdy/linie-pozamiejskie).
+- Przeniesienie ulubionych na nowe identyfikatory przystanków (po nazwie i położeniu).
+- Tryb „Teraz” = rozkład na bieżącą godzinę; warstwa „Autobusy na żywo” wyłączona, dopóki nie będzie legalnego źródła danych na żywo.
+
+### 2. Aktualność GTFS
+
+Plik GTFS na stronie MKS ma rozkład z 11.03.2026, a [ogólny rozkład w PDF](https://www.mksjaslo.pl/rozklad-jazdy/ogolny-rozklad-jazdy) obowiązuje od 01.04.2026. Sprawdzone 24.10.2026 (odjazdy z przystanku początkowego Rynek, dzień roboczy / sobota / niedziela):
+
+- linie **C, D, E2** – zgodne co do minuty,
+- linia **A** – 9 z 12 kursów zgodnych; różnice: PDF 06:40 / GTFS 06:45, kurs 07:50 w PDF od pon. do sob. / w GTFS tylko w sobotę, kursu 10:05 (pon.–pt.) brak w GTFS.
+
+Na przystankach pośrednich (3 Maja 01) ok. 20% godzin różni się od danych kiedyprzyjedzie, głównie o 1 minutę – PDF podaje tylko godziny z przystanku początkowego, więc tego nie da się nim sprawdzić. Do zrobienia: sprawdzić pozostałe linie i zapytać MKS o aktualizację pliku GTFS.
+
+### 3. Ręczne poprawienie położenia przystanków
+
+Część przystanków ma współrzędne nie tam, gdzie faktycznie stoi wiata (np. po złej stronie drogi albo kilkadziesiąt metrów obok), przez co planer czasem pokazuje złe miejsce wsiadania lub wysiadania. GTFS ma **te same współrzędne** co obecny plik, więc przejście na GTFS tego nie naprawi.
+
+- Poprawki trzymać w osobnym pliku (np. `stop-overrides.json`), a nie w pliku z danymi – żeby aktualizacja GTFS ich nie nadpisywała. Klucz: nazwa przystanku + przybliżone położenie (identyfikatory mogą się zmieniać między wersjami GTFS).
+- Narzędziem jest tryb przeciągania znaczników (`devMode` w `MapMarkerService`, patrz „Poprawianie pozycji przystanków”) – do rozbudowy o zapis poprawek do pliku zamiast do konsoli.
+- Weryfikacja: porównanie z mapą OSM (wiaty / `highway=bus_stop`) lub objazd w terenie.
+
+### 4. Pozostałe
+
+- Kursy po północy w trybie „Inny termin” (dziś widać tylko kursy z wybranego dnia).
+- Własna nazwa aplikacji przed publikacją (nazwa „JakDojade” należy do istniejącej aplikacji).
+- Przed publikacją: mail do MKS (biuro@mksjaslo.com.pl) – zgoda na użycie GTFS, aktualizacja pliku i numery linii, możliwość udostępnienia danych na żywo (np. GTFS-Realtime z systemu kiedyprzyjedzie).
