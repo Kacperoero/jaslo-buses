@@ -201,9 +201,11 @@ export class MapMarkerService {
     } else {
       departures = `<div class="popup-departures">`;
       for (const row of rows.slice(0, 8)) {
-        const estimatedBadge = row.is_estimated
-          ? '<span class="badge-live">LIVE</span>'
-          : '';
+        const estimatedBadge = row.canceled
+          ? '<span class="badge-canceled">ODWOŁANY</span>'
+          : row.is_estimated
+            ? '<span class="badge-live">LIVE</span>'
+            : '';
         // Scheduled mode: clock time is more useful than "in N min" from a future moment
         const timeDisplay = scheduled && row.static_time
           ? row.static_time
@@ -215,7 +217,7 @@ export class MapMarkerService {
         const direction = (row.direction_id && directions[row.direction_id]) || row.direction || 'Brak kierunku';
 
         departures += `
-          <div class="departure-row">
+          <div class="departure-row${row.canceled ? ' canceled' : ''}">
             <span class="dep-line">${escapeHtml(line)}</span>
             <span class="dep-direction">${escapeHtml(direction)}</span>
             <span class="dep-time">${escapeHtml(timeDisplay)}${estimatedBadge}</span>

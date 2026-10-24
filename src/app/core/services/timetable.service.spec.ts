@@ -77,6 +77,16 @@ describe('TimetableService scheduled departures', () => {
     http.expectNone(r => r.url.startsWith('/api/'));
   });
 
+  it('asks for a live trip by Base64 id and stop position', async () => {
+    const result = firstValueFrom(service.getTripExecution('Z22:739913:5', 14));
+    http.expectOne('/api/trip_execution/WjIyOjczOTkxMzo1/14').flush({
+      trip: { times: [], direction: '', current_station_id: 0, line: { name: 'OG', type: 'bus', show_name: true } },
+      canceled: [], vehicle_type: 0, estimated: true, at_stop: false,
+      next_departure_index: 0, estimates: [], vehicle_trip_index: 0
+    });
+    expect((await result).trip.line.name).toBe('OG');
+  });
+
   it('loads scheduled trips from the planned trip endpoint', async () => {
     const result = firstValueFrom(service.getTripExecution('trip:46084089:35'));
     http.expectOne('/api/trip/46084089/35').flush({

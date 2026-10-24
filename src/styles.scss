@@ -171,6 +171,31 @@ html, body {
   font-weight: 500;
 }
 
+.badge-canceled {
+  display: inline-flex;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+  background: #ef4444;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-left: 4px;
+  letter-spacing: 0.03em;
+}
+
+.departure-row.canceled {
+  .dep-line, .dep-direction, .dep-time {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+
+  .badge-canceled {
+    text-decoration: none;
+    display: inline-flex;
+  }
+}
+
 .badge-live {
   display: inline-flex;
   align-items: center;

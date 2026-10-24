@@ -37,10 +37,10 @@ const dir = (line: string, direction: string): StopDirection => ({ line, directi
 
 const DIRECTIONS: Record<string, StopDirection[]> = {
   s1: [dir('1', 'KONIEC')],
-  s2: [dir('1', 'KONIEC'), dir('2', 'IKS')],
+  s2: [dir('1', 'KONIEC'), dir('2', 'IKS'), dir('3', 'CEL')],
   s3: [dir('1', 'KONIEC')],
   k: [],
-  x: [dir('2', 'IKS')],
+  x: [dir('2', 'IKS'), dir('3', 'CEL')],
   i: [],
   p: [dir('E4', 'PĘTLA')],
   p2: [dir('22', 'RYNEK')],
@@ -50,7 +50,10 @@ const DIRECTIONS: Record<string, StopDirection[]> = {
 
 const DEPARTURES: Record<string, DeparturesResponse> = {
   s1: board([{ line: '1', time: '5 min', dir: 'd1', trip: 't1' }], { d1: 'KONIEC' }),
-  s2: board([{ line: '2', time: '15 min', dir: 'd2', trip: 't2' }], { d2: 'IKS' }),
+  s2: board([
+    { line: '2', time: '15 min', dir: 'd2', trip: 't2' },
+    { line: '3', time: '20 min', dir: 'd3', trip: 't3' }
+  ], { d2: 'IKS', d3: 'CEL' }),
   s3: board([{ line: '1', time: '9 min', dir: 'd1', trip: 't1' }], { d1: 'KONIEC' }),
   k: board([], {}),
   x: board([], {}),
@@ -64,6 +67,8 @@ const DEPARTURES: Record<string, DeparturesResponse> = {
 const TRIPS: Record<string, TripTime[]> = {
   t1: [time(S1, '07:35', 0), time(S2, '07:38', 1), time(S3, '07:42', 2), time(KONIEC, '07:50', 3)],
   t2: [time(S2, '07:45', 0), time(X, '07:52', 1), time(IKS, '07:58', 2)],
+  // line 3 goes back through S1 on its way to X
+  t3: [time(S2, '07:50', 0), time(S1, '07:55', 1), time(X, '08:05', 2)],
   e4: [time(P, '08:00', 0), time(Q, '08:05', 1), time(R, '08:10', 2)],
   t22: [time(P2, '08:02', 0), time(R, '08:06', 1)]
 };
@@ -91,18 +96,19 @@ const at = (s: Stop): ConnectionPoint => ({ lat: s.lat, lng: s.lng, name: s.name
 
 describe('RoutePlannerService', () => {
   let planner: RoutePlannerService;
-  let calls: { departures: string[]; trips: string[] };
+  let calls: { departures: string[]; trips: string[]; tripIndexes: number[] };
 
   beforeEach(() => {
-    calls = { departures: [], trips: [] };
+    calls = { departures: [], trips: [], tripIndexes: [] };
     const fakeTimetable: Partial<TimetableService> = {
       getDirectionsForStop: (id: string) => of(DIRECTIONS[id] ?? []),
       getDepartures: (id: string) => {
         calls.departures.push(id);
         return of(DEPARTURES[id]);
       },
-      getTripExecution: (id: string) => {
+      getTripExecution: (id: string, index = 0) => {
         calls.trips.push(id);
+        calls.tripIndexes.push(index);
         return of(execution(TRIPS[id]));
       }
     };
@@ -167,6 +173,37 @@ describe('RoutePlannerService', () => {
     const conns = await planner.findConnections(point(S1), point(S3), STOPS);
 
     expect(conns.filter(c => c.line === '1').length).toBe(1);
+  });
+
+  it('asks for a live trip with the stop position from the departure', async () => {
+    const original = DEPARTURES['s1'];
+    DEPARTURES['s1'] = { ...original, rows: original.rows!.map(r => ({ ...r, trip_index: 0 })) };
+    try {
+      TestBed.inject(TravelTimeService).resetToNow();
+      const [conn] = await planner.findConnections(at(S1), at(S3), STOPS);
+
+      expect(conn.line).toBe('1');
+      expect(calls.tripIndexes[calls.trips.indexOf('t1')]).toBe(0);
+    } finally {
+      DEPARTURES['s1'] = original;
+    }
+  });
+
+  it('skips cancelled trips', async () => {
+    const original = DEPARTURES['s1'];
+    DEPARTURES['s1'] = { ...original, rows: original.rows!.map(r => ({ ...r, canceled: true })) };
+    try {
+      const conns = await planner.findConnections(at(S1), at(S3), STOPS);
+      expect(conns.every(c => c.nextDeparture === null)).toBe(true); // only "Brak kursu"
+    } finally {
+      DEPARTURES['s1'] = original;
+    }
+  });
+
+  it('drops a transfer whose second bus passes back through the start stop', async () => {
+    // 1 → S2 → 3 would come back past S1, where line 3 could be boarded directly
+    const conns = await planner.findConnections(at(S1), at(X), STOPS);
+    expect(conns.map(c => c.line)).not.toContain('1 ➔ 3');
   });
 
   it('never requests the same departures or trip twice in one search', async () => {

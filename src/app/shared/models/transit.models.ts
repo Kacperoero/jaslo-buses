@@ -34,6 +34,12 @@ export interface Departure {
   vehicle_attributes?: string[];
   /** Execution ID for real-time tracking of the specific trip */
   trip_execution_id?: string;
+  /** Position of this stop in the trip's stop list (live departures) */
+  trip_index?: number;
+  /** The trip was cancelled (live departures) */
+  canceled?: boolean;
+  /** Bus is standing at the stop right now (live departures) */
+  at_stop?: boolean;
 }
 
 /** Response from the departures API endpoint */

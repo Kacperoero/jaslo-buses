@@ -147,6 +147,7 @@ export class RoutePlannerService {
     for (const { from, lines: only } of usable) {
       const perLine = new Map<string, number>();
       for (const row of (await this.departures(from.stop.id, only)).rows || []) {
+        if (row.canceled) continue;
         const key = `${row.line_name || row.line}|${row.direction_id ?? ''}`;
         const n = perLine.get(key) ?? 0;
         if (n >= MAX_ROWS_PER_LINE) continue;
@@ -155,7 +156,7 @@ export class RoutePlannerService {
       }
     }
 
-    await Promise.all(unique(picked.map(p => p.row.trip_execution_id).filter(isString)).map(id => this.trip(id)));
+    await Promise.all(picked.map(p => this.trip(p.row)));
 
     const rides: Ride[] = [];
     for (const { from, row } of picked) {
@@ -169,7 +170,7 @@ export class RoutePlannerService {
   private async toRide(from: StopCandidate, row: Departure, ctx: SearchContext): Promise<Ride | null> {
     const line = row.line_name || row.line;
     if (!line || !row.trip_execution_id) return null;
-    const times = (await this.trip(row.trip_execution_id))?.trip?.times;
+    const times = (await this.trip(row))?.trip?.times;
     if (!times) return null;
 
     const minToDep = parseDepartureTimeToMinutes(row.time, ctx.ref);
@@ -277,13 +278,15 @@ export class RoutePlannerService {
             && parseDepartureTimeToMinutes(r.time, ctx.ref) >= arrival1 + MIN_TRANSFER_MIN);
 
         for (const line2 of lines) {
-          const tries = rows.filter(r => (r.line_name || r.line) === line2).slice(0, MAX_SECOND_LEG_OPTIONS);
-          await Promise.all(tries.map(r => r.trip_execution_id && this.trip(r.trip_execution_id)));
+          const tries = rows.filter(r => (r.line_name || r.line) === line2 && !r.canceled).slice(0, MAX_SECOND_LEG_OPTIONS);
+          await Promise.all(tries.map(r => this.trip(r)));
 
           for (const row of tries) {
             const ride2 = await this.toRide(tCand, row, ctx);
             const endIndex = ride2 ? indexAfter(ride2.times, e.stop.id, ride2.boardIndex) : -1;
             if (!ride2 || endIndex === -1) continue;
+            // The second bus comes back past a start stop – boarding it there is simpler (direct search)
+            if (ride2.times.slice(ride2.boardIndex + 1, endIndex).some(t => startIds.has(t.place_id))) continue;
 
             const conn = this.transferConnection(ride, k, ride2, endIndex, e, ctx);
             if (conn.totalTime >= bestDirect) break; // slower than going direct
@@ -474,10 +477,12 @@ export class RoutePlannerService {
     );
   }
 
-  private trip(tripExecId: string): Promise<TripExecutionResponse | null> {
-    // One request per bus run, whichever stop it was looked up from
+  /** Stop sequence of a departure's trip – one request per bus run, whichever stop it was looked up from. */
+  private trip(row: Departure): Promise<TripExecutionResponse | null> {
+    const tripExecId = row.trip_execution_id;
+    if (!tripExecId) return Promise.resolve(null);
     return cached(this.tripCache, tripKey(tripExecId), () =>
-      firstValueFrom(this.timetable.getTripExecution(tripExecId)).catch(err => {
+      firstValueFrom(this.timetable.getTripExecution(tripExecId, row.trip_index ?? 0)).catch(err => {
         console.error(`Failed to fetch trip execution ${tripExecId}`, err);
         return null;
       })
@@ -498,9 +503,10 @@ function tripKey(tripExecId: string): string {
  * stop index from a scheduled id, or else the visit whose time is closest to the departure.
  */
 function findBoardIndex(times: TripTime[], stopId: string, row: Departure, minToDep: number, ref: Date): number {
+  // Position of the stop in the trip: from a scheduled id, or `trip_index` of a live departure
   const id = row.trip_execution_id ?? '';
-  if (id.startsWith('trip:')) {
-    const index = Number(id.split(':')[2]);
+  const index = id.startsWith('trip:') ? Number(id.split(':')[2]) : row.trip_index;
+  if (index != null) {
     const i = times.findIndex(t => t.index === index && t.place_id === stopId);
     if (i !== -1) return i;
   }
@@ -550,8 +556,4 @@ function cached<T>(cache: Map<string, Promise<T>>, key: string, load: () => Prom
 
 function unique<T>(items: T[]): T[] {
   return [...new Set(items)];
-}
-
-function isString(v: unknown): v is string {
-  return typeof v === 'string' && v.length > 0;
 }

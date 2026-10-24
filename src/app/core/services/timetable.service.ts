@@ -131,10 +131,12 @@ export class TimetableService {
 
   /**
    * Fetch details (stop sequence and times) of a specific trip.
-   * Live ids are Base64-encoded as required by the API; scheduled ids
-   * ("trip:<id>:<index>") are fetched from the planned trip endpoint instead.
+   * Live ids are Base64-encoded as required by the API and need the stop's position in the
+   * trip (`trip_index` of the departure – any position returns the same stop list, but the
+   * endpoint answers 404 without one). Scheduled ids ("trip:<id>:<index>") are fetched from
+   * the planned trip endpoint instead.
    */
-  getTripExecution(tripExecutionId: string): Observable<TripExecutionResponse> {
+  getTripExecution(tripExecutionId: string, index = 0): Observable<TripExecutionResponse> {
     if (tripExecutionId.startsWith(SCHEDULED_TRIP_PREFIX)) {
       const [tripId, index] = tripExecutionId.slice(SCHEDULED_TRIP_PREFIX.length).split(':');
       return this.getTrip(tripId, Number(index)).pipe(
@@ -158,7 +160,7 @@ export class TimetableService {
 
     const encodedId = encodeURIComponent(btoa(tripExecutionId));
     return this.http.get<TripExecutionResponse>(
-      `${this.baseUrl}/trip_execution/${encodedId}`
+      `${this.baseUrl}/trip_execution/${encodedId}/${index}`
     );
   }
 

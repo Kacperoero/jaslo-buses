@@ -87,7 +87,7 @@ Wszystkie zapytania idą przez `/api` (proxy). Identyfikator przystanku ma posta
 | --- | --- |
 | `GET /api/departures/{stopId}` | Najbliższe odjazdy z przystanku |
 | `GET /api/directions/{stopId}` | Linie i kierunki obsługujące przystanek |
-| `GET /api/trip_execution/{base64(tripId)}` | Pełna lista przystanków i godzin konkretnego kursu (na żywo) |
+| `GET /api/trip_execution/{base64(trip_execution_id)}/{trip_index}` | Pełna lista przystanków i godzin konkretnego kursu (na żywo) + pozycja GPS pojazdu. Bez `trip_index` (pozycja przystanku w kursie, z odjazdu) API zwraca 404 |
 | `GET /api/directions/{stopId}?date=RRRR-MM-DD` | Linie kursujące przez przystanek w danym dniu |
 | `GET /api/timetable/{stopId}/{base64url(linia)}?date=RRRR-MM-DD` | Rozkład jednej linii na przystanku w danym dniu (czasy w sekundach od północy) |
 | `GET /api/trip/{tripId}/{index}` | Planowa lista przystanków kursu z rozkładu (`index` = pozycja przystanku w kursie) |
