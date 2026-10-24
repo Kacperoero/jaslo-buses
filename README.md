@@ -117,7 +117,7 @@ Algorytm siedzi w `RoutePlannerService`, dane daje `TimetableService` (z GTFS, w
 
 Kursy po północy są uwzględniane (odjazdy z poprzedniego i następnego dnia, gdy okno 3 godzin przechodzi przez północ).
 
-Do rysowania tras (dojście pieszo, przejazd autobusu) używane są publiczne serwery OSRM: `routing.openstreetmap.de`, a w razie błędu `router.project-osrm.org`. Gdy oba zawiodą, rysowana jest linia prosta.
+**Rysowanie trasy na mapie** nie korzysta z żadnego zewnętrznego serwera: przejazd autobusu to linia przez kolejne przystanki kursu z rozkładu (z kropkami na przystankach pośrednich), a dojście pieszo – przerywana linia prosta. Między przystankami odcinki są proste, więc w centrum linia czasem przecina kwartały zamiast iść ulicą.
 
 ## Poprawianie pozycji przystanków
 
@@ -133,7 +133,8 @@ Uwaga: `npm run gtfs:build` nadpisuje `stops-base.json` i `gtfs.json`, więc pop
 - Brak danych na żywo (opóźnień, pozycji autobusów) – MKS udostępnia je tylko przez płatny system kiedyprzyjedzie, bez publicznego API dla innych. Warstwa „Autobusy na żywo” była zrobiona na tym API i została usunięta; jej kod jest w historii git (commit `b790d54`), gdyby pojawiło się legalne źródło.
 - Numery linii są przypisane heurystycznie (patrz „Numery linii”).
 - Obsługiwana jest maksymalnie jedna przesiadka.
-- Rysowanie tras korzysta z publicznych serwerów OSRM, a mapa z kafelków OpenStreetMap – mają własne zasady użycia, przed publikacją warto to sprawdzić (lub użyć własnego/płatnego dostawcy).
+- Jedyne zewnętrzne zasoby to kafelki mapy OpenStreetMap i czcionka Google Fonts. Kafelki OSM mają [zasady użycia](https://operations.osmfoundation.org/policies/tiles/) – przy publikacji z większym ruchem warto przejść na własnego lub płatnego dostawcę kafelków.
+- Trasa autobusu jest rysowana prostymi odcinkami między przystankami, nie po ulicach. Dokładny kształt dałby plik `shapes.txt` w GTFS (MKS go nie publikuje) albo własny serwer wyznaczania tras.
 
 ## Do zrobienia
 

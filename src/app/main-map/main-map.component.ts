@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import * as L from 'leaflet';
 import { MapMarkerService } from '../features/map/services/map-marker.service';
-import { Stop } from '../shared/models/transit.models';
+import { Departure, Stop } from '../shared/models/transit.models';
 import { escapeHtml } from '../shared/utils/text.utils';
 import { getNearestStops } from '../shared/utils/geo.utils';
 import { TravelTimeService } from '../core/services/travel-time.service';
@@ -11,6 +11,9 @@ import { FavoritesService, RecentRoute } from '../core/services/favorites.servic
 import { GtfsService } from '../core/services/gtfs.service';
 import { TimePickerComponent } from '../shared/components/time-picker/time-picker.component';
 import { RoutePlannerService } from '../features/route-planner/route-planner.service';
+import { stopsBetween } from '../features/route-planner/ride-path';
+import { TimetableService } from '../core/services/timetable.service';
+import { firstValueFrom } from 'rxjs';
 import { Connection, ConnectionPoint } from '../features/route-planner/route-planner.models';
 
 @Component({
@@ -117,7 +120,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
     private routePlanner: RoutePlannerService,
     readonly travelTime: TravelTimeService,
     readonly favorites: FavoritesService,
-    private gtfs: GtfsService
+    private gtfs: GtfsService,
+    private timetable: TimetableService
   ) {
     // Start loading the timetable right away, so the first popup / search doesn't wait
     this.gtfs.index().subscribe({ error: err => console.error('Failed to load the timetable', err) });
@@ -386,146 +390,82 @@ export class MainMapComponent implements OnInit, OnDestroy {
     this.favorites.removeRecentRoute(route);
   }
 
+  /** Incremented per drawn route, so a slower earlier draw can't overwrite a newer one */
+  private drawCounter = 0;
+
+  /**
+   * Draws the selected connection: walks as dashed straight lines, bus rides along the stops
+   * the bus actually passes (from the timetable), with small dots at intermediate stops.
+   * No external routing service is used.
+   */
   async selectConnection(index: number): Promise<void> {
     this.selectedConnectionIndex.set(index);
     this.routeLayerGroup.clearLayers();
+    const drawId = ++this.drawCounter;
 
     const conn = this.connections()[index];
-    if (!conn) return;
+    const start = this.startPoint();
+    const end = this.endPoint();
+    if (!conn || !start || !end) return;
 
-    const start = this.startPoint()!;
-    const end = this.endPoint()!;
+    const rides: { dep: Departure | null; from: Stop; to: Stop; line: string; color: string; label: string }[] =
+      conn.isTransfer && conn.legs?.length === 2
+        ? [
+            { dep: conn.legs[0].nextDeparture, from: conn.startStop, to: conn.transferStop!, line: conn.legs[0].line, color: '#10b981', label: ' (etap 1)' },
+            { dep: conn.legs[1].nextDeparture, from: conn.transferStop!, to: conn.endStop, line: conn.legs[1].line, color: '#06b6d4', label: ' (etap 2)' }
+          ]
+        : [{ dep: conn.nextDeparture, from: conn.startStop, to: conn.endStop, line: conn.line, color: '#10b981', label: '' }];
 
-    // Start & end stop markers
+    const paths = await Promise.all(rides.map(r => this.ridePath(r.dep, r.from, r.to)));
+    if (drawId !== this.drawCounter) return; // another connection was selected meanwhile
+
+    const all: L.LatLng[] = [];
+    const walk = (a: L.LatLngExpression, b: L.LatLngExpression, label: string) => {
+      const line = L.polyline([a, b], { color: '#f43f5e', weight: 5, dashArray: '5, 10', opacity: 0.85 })
+        .bindPopup(`🚶‍♂️ ${label}`);
+      line.addTo(this.routeLayerGroup);
+      all.push(...line.getLatLngs() as L.LatLng[]);
+    };
+
+    walk([start.lat, start.lng], [conn.startStop.lat, conn.startStop.lng], 'Dojście do przystanku');
+    rides.forEach((ride, i) => {
+      const path = paths[i];
+      L.polyline(path.map(s => [s.lat, s.lng] as L.LatLngTuple), { color: ride.color, weight: 7, opacity: 0.95 })
+        .bindPopup(`🚌 Linia ${escapeHtml(ride.line)}${ride.label}`)
+        .addTo(this.routeLayerGroup);
+      for (const stop of path.slice(1, -1)) {
+        L.circleMarker([stop.lat, stop.lng], { radius: 3.5, color: '#fff', weight: 1.5, fillColor: ride.color, fillOpacity: 1 })
+          .bindTooltip(escapeHtml(stop.name))
+          .addTo(this.routeLayerGroup);
+      }
+      all.push(...path.map(s => L.latLng(s.lat, s.lng)));
+    });
+    walk([conn.endStop.lat, conn.endStop.lng], [end.lat, end.lng], 'Dojście do celu');
+
+    // Start, transfer and end stop markers on top
     this.plannedStopMarker(conn.startStop, 'planned-start', 'Przystanek początkowy').addTo(this.routeLayerGroup);
+    if (conn.isTransfer && conn.transferStop) {
+      this.plannedStopMarker(conn.transferStop, 'planned-transfer', 'Punkt przesiadkowy').addTo(this.routeLayerGroup);
+    }
     this.plannedStopMarker(conn.endStop, 'planned-end', 'Przystanek końcowy').addTo(this.routeLayerGroup);
 
-    let walk1Coords: L.LatLng[] = [];
-    let bus1Coords: L.LatLng[] = [];
-    let bus2Coords: L.LatLng[] = [];
-    let walk2Coords: L.LatLng[] = [];
-
-    if (!conn.isTransfer) {
-      // Direct connection
-      walk1Coords = await this.getOSRMRoute([[start.lat, start.lng], [conn.startStop.lat, conn.startStop.lng]], 'foot');
-      bus1Coords = await this.getOSRMRoute([[conn.startStop.lat, conn.startStop.lng], [conn.endStop.lat, conn.endStop.lng]], 'driving');
-      walk2Coords = await this.getOSRMRoute([[conn.endStop.lat, conn.endStop.lng], [end.lat, end.lng]], 'foot');
-
-      // Create Polylines
-      const walk1Poly = L.polyline(walk1Coords, {
-        color: '#f43f5e',
-        weight: 5,
-        dashArray: '5, 10',
-        opacity: 0.85
-      }).bindPopup('🚶‍♂️ Dojście do przystanku');
-
-      const busPoly = L.polyline(bus1Coords, {
-        color: '#10b981',
-        weight: 7,
-        opacity: 0.95
-      }).bindPopup(`🚌 Linia ${escapeHtml(conn.line)}`);
-
-      const walk2Poly = L.polyline(walk2Coords, {
-        color: '#f43f5e',
-        weight: 5,
-        dashArray: '5, 10',
-        opacity: 0.85
-      }).bindPopup('🚶‍♂️ Dojście do celu');
-
-      walk1Poly.addTo(this.routeLayerGroup);
-      busPoly.addTo(this.routeLayerGroup);
-      walk2Poly.addTo(this.routeLayerGroup);
-
-      const bounds = L.latLngBounds([...walk1Coords, ...bus1Coords, ...walk2Coords]);
-      this.map.fitBounds(bounds, { padding: [40, 40] });
-    } else {
-      // Transfer connection
-      const transferStop = conn.transferStop!;
-      walk1Coords = await this.getOSRMRoute([[start.lat, start.lng], [conn.startStop.lat, conn.startStop.lng]], 'foot');
-      bus1Coords = await this.getOSRMRoute([[conn.startStop.lat, conn.startStop.lng], [transferStop.lat, transferStop.lng]], 'driving');
-      bus2Coords = await this.getOSRMRoute([[transferStop.lat, transferStop.lng], [conn.endStop.lat, conn.endStop.lng]], 'driving');
-      walk2Coords = await this.getOSRMRoute([[conn.endStop.lat, conn.endStop.lng], [end.lat, end.lng]], 'foot');
-
-      // Create transfer stop marker and add to map
-      const transferMarker = L.marker([transferStop.lat, transferStop.lng], {
-        icon: L.divIcon({
-          className: 'bus-stop-marker planned transfer',
-          html: `<div class="marker-dot planned-transfer" style="background-color: #f59e0b; width: 14px; height: 14px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 4px rgba(0,0,0,0.5);"></div>`,
-          iconSize: [14, 14],
-          iconAnchor: [7, 7]
-        })
-      }).bindPopup(`<b>Punkt przesiadkowy:</b><br>${escapeHtml(transferStop.name)}`);
-      transferMarker.addTo(this.routeLayerGroup);
-
-      // Create Polylines
-      const walk1Poly = L.polyline(walk1Coords, {
-        color: '#f43f5e',
-        weight: 5,
-        dashArray: '5, 10',
-        opacity: 0.85
-      }).bindPopup('🚶‍♂️ Dojście do przystanku początkowego');
-
-      const bus1Poly = L.polyline(bus1Coords, {
-        color: '#10b981', // Leg 1 is Emerald
-        weight: 7,
-        opacity: 0.95
-      }).bindPopup(`🚌 Linia ${escapeHtml(conn.legs?.[0]?.line)} (Etap 1)`);
-
-      const bus2Poly = L.polyline(bus2Coords, {
-        color: '#06b6d4', // Leg 2 is Cyan/Teal
-        weight: 7,
-        opacity: 0.95
-      }).bindPopup(`🚌 Linia ${escapeHtml(conn.legs?.[1]?.line)} (Etap 2)`);
-
-      const walk2Poly = L.polyline(walk2Coords, {
-        color: '#f43f5e',
-        weight: 5,
-        dashArray: '5, 10',
-        opacity: 0.85
-      }).bindPopup('🚶‍♂️ Dojście do celu');
-
-      walk1Poly.addTo(this.routeLayerGroup);
-      bus1Poly.addTo(this.routeLayerGroup);
-      bus2Poly.addTo(this.routeLayerGroup);
-      walk2Poly.addTo(this.routeLayerGroup);
-
-      const bounds = L.latLngBounds([...walk1Coords, ...bus1Coords, ...bus2Coords, ...walk2Coords]);
-      this.map.fitBounds(bounds, { padding: [40, 40] });
-    }
+    this.map.fitBounds(L.latLngBounds(all), { padding: [40, 40] });
   }
 
-  // ─── OSRM Geocoding / Routing Helpers ──────────────────
-  private async getOSRMRoute(coords: [number, number][], profile: 'foot' | 'driving'): Promise<L.LatLng[]> {
-    try {
-      const coordsStr = coords.map(c => `${c[1]},${c[0]}`).join(';');
-      let url = '';
-      if (profile === 'foot') {
-        url = `https://routing.openstreetmap.de/routed-foot/route/v1/foot/${coordsStr}?overview=full&geometries=geojson`;
-      } else {
-        url = `https://routing.openstreetmap.de/routed-car/route/v1/driving/${coordsStr}?overview=full&geometries=geojson`;
-      }
-      
-      const res = await fetch(url);
-      const data = await res.json();
-      if (data.routes && data.routes[0]) {
-        const geojson = data.routes[0].geometry;
-        return geojson.coordinates.map((c: any) => new L.LatLng(c[1], c[0]));
-      }
-    } catch (e) {
-      console.error('FOSSGIS OSM route fetch failed, falling back to public OSRM demo', e);
+  /** Stops the bus passes from `from` to `to` on this departure's trip (straight line if unknown). */
+  private async ridePath(dep: Departure | null, from: Stop, to: Stop): Promise<Stop[]> {
+    if (dep?.trip_execution_id) {
       try {
-        const coordsStr = coords.map(c => `${c[1]},${c[0]}`).join(';');
-        const res = await fetch(`https://router.project-osrm.org/route/v1/${profile}/${coordsStr}?overview=full&geometries=geojson`);
-        const data = await res.json();
-        if (data.routes && data.routes[0]) {
-          const geojson = data.routes[0].geometry;
-          return geojson.coordinates.map((c: any) => new L.LatLng(c[1], c[0]));
-        }
-      } catch (err) {
-        console.error('Public OSRM demo also failed, falling back to direct line', err);
+        const exec = await firstValueFrom(this.timetable.getTripExecution(dep.trip_execution_id));
+        const stops = stopsBetween(exec.trip.times, dep.trip_index ?? 0, from.id, to.id)
+          .map(id => this.stopById().get(id))
+          .filter((s): s is Stop => !!s);
+        if (stops.length >= 2) return stops;
+      } catch {
+        // fall through to a straight line
       }
     }
-    return coords.map(c => new L.LatLng(c[0], c[1]));
+    return [from, to];
   }
 
   private plannedStopMarker(stop: Stop, cssClass: string, label: string): L.Marker {
