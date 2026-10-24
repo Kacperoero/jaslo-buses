@@ -230,7 +230,9 @@ export class MapMarkerService {
     return `
       <div class="popup-content">
         ${this.buildHeader(stop)}
-        ${scheduled ? `<div class="popup-schedule-note">🕒 Rozkład: ${escapeHtml(this.travelTime.label())}</div>` : ''}
+        <div class="popup-schedule-note">🕒 ${scheduled
+          ? `Rozkład: ${escapeHtml(this.travelTime.label())}`
+          : 'Według rozkładu jazdy (bez opóźnień)'}</div>
         ${departures}
       </div>
     `;

@@ -1,0 +1,415 @@
+{
+ "_source": "MKS Jasło, Rozkład jazdy ogólny od 01.04.2026 (kolumny Kierunek / przez) + strona Linie miejskie. \"to\" = kierunek (mocniejszy, gdy to pierwszy/ostatni przystanek wariantu), \"via\" = ulice/miejscowości po drodze, \"never\" = wariant przez to miejsce nie może być tą linią.",
+ "A": {
+  "from": "RYNEK",
+  "to": [
+   "WARZYCE Kościół"
+  ],
+  "via": [
+   "BIESZCZ"
+  ]
+ },
+ "C": {
+  "from": "RYNEK",
+  "to": [
+   "KOWALOWY"
+  ],
+  "via": [
+   "17 STYCZNIA"
+  ]
+ },
+ "D": {
+  "from": "RYNEK",
+  "to": [
+   "HANKÓWKA",
+   "TRANS-WIERT",
+   "PRZEMYSŁOWA"
+  ],
+  "via": [
+   "TOWAROWA",
+   "RZEMIEŚLNICZA"
+  ]
+ },
+ "E2": {
+  "from": "RYNEK",
+  "to": [
+   "HANKÓWKA"
+  ],
+  "via": [
+   "TOWAROWA",
+   "PRZEMYSŁOWA"
+  ]
+ },
+ "E5": {
+  "from": "RYNEK|SKARGI",
+  "to": [
+   "P.SKARGI",
+   "RYNEK"
+  ],
+  "via": [
+   "PRZEMYSŁOWA",
+   "ŻNIWNA",
+   "TOWAROWA"
+  ]
+ },
+ "OG": {
+  "from": "RYNEK|SKARGI",
+  "to": [
+   "RYNEK",
+   "P.SKARGI"
+  ],
+  "via": [
+   "GRANICZNA",
+   "ŻNIWNA",
+   "FLORIAŃSKA"
+  ]
+ },
+ "E": {
+  "from": "RYNEK",
+  "to": [
+   "GĄDKI"
+  ],
+  "via": [
+   "3 MAJA"
+  ],
+  "never": [
+   "WARZYCE Kościół"
+  ]
+ },
+ "E3": {
+  "from": "RYNEK",
+  "to": [
+   "FABRYCZNA",
+   "GĄDKI"
+  ],
+  "via": [
+   "RAFINERYJNA",
+   "BIESZCZ"
+  ],
+  "never": [
+   "WARZYCE Kościół"
+  ]
+ },
+ "K": {
+  "from": "RYNEK",
+  "to": [
+   "KACZOROWY"
+  ],
+  "via": [
+   "MICKIEWICZA"
+  ]
+ },
+ "N": {
+  "from": "RYNEK",
+  "to": [
+   "BACZYŃSKIEGO"
+  ],
+  "via": [
+   "SZAJNOCHY",
+   "SIKORSKIEGO"
+  ]
+ },
+ "E1": {
+  "from": "GALERIA",
+  "to": [
+   "J.PAWŁA II Galeria"
+  ],
+  "via": [
+   "SZAJNOCHY",
+   "BACZYŃSKIEGO",
+   "KOŚCIUSZKI"
+  ]
+ },
+ "E4": {
+  "from": "RYNEK",
+  "to": [
+   "RYNEK"
+  ],
+  "via": [
+   "ULASZOWICE",
+   "SZAJNOCHY"
+  ]
+ },
+ "E6": {
+  "from": "RYNEK",
+  "to": [
+   "RYNEK"
+  ],
+  "via": [
+   "JANA Z DUKLI",
+   "GRUNWALDZKA"
+  ]
+ },
+ "OP": {
+  "from": "RYNEK",
+  "to": [
+   "GAMRAT"
+  ],
+  "via": [
+   "17 STYCZNIA",
+   "PODZAMCZE"
+  ]
+ },
+ "OM": {
+  "from": "RYNEK",
+  "to": [
+   "GAMRAT",
+   "DĄBRÓWKA Kościół"
+  ],
+  "via": [
+   "MICKIEWICZA",
+   "KRAKOWSKA"
+  ]
+ },
+ "H": {
+  "from": "MICKIEWICZA",
+  "to": [
+   "GAMRAT"
+  ],
+  "via": [
+   "MICKIEWICZA"
+  ]
+ },
+ "3": {
+  "from": "RYNEK",
+  "to": [
+   "ZIMNA WODA"
+  ],
+  "via": [
+   "BIESZCZ",
+   "WARZYCE"
+  ]
+ },
+ "4": {
+  "from": "RYNEK",
+  "to": [
+   "NIEPLA"
+  ],
+  "via": [
+   "BIESZCZ",
+   "BIERÓWKA"
+  ]
+ },
+ "5": {
+  "from": "RYNEK",
+  "to": [
+   "PRZYBÓWKA"
+  ],
+  "via": [
+   "BIESZCZ",
+   "BIERÓWKA"
+  ]
+ },
+ "6": {
+  "from": "RYNEK",
+  "to": [
+   "WOJASZÓWKA"
+  ],
+  "via": [
+   "NIEPLA",
+   "PRZYBÓWKA",
+   "ŁĘKI STRZYŻ"
+  ]
+ },
+ "7": {
+  "from": "RYNEK",
+  "to": [
+   "SZEBNIE"
+  ],
+  "via": [
+   "BIESZCZ"
+  ]
+ },
+ "14": {
+  "from": "RYNEK",
+  "to": [
+   "WOLA DĘBOWIECKA",
+   "ZAŁĘŻE"
+  ],
+  "via": [
+   "DĘBOWIEC"
+  ]
+ },
+ "21": {
+  "from": "RYNEK",
+  "to": [
+   "OSOBNICA Wysłanka",
+   "BRZYŚCIE"
+  ],
+  "via": [
+   "BRZYŚCIE",
+   "3 MAJA"
+  ],
+  "never": [
+   "RADOŚĆ"
+  ]
+ },
+ "22": {
+  "from": "RYNEK",
+  "to": [
+   "RADOŚĆ"
+  ],
+  "via": [
+   "OSOBNICA",
+   "PAGÓREK"
+  ]
+ },
+ "23": {
+  "from": "RYNEK",
+  "to": [
+   "OSOBNICA Górna"
+  ],
+  "via": [
+   "TRZCINICA"
+  ]
+ },
+ "24": {
+  "from": "RYNEK",
+  "to": [
+   "OSOBNICA Wiśniówki"
+  ],
+  "via": [
+   "DĘBOWIEC"
+  ]
+ },
+ "25": {
+  "from": "RYNEK",
+  "to": [
+   "TRZCINICA"
+  ],
+  "via": [
+   "3 MAJA",
+   "JAREN"
+  ]
+ },
+ "29": {
+  "from": "RYNEK",
+  "to": [
+   "OPACIE"
+  ],
+  "via": [
+   "JAREN"
+  ]
+ },
+ "32": {
+  "from": "RYNEK",
+  "to": [
+   "LIPNICA"
+  ],
+  "via": [
+   "GAMRAT"
+  ]
+ },
+ "33": {
+  "from": "RYNEK",
+  "to": [
+   "GORAJOWICE"
+  ],
+  "via": [
+   "LWOWSKA",
+   "ULASZOWICE"
+  ]
+ },
+ "34": {
+  "from": "RYNEK",
+  "to": [
+   "PAGÓREK"
+  ],
+  "via": [
+   "OSOBNICA",
+   "DĘBOWIEC"
+  ]
+ },
+ "36": {
+  "from": "RYNEK",
+  "to": [
+   "CIEKLIN"
+  ],
+  "via": [
+   "DĘBOWIEC",
+   "DZIELEC"
+  ]
+ },
+ "39": {
+  "from": "RYNEK",
+  "to": [
+   "NIEGŁOWICE"
+  ],
+  "via": [
+   "GAJOWA"
+  ]
+ },
+ "9": {
+  "from": "SKARGI",
+  "to": [
+   "WOLICA",
+   "ŁASKI Las"
+  ],
+  "via": [
+   "FLORIAŃSKA",
+   "WALOWICE"
+  ]
+ },
+ "10": {
+  "from": "SKARGI",
+  "to": [
+   "ŁAJSCE",
+   "ŁUBIENKO"
+  ],
+  "via": [
+   "UMIESZCZ"
+  ]
+ },
+ "11": {
+  "from": "SKARGI",
+  "to": [
+   "BRZEZÓWKA",
+   "TARNOWIEC",
+   "GLINIK POLSKI"
+  ],
+  "via": [
+   "UMIESZCZ",
+   "NOWY GLINIK",
+   "ŁASKI"
+  ]
+ },
+ "12": {
+  "from": "SKARGI",
+  "to": [
+   "NOWY GLINIK",
+   "ŁAJSCE",
+   "ŁUBIENKO"
+  ],
+  "via": [
+   "ŁASKI",
+   "ZARZECZE"
+  ]
+ },
+ "13": {
+  "from": "SKARGI",
+  "to": [
+   "ŁASKI Las"
+  ],
+  "via": [
+   "ŻÓŁKÓW"
+  ]
+ },
+ "20": {
+  "from": "SKARGI",
+  "to": [
+   "ŻÓŁKÓW"
+  ],
+  "via": [
+   "GRUNWALDZKA"
+  ]
+ },
+ "30": {
+  "from": "MICKIEWICZA",
+  "to": [
+   "BRZYSKA"
+  ],
+  "via": [
+   "MICKIEWICZA"
+  ]
+ }
+}

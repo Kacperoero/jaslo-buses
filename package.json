@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "gtfs:build": "node scripts/gtfs/build-gtfs.mjs"
   },
   "private": true,
   "packageManager": "npm@11.11.0",

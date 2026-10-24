@@ -64,8 +64,7 @@
               "buildTarget": "autobusy:build:production"
             },
             "development": {
-              "buildTarget": "autobusy:build:development",
-              "proxyConfig": "proxy.conf.json"
+              "buildTarget": "autobusy:build:development"
             }
           },
           "defaultConfiguration": "development"

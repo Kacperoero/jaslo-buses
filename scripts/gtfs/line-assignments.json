@@ -1,0 +1,3614 @@
+{
+ "007f7a52cded84f0": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "ŁAJSCE Dom Ludowy",
+  "last": "JASŁO,ul.DWORCOWA 01",
+  "headsign": "JASŁO,ul.DWORCOWA 01",
+  "candidates": []
+ },
+ "02cf9819a8a01294": {
+  "line": "E6",
+  "confidence": "medium",
+  "trips": 4,
+  "first": "JASŁO,ul.J.PAWŁA II Galeria 01",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "E6",
+    6.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "043f5d09bac5646e": {
+  "line": "10",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI",
+  "last": "ŁUBIENKO Centrum",
+  "headsign": "ŁUBIENKO Centrum",
+  "candidates": [
+   [
+    "10",
+    5.5
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "12",
+    4.5
+   ]
+  ]
+ },
+ "0700d9559bbd7b58": {
+  "line": "34",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "OSOBNICA stadion",
+  "headsign": "OSOBNICA stadion",
+  "candidates": [
+   [
+    "34",
+    5.0
+   ],
+   [
+    "22",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "082a42aeffa066b5": {
+  "line": "24",
+  "confidence": "high",
+  "trips": 1,
+  "first": "OSOBNICA Wiśniówki",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "24",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "08aef0b2aaf5520f": {
+  "line": "7",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "SZEBNIE I Cmentarz",
+  "headsign": "SZEBNIE I Cmentarz",
+  "candidates": [
+   [
+    "7",
+    5.5
+   ],
+   [
+    "3",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "0a7d24177624727a": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "ŁAZY DĘBOWIECKIE Góra",
+  "headsign": "ŁAZY DĘBOWIECKIE Góra",
+  "candidates": [
+   [
+    "E5",
+    4.5
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "E4",
+    4.0
+   ]
+  ]
+ },
+ "0d52b5ff15328fae": {
+  "line": "OM",
+  "confidence": "high",
+  "trips": 10,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OM",
+    9.0
+   ],
+   [
+    "OP",
+    6.0
+   ],
+   [
+    "C",
+    5.0
+   ]
+  ]
+ },
+ "0e4028a07aea2e55": {
+  "line": "34",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "PAGÓREK skrzyżowanie",
+  "headsign": "PAGÓREK skrzyżowanie",
+  "candidates": [
+   [
+    "34",
+    5.5
+   ],
+   [
+    "22",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "0e8a6b9e2d281460": {
+  "line": "4",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "NIEPLA 08",
+  "headsign": "NIEPLA 08",
+  "candidates": [
+   [
+    "4",
+    6.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "0fcc9c972e5b42a1": {
+  "line": "9",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "WOLICA Kliniec",
+  "headsign": "WOLICA Kliniec",
+  "candidates": [
+   [
+    "9",
+    6.5
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "1127077530f00fd6": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JASŁO,ul.KRAKOWSKA II",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "C",
+    3.5
+   ],
+   [
+    "OP",
+    1.0
+   ],
+   [
+    "OM",
+    1.0
+   ]
+  ]
+ },
+ "114fbe9ae9db9ce4": {
+  "line": "10",
+  "confidence": "medium",
+  "trips": 2,
+  "first": "ŁUBIENKO Centrum",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "10",
+    6.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "1bf2e808b725c3f2": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "DĘBOWIEC Cmentarz",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "E4",
+    4.0
+   ]
+  ]
+ },
+ "1c9e83f477a53421": {
+  "line": "E3",
+  "confidence": "medium",
+  "trips": 3,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.FABRYCZNA",
+  "headsign": "JASŁO,ul.FABRYCZNA",
+  "candidates": [
+   [
+    "E3",
+    6.0
+   ],
+   [
+    "E",
+    5.0
+   ],
+   [
+    "E4",
+    5.0
+   ]
+  ]
+ },
+ "1cbc09cf3f967cb9": {
+  "line": "9",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "WOLICA Walowice",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "9",
+    6.0
+   ],
+   [
+    "OG",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "1e961410d3d388c7": {
+  "line": "4",
+  "confidence": "medium",
+  "trips": 2,
+  "first": "NIEPLA 08",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "4",
+    6.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "1f1eea5003c3376b": {
+  "line": "C",
+  "confidence": "high",
+  "trips": 4,
+  "first": "KOWALOWY",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "C",
+    7.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "1f9f2648c51b1ddf": {
+  "line": "OM",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OM",
+    6.5
+   ],
+   [
+    "OP",
+    6.0
+   ],
+   [
+    "C",
+    5.0
+   ]
+  ]
+ },
+ "21ea13d5e739d1d0": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ŁUBIENKO Centrum",
+  "last": "JASŁO,ul.DWORCOWA 01",
+  "headsign": "JASŁO,ul.DWORCOWA 01",
+  "candidates": []
+ },
+ "2544bcef5f83ab54": {
+  "line": "5",
+  "confidence": "high",
+  "trips": 2,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "PRZYBÓWKA-SZKOŁA",
+  "headsign": "PRZYBÓWKA-SZKOŁA",
+  "candidates": [
+   [
+    "5",
+    7.0
+   ],
+   [
+    "4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "25c648dd153aa52c": {
+  "line": "3",
+  "confidence": "high",
+  "trips": 5,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "3",
+    8.5
+   ],
+   [
+    "E4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "28a79d84b874a37c": {
+  "line": "22",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "RADOŚĆ skrzyżowanie",
+  "headsign": "RADOŚĆ skrzyżowanie",
+  "candidates": [
+   [
+    "22",
+    6.5
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "25",
+    3.5
+   ]
+  ]
+ },
+ "295f72f4f3d534cb": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ZAŁĘŻE Kościół",
+  "last": "DĘBOWIEC Centrum",
+  "headsign": "DĘBOWIEC Centrum",
+  "candidates": []
+ },
+ "2d218de0c201a7e5": {
+  "line": null,
+  "confidence": "none",
+  "trips": 3,
+  "first": "TRZCINICA Łysok 1",
+  "last": "OPACIE Szkoła",
+  "headsign": "OPACIE Szkoła",
+  "candidates": []
+ },
+ "2e4fdc8699821438": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ŁUBIENKO Centrum",
+  "last": "JASŁO,ul.DWORCOWA 01",
+  "headsign": "JASŁO,ul.DWORCOWA 01",
+  "candidates": []
+ },
+ "2e50c067dac155b9": {
+  "line": "11",
+  "confidence": "medium",
+  "trips": 2,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "BRZEZÓWKA (06)",
+  "headsign": "BRZEZÓWKA (06)",
+  "candidates": [
+   [
+    "11",
+    6.0
+   ],
+   [
+    "OG",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "2ffce618000e1eed": {
+  "line": "14",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "WOLA DĘBOWIECKA",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "14",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "31c724631c20816e": {
+  "line": "E1",
+  "confidence": "high",
+  "trips": 13,
+  "first": "JASŁO,ul.J.PAWŁA II Galeria 01",
+  "last": "JASŁO,ul.J.PAWŁA II Galeria",
+  "headsign": "JASŁO,ul.J.PAWŁA II Galeria",
+  "candidates": [
+   [
+    "E1",
+    9.0
+   ]
+  ]
+ },
+ "32d1b4ce98281cd7": {
+  "line": "10",
+  "confidence": "high",
+  "trips": 10,
+  "first": "ŁAJSCE Dom Ludowy",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "10",
+    8.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "12",
+    4.5
+   ]
+  ]
+ },
+ "348bb69a7b72261e": {
+  "line": "6",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "6",
+    6.5
+   ],
+   [
+    "4",
+    6.0
+   ],
+   [
+    "5",
+    6.0
+   ]
+  ]
+ },
+ "3cf2d4a19492af59": {
+  "line": "33",
+  "confidence": "medium",
+  "trips": 3,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "33",
+    6.0
+   ],
+   [
+    "E4",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "3faa481ae5346fc7": {
+  "line": "12",
+  "confidence": "high",
+  "trips": 2,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "ŁAJSCE krzyżówki",
+  "headsign": "ŁAJSCE krzyżówki",
+  "candidates": [
+   [
+    "12",
+    7.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "10",
+    4.5
+   ]
+  ]
+ },
+ "40d8a7db21303a33": {
+  "line": "14",
+  "confidence": "medium",
+  "trips": 3,
+  "first": "WOLA DĘBOWIECKA",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "14",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "45dcade259c7d2cb": {
+  "line": "9",
+  "confidence": "high",
+  "trips": 2,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "9",
+    7.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "4607561e19a5ded3": {
+  "line": "22",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "22",
+    6.0
+   ],
+   [
+    "23",
+    5.0
+   ],
+   [
+    "25",
+    5.0
+   ]
+  ]
+ },
+ "467da655a4724ef1": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "JASŁO,ul.GĄDKI 04",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "E4",
+    4.0
+   ]
+  ]
+ },
+ "49279067583d46cf": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ŁUBIENKO Centrum",
+  "last": "JASŁO,ul.DWORCOWA 01",
+  "headsign": "JASŁO,ul.DWORCOWA 01",
+  "candidates": []
+ },
+ "4aa23521cd934039": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "OSOBNICA 4 IMIELNA",
+  "last": "OSOBNICA Centrum",
+  "headsign": "OSOBNICA Centrum",
+  "candidates": []
+ },
+ "4ba9b603c2994c17": {
+  "line": "3",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "3",
+    6.5
+   ],
+   [
+    "A",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "4c18c780ab92bad5": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "JASŁO,ul.MICKIEWICZA Bogumił",
+  "last": "JARENIÓWKA - SZKOŁA",
+  "headsign": "JARENIÓWKA - SZKOŁA",
+  "candidates": []
+ },
+ "4cf42737455b9841": {
+  "line": "11",
+  "confidence": "high",
+  "trips": 2,
+  "first": "TARNOWIEC Park",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "11",
+    7.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "504009444e293717": {
+  "line": "9",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "WOLICA Kliniec",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "9",
+    6.0
+   ],
+   [
+    "OG",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "504c5ab23522584b": {
+  "line": "4",
+  "confidence": "high",
+  "trips": 3,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "NIEPLA 08",
+  "headsign": "NIEPLA 08",
+  "candidates": [
+   [
+    "4",
+    6.5
+   ],
+   [
+    "E5",
+    4.5
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "54aa4882c45f3388": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JARENIÓWKA - SZKOŁA",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "E4",
+    4.0
+   ]
+  ]
+ },
+ "54fa747e52e79695": {
+  "line": "E3",
+  "confidence": "high",
+  "trips": 3,
+  "first": "JASŁO,ul.FABRYCZNA",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "E3",
+    6.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "55856bcc828ece89": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JASŁO,ul.MICKIEWICZA 02",
+  "last": "JASŁO,ul.KRAJOWICKA 01",
+  "headsign": "JASŁO,ul.KRAJOWICKA 01",
+  "candidates": [
+   [
+    "H",
+    4.0
+   ],
+   [
+    "30",
+    1.0
+   ]
+  ]
+ },
+ "56d29060191eca82": {
+  "line": "9",
+  "confidence": "high",
+  "trips": 5,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "WOLICA Walowice",
+  "headsign": "WOLICA Walowice",
+  "candidates": [
+   [
+    "9",
+    7.5
+   ],
+   [
+    "OG",
+    6.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "573b5bae97e8bcf7": {
+  "line": "33",
+  "confidence": "high",
+  "trips": 6,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "33",
+    8.5
+   ],
+   [
+    "E4",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "580cd42cfcd9188c": {
+  "line": "5",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "PRZYBÓWKA-SZKOŁA",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "5",
+    6.5
+   ],
+   [
+    "4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "58bbcad94d0050b0": {
+  "line": "4",
+  "confidence": "medium",
+  "trips": 2,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "NIEPLA 08",
+  "headsign": "NIEPLA 08",
+  "candidates": [
+   [
+    "4",
+    6.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "5a7cec703752d490": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JASŁO,ul.GĄDKI 04",
+  "last": "JASŁO,ul.GĄDKI 04",
+  "headsign": "JASŁO,ul.GĄDKI 04",
+  "candidates": []
+ },
+ "5bc138dd89db5fa4": {
+  "line": "11",
+  "confidence": "medium",
+  "trips": 3,
+  "byStart": {
+   "08:30": "OG"
+  },
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "GLINIK POLSKI Podlas",
+  "headsign": "GLINIK POLSKI Podlas",
+  "candidates": [
+   [
+    "11",
+    6.0
+   ],
+   [
+    "OG",
+    5.5
+   ],
+   [
+    "12",
+    5.0
+   ]
+  ]
+ },
+ "5fe96c7c1933eb77": {
+  "line": "12",
+  "confidence": "high",
+  "trips": 7,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "ŁUBIENKO Centrum",
+  "headsign": "ŁUBIENKO Centrum",
+  "candidates": [
+   [
+    "12",
+    9.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "10",
+    4.5
+   ]
+  ]
+ },
+ "5fee045184f36add": {
+  "line": "29",
+  "confidence": "high",
+  "trips": 2,
+  "first": "OPACIE Dom Ludowy",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "29",
+    6.0
+   ],
+   [
+    "K",
+    3.5
+   ],
+   [
+    "OM",
+    1.0
+   ]
+  ]
+ },
+ "60074c94d4590c01": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ŁUBIENKO Centrum",
+  "last": "JASŁO,ul.LWOWSKA-KAUFLAND",
+  "headsign": "JASŁO,ul.LWOWSKA-KAUFLAND",
+  "candidates": []
+ },
+ "60ac83adc56e7104": {
+  "line": "12",
+  "confidence": "high",
+  "trips": 5,
+  "first": "ŁUBIENKO Centrum",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "12",
+    8.5
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "61bc209b155d23ee": {
+  "line": "11",
+  "confidence": "high",
+  "trips": 2,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "TARNOWIEC Park",
+  "headsign": "TARNOWIEC Park",
+  "candidates": [
+   [
+    "11",
+    7.0
+   ],
+   [
+    "OG",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "6290e31ce8be51f9": {
+  "line": "OG",
+  "confidence": "high",
+  "trips": 3,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OG",
+    7.5
+   ],
+   [
+    "E5",
+    6.0
+   ],
+   [
+    "D",
+    5.0
+   ]
+  ]
+ },
+ "62c2a99cf0ef461f": {
+  "line": "14",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "14",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "633dd6ad0bc37285": {
+  "line": "9",
+  "confidence": "high",
+  "trips": 4,
+  "first": "WOLICA Walowice",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "9",
+    8.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "6566f33c397c0e74": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JASŁO,ul.KRAJOWICKA 01",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "E4",
+    4.0
+   ]
+  ]
+ },
+ "65969871680d5d88": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ŁAZY DĘBOWIECKIE Góra",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "E4",
+    4.0
+   ]
+  ]
+ },
+ "6661f49e968f11a1": {
+  "line": "OM",
+  "confidence": "medium",
+  "trips": 2,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OM",
+    7.0
+   ],
+   [
+    "OP",
+    6.0
+   ],
+   [
+    "C",
+    5.0
+   ]
+  ]
+ },
+ "667dc1ad09bdf603": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "KOŁACZYCE Rynek",
+  "last": "BRZYSKA Nagórze Lewe",
+  "headsign": "BRZYSKA Nagórze Lewe",
+  "candidates": []
+ },
+ "66870df98cf70d8e": {
+  "line": "E",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK 02",
+  "last": "JASŁO,ul.GĄDKI 04",
+  "headsign": "JASŁO,ul.GĄDKI 04",
+  "candidates": [
+   [
+    "E",
+    5.5
+   ],
+   [
+    "E3",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "674f3ce50c6fe65f": {
+  "line": "14",
+  "confidence": "high",
+  "trips": 5,
+  "byStart": {
+   "07:45": null,
+   "11:10": null
+  },
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "14",
+    6.0
+   ],
+   [
+    "E6",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "67779290fba185ae": {
+  "line": "OG",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "OG",
+    6.5
+   ],
+   [
+    "9",
+    6.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "67ee5389cbb2887b": {
+  "line": "OP",
+  "confidence": "high",
+  "trips": 4,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "OP",
+    8.0
+   ],
+   [
+    "OM",
+    6.5
+   ],
+   [
+    "K",
+    5.5
+   ]
+  ]
+ },
+ "6a5e4d78304b1d96": {
+  "line": "11",
+  "confidence": "medium",
+  "trips": 2,
+  "first": "BRZEZÓWKA (06)",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "11",
+    6.0
+   ],
+   [
+    "OG",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "6bd4720c37b70d43": {
+  "line": "OM",
+  "confidence": "high",
+  "trips": 14,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OM",
+    9.0
+   ],
+   [
+    "OP",
+    7.5
+   ],
+   [
+    "K",
+    5.5
+   ]
+  ]
+ },
+ "6c5e471cf95d999d": {
+  "line": "OP",
+  "confidence": "high",
+  "trips": 15,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "OP",
+    9.0
+   ],
+   [
+    "OM",
+    6.5
+   ],
+   [
+    "K",
+    5.5
+   ]
+  ]
+ },
+ "6d669064f2eaae7d": {
+  "line": "OG",
+  "confidence": "high",
+  "trips": 4,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OG",
+    8.0
+   ],
+   [
+    "E5",
+    6.0
+   ],
+   [
+    "D",
+    5.0
+   ]
+  ]
+ },
+ "6e76850f1fd38eb2": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "TRZCINICA ZSR",
+  "last": "DZIELEC pod Dębiną",
+  "headsign": "DZIELEC pod Dębiną",
+  "candidates": []
+ },
+ "7081a51e49b0449f": {
+  "line": "36",
+  "confidence": "high",
+  "trips": 2,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "CIEKLIN Remiza",
+  "headsign": "CIEKLIN Remiza",
+  "candidates": [
+   [
+    "36",
+    7.0
+   ],
+   [
+    "E4",
+    4.5
+   ],
+   [
+    "22",
+    4.5
+   ]
+  ]
+ },
+ "7166eeb13fb92836": {
+  "line": "4",
+  "confidence": "high",
+  "trips": 1,
+  "first": "NIEPLA 08",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "4",
+    5.5
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "A",
+    2.5
+   ]
+  ]
+ },
+ "71ad686bbca39a9d": {
+  "line": "D",
+  "confidence": "high",
+  "trips": 5,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "D",
+    8.5
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "C",
+    0.5
+   ]
+  ]
+ },
+ "71fddc28eb19222d": {
+  "line": "E4",
+  "confidence": "high",
+  "trips": 7,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "E4",
+    9.0
+   ],
+   [
+    "N",
+    6.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "74d54bff769d0a51": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "DĘBOWIEC Cmentarz",
+  "headsign": "DĘBOWIEC Cmentarz",
+  "candidates": [
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "E4",
+    4.0
+   ]
+  ]
+ },
+ "74dcb8cf52f550de": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "BRZYSKA Szkoła",
+  "last": "BŁAŻKOWA szkoła",
+  "headsign": "BŁAŻKOWA szkoła",
+  "candidates": []
+ },
+ "7558032ad322600f": {
+  "line": "9",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "9",
+    6.0
+   ],
+   [
+    "10",
+    0.5
+   ],
+   [
+    "20",
+    0.0
+   ]
+  ]
+ },
+ "75c74287d689993f": {
+  "line": "21",
+  "confidence": "high",
+  "trips": 7,
+  "first": "OSOBNICA Wysłanka 1",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "21",
+    9.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "76587760f2a1a5c7": {
+  "line": "OG",
+  "confidence": "high",
+  "trips": 3,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "OG",
+    7.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "9",
+    1.0
+   ]
+  ]
+ },
+ "79ce7714432d6528": {
+  "line": "22",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "OSOBNICA Kościół",
+  "headsign": "OSOBNICA Kościół",
+  "candidates": [
+   [
+    "22",
+    5.0
+   ],
+   [
+    "E5",
+    4.5
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "7bad70b78743e499": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "OSOBNICA Centrum",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "E4",
+    4.0
+   ]
+  ]
+ },
+ "7d972819896a06e9": {
+  "line": "OP",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "OP",
+    6.5
+   ],
+   [
+    "OM",
+    6.0
+   ],
+   [
+    "C",
+    5.0
+   ]
+  ]
+ },
+ "7de7aa7aa5e93f90": {
+  "line": "12",
+  "confidence": "high",
+  "trips": 2,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "ŁAJSCE krzyżówki",
+  "headsign": "ŁAJSCE krzyżówki",
+  "candidates": [
+   [
+    "12",
+    7.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "10",
+    4.5
+   ]
+  ]
+ },
+ "7f1a8130409069c8": {
+  "line": "34",
+  "confidence": "high",
+  "trips": 1,
+  "first": "PAGÓREK skrzyżowanie",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "34",
+    6.5
+   ],
+   [
+    "22",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "8212d56cea2cc835": {
+  "line": "25",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "TRZCINICA Kościół",
+  "headsign": "TRZCINICA Kościół",
+  "candidates": [
+   [
+    "25",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "828ffd6ceeb1138c": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "OSOBNICA Centrum",
+  "last": "DĘBOWIEC górka",
+  "headsign": "DĘBOWIEC górka",
+  "candidates": []
+ },
+ "85d169e4e6dd5c8a": {
+  "line": "14",
+  "confidence": "medium",
+  "trips": 4,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "WOLA DĘBOWIECKA",
+  "headsign": "WOLA DĘBOWIECKA",
+  "candidates": [
+   [
+    "14",
+    5.5
+   ],
+   [
+    "E4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "85f1285c53096872": {
+  "line": "E2",
+  "confidence": "medium",
+  "trips": 14,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "E2",
+    9.0
+   ],
+   [
+    "D",
+    8.0
+   ],
+   [
+    "E5",
+    7.0
+   ]
+  ]
+ },
+ "8bf0edb3044c9359": {
+  "line": "7",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "SZEBNIE Szkoła",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "7",
+    5.0
+   ],
+   [
+    "4",
+    4.5
+   ],
+   [
+    "5",
+    4.5
+   ]
+  ]
+ },
+ "8d77ffa55e959d8b": {
+  "line": "6",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "6",
+    6.5
+   ],
+   [
+    "4",
+    6.0
+   ],
+   [
+    "5",
+    6.0
+   ]
+  ]
+ },
+ "8dd4c305db287065": {
+  "line": "29",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "OPACIE Szkoła",
+  "headsign": "OPACIE Szkoła",
+  "candidates": [
+   [
+    "29",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "8e9b8b84c652042e": {
+  "line": "32",
+  "confidence": "high",
+  "trips": 4,
+  "first": "LIPNICA DOLNA koniec",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "32",
+    7.0
+   ],
+   [
+    "OG",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "8fba29c7d53f4234": {
+  "line": "E1",
+  "confidence": "medium",
+  "trips": 6,
+  "byStart": {
+   "11:48": null,
+   "09:43": null,
+   "07:28": null,
+   "12:43": null,
+   "15:33": null
+  },
+  "first": "JASŁO,ul.J.PAWŁA II Galeria 01",
+  "last": "JASŁO,ul.J.PAWŁA II Galeria",
+  "headsign": "JASŁO,ul.J.PAWŁA II Galeria",
+  "candidates": [
+   [
+    "E1",
+    6.0
+   ]
+  ]
+ },
+ "914f2f085a61e572": {
+  "line": "14",
+  "confidence": "high",
+  "trips": 5,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "ZAŁĘŻE Kościół",
+  "headsign": "ZAŁĘŻE Kościół",
+  "candidates": [
+   [
+    "14",
+    7.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "91aa66715457b7d6": {
+  "line": "OM",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "DĄBRÓWKA Kościół",
+  "headsign": "DĄBRÓWKA Kościół",
+  "candidates": [
+   [
+    "OM",
+    5.5
+   ],
+   [
+    "K",
+    3.5
+   ],
+   [
+    "OP",
+    2.5
+   ]
+  ]
+ },
+ "929cdf6a6c8364d3": {
+  "line": "25",
+  "confidence": "high",
+  "trips": 1,
+  "first": "TRZCINICA Kościół",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "25",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "92e0660cd9dfffad": {
+  "line": "C",
+  "confidence": "high",
+  "trips": 5,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "KOWALOWY",
+  "headsign": "KOWALOWY",
+  "candidates": [
+   [
+    "C",
+    7.5
+   ],
+   [
+    "OG",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "96480a31c83167eb": {
+  "line": "20",
+  "confidence": "high",
+  "trips": 4,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "ŻÓŁKÓW, KAPLICZKA",
+  "headsign": "ŻÓŁKÓW, KAPLICZKA",
+  "candidates": [
+   [
+    "20",
+    7.0
+   ],
+   [
+    "9",
+    0.0
+   ],
+   [
+    "10",
+    0.0
+   ]
+  ]
+ },
+ "96660c7c6844fb43": {
+  "line": "E5",
+  "confidence": "high",
+  "trips": 5,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "E5",
+    8.5
+   ],
+   [
+    "D",
+    5.0
+   ],
+   [
+    "OG",
+    5.0
+   ]
+  ]
+ },
+ "967d1f3982767896": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "NIEPLA Szkoła",
+  "last": "SZEBNIE Szkoła",
+  "headsign": "SZEBNIE Szkoła",
+  "candidates": []
+ },
+ "970f9d0022c42ab1": {
+  "line": "22",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "22",
+    6.5
+   ],
+   [
+    "23",
+    5.0
+   ],
+   [
+    "25",
+    5.0
+   ]
+  ]
+ },
+ "97f37b70de3d6269": {
+  "line": "OG",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "OG",
+    6.5
+   ],
+   [
+    "9",
+    6.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "9868a6d506d75bb2": {
+  "line": "OM",
+  "confidence": "high",
+  "trips": 2,
+  "first": "DĄBRÓWKA Kościół",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "OM",
+    6.0
+   ],
+   [
+    "K",
+    3.5
+   ],
+   [
+    "OP",
+    2.5
+   ]
+  ]
+ },
+ "9881074daa784bcf": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "DZIELEC pod Dębiną",
+  "last": "TRZCINICA ZSR",
+  "headsign": "TRZCINICA ZSR",
+  "candidates": []
+ },
+ "9c08e55c80fcb9f3": {
+  "line": "5",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "PRZYBÓWKA-SZKOŁA",
+  "headsign": "PRZYBÓWKA-SZKOŁA",
+  "candidates": [
+   [
+    "5",
+    6.5
+   ],
+   [
+    "4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "9ca48bbfdaa3273a": {
+  "line": "E6",
+  "confidence": "medium",
+  "trips": 6,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "E6",
+    7.5
+   ],
+   [
+    "E4",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "9d1a1804ba993f5d": {
+  "line": "14",
+  "confidence": "medium",
+  "trips": 5,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "14",
+    6.0
+   ],
+   [
+    "24",
+    6.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "9e527e970e4573c2": {
+  "line": "E5",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.PRZEMYSŁOWA 04",
+  "headsign": "JASŁO,ul.PRZEMYSŁOWA 04",
+  "candidates": [
+   [
+    "E5",
+    6.0
+   ],
+   [
+    "D",
+    5.5
+   ],
+   [
+    "N",
+    5.0
+   ]
+  ]
+ },
+ "9efc38d7a7b21314": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "BRZYSKA Nagórze Lewe",
+  "last": "JASŁO,ul.DWORCOWA 01",
+  "headsign": "JASŁO,ul.DWORCOWA 01",
+  "candidates": []
+ },
+ "a26be0f70e3a8e18": {
+  "line": "5",
+  "confidence": "high",
+  "trips": 1,
+  "first": "PRZYBÓWKA-SZKOŁA",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "5",
+    6.5
+   ],
+   [
+    "4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "a539f0faee346a2f": {
+  "line": "6",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "6",
+    6.5
+   ],
+   [
+    "4",
+    6.0
+   ],
+   [
+    "5",
+    6.0
+   ]
+  ]
+ },
+ "a558342a4ccaa1ce": {
+  "line": "12",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "NOWY GLINIK Centrum",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "12",
+    5.5
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "a5737e08a1120e9c": {
+  "line": "4",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "NIEPLA 08",
+  "headsign": "NIEPLA 08",
+  "candidates": [
+   [
+    "4",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "a661e64d02e25b3b": {
+  "line": "OP",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OP",
+    6.5
+   ],
+   [
+    "OM",
+    6.0
+   ],
+   [
+    "C",
+    5.0
+   ]
+  ]
+ },
+ "a7ce0427cddc0abe": {
+  "line": "OG",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "OG",
+    6.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "9",
+    1.0
+   ]
+  ]
+ },
+ "a8ada6147d42119f": {
+  "line": "9",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "9",
+    6.5
+   ],
+   [
+    "10",
+    0.0
+   ],
+   [
+    "20",
+    0.0
+   ]
+  ]
+ },
+ "a8c155ab9d1548d2": {
+  "line": "A",
+  "confidence": "high",
+  "trips": 4,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.GĄDKI 04",
+  "headsign": "JASŁO,ul.GĄDKI 04",
+  "candidates": [
+   [
+    "A",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "a9335346fbef286c": {
+  "line": "5",
+  "confidence": "high",
+  "trips": 1,
+  "first": "PRZYBÓWKA-SZKOŁA",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "5",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "ab105a947d071204": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JASŁO,ul.MICKIEWICZA 02",
+  "last": "BŁAŻKOWA Chorzówka",
+  "headsign": "BŁAŻKOWA Chorzówka",
+  "candidates": [
+   [
+    "30",
+    4.0
+   ],
+   [
+    "H",
+    3.5
+   ]
+  ]
+ },
+ "b0a247a2a33e3c77": {
+  "line": "21",
+  "confidence": "high",
+  "trips": 7,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "OSOBNICA Wysłanka 1",
+  "headsign": "OSOBNICA Wysłanka 1",
+  "candidates": [
+   [
+    "21",
+    9.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "b0dd9c9524f136cf": {
+  "line": "34",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "PAGÓREK skrzyżowanie",
+  "headsign": "PAGÓREK skrzyżowanie",
+  "candidates": [
+   [
+    "34",
+    6.5
+   ],
+   [
+    "22",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "b30054613ad57a61": {
+  "line": "12",
+  "confidence": "high",
+  "trips": 2,
+  "first": "ŁAJSCE krzyżówki",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "12",
+    7.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "b35923569a42e560": {
+  "line": "24",
+  "confidence": "high",
+  "trips": 5,
+  "first": "OSOBNICA Wiśniówki",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "24",
+    7.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "b3ee783a2797cd69": {
+  "line": "OM",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "DĄBRÓWKA Kościół",
+  "headsign": "DĄBRÓWKA Kościół",
+  "candidates": [
+   [
+    "OM",
+    5.5
+   ],
+   [
+    "K",
+    3.5
+   ],
+   [
+    "OP",
+    2.5
+   ]
+  ]
+ },
+ "b439939a462e6550": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "SZEBNIE Szkoła",
+  "last": "SZEBNIE Szkoła",
+  "headsign": "SZEBNIE Szkoła",
+  "candidates": []
+ },
+ "b534297d5b91dc29": {
+  "line": "22",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "RADOŚĆ skrzyżowanie",
+  "headsign": "RADOŚĆ skrzyżowanie",
+  "candidates": [
+   [
+    "22",
+    5.5
+   ],
+   [
+    "E6",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "b588857da2369a19": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ŁAJSCE krzyżówki",
+  "last": "JASŁO,ul.DWORCOWA 01",
+  "headsign": "JASŁO,ul.DWORCOWA 01",
+  "candidates": []
+ },
+ "b784ae0159ce05f9": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "BŁAŻKOWA szkoła",
+  "last": "KOŁACZYCE Rynek",
+  "headsign": "KOŁACZYCE Rynek",
+  "candidates": []
+ },
+ "b82d8062c27a9618": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "TRZCINICA-Szkoła 01",
+  "last": "TRZCINICA-Skansen",
+  "headsign": "TRZCINICA-Skansen",
+  "candidates": []
+ },
+ "b94a64cf69990072": {
+  "line": "39",
+  "confidence": "high",
+  "trips": 5,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "39",
+    7.5
+   ],
+   [
+    "E5",
+    4.5
+   ],
+   [
+    "E4",
+    4.5
+   ]
+  ]
+ },
+ "baa318852cbeeae8": {
+  "line": "13",
+  "confidence": "high",
+  "trips": 4,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "13",
+    7.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "9",
+    5.0
+   ]
+  ]
+ },
+ "bd4d893ab50825d7": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "JASŁO,ul.MICKIEWICZA 02",
+  "last": "OPACIE Dom Ludowy",
+  "headsign": "OPACIE Dom Ludowy",
+  "candidates": []
+ },
+ "bf76152e7c9ebc15": {
+  "line": "36",
+  "confidence": "high",
+  "trips": 2,
+  "first": "CIEKLIN Remiza",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "36",
+    7.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "c168cac53c59d77e": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "OSOBNICA Kościół",
+  "last": "OSOBNICA Górna",
+  "headsign": "OSOBNICA Górna",
+  "candidates": []
+ },
+ "c340a86a47f32901": {
+  "line": "34",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "PAGÓREK skrzyżowanie",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "34",
+    5.5
+   ],
+   [
+    "22",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "c3a4ef9affd9552d": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JASŁO,ul.3 MAJA Rafineria",
+  "last": "OSOBNICA Wysłanka 1",
+  "headsign": "OSOBNICA Wysłanka 1",
+  "candidates": []
+ },
+ "c3b47dd3f62fd2e4": {
+  "line": "A",
+  "confidence": "high",
+  "trips": 6,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "A",
+    8.0
+   ],
+   [
+    "E4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "c4295d96f317853d": {
+  "line": "34",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "PAGÓREK skrzyżowanie",
+  "headsign": "PAGÓREK skrzyżowanie",
+  "candidates": [
+   [
+    "34",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "c42d3d12273684ad": {
+  "line": "5",
+  "confidence": "high",
+  "trips": 2,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "PRZYBÓWKA-SZKOŁA",
+  "headsign": "PRZYBÓWKA-SZKOŁA",
+  "candidates": [
+   [
+    "5",
+    6.0
+   ],
+   [
+    "E4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "c528c231b030b58a": {
+  "line": "25",
+  "confidence": "high",
+  "trips": 11,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "25",
+    9.0
+   ],
+   [
+    "K",
+    5.0
+   ],
+   [
+    "E6",
+    4.5
+   ]
+  ]
+ },
+ "ca700fa5d3dde272": {
+  "line": "10",
+  "confidence": "high",
+  "trips": 13,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "ŁAJSCE Dom Ludowy",
+  "headsign": "ŁAJSCE Dom Ludowy",
+  "candidates": [
+   [
+    "10",
+    8.0
+   ],
+   [
+    "OG",
+    6.5
+   ],
+   [
+    "12",
+    6.0
+   ]
+  ]
+ },
+ "cbf5cf61942c198f": {
+  "line": "20",
+  "confidence": "high",
+  "trips": 4,
+  "first": "ŻÓŁKÓW, KAPLICZKA",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "20",
+    7.0
+   ],
+   [
+    "9",
+    0.0
+   ],
+   [
+    "10",
+    0.0
+   ]
+  ]
+ },
+ "cf116366fe638289": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "DĘBOWIEC górka",
+  "last": "OSOBNICA Centrum",
+  "headsign": "OSOBNICA Centrum",
+  "candidates": []
+ },
+ "cfdbee93fe45f79f": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ZIMNA WODA 4",
+  "last": "SZEBNIE Szkoła",
+  "headsign": "SZEBNIE Szkoła",
+  "candidates": []
+ },
+ "d25731a0b6a5ee55": {
+  "line": "11",
+  "confidence": "medium",
+  "trips": 3,
+  "byStart": {
+   "08:55": "OG"
+  },
+  "first": "GLINIK POLSKI Podlas",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "11",
+    6.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "12",
+    5.0
+   ]
+  ]
+ },
+ "d4ac46d85903c7e3": {
+  "line": "25",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "25",
+    6.0
+   ],
+   [
+    "K",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "d7110189249a8559": {
+  "line": "22",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "RADOŚĆ skrzyżowanie",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "22",
+    6.5
+   ],
+   [
+    "34",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "d7c372a3b7556865": {
+  "line": "24",
+  "confidence": "high",
+  "trips": 6,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "OSOBNICA Wiśniówki",
+  "headsign": "OSOBNICA Wiśniówki",
+  "candidates": [
+   [
+    "24",
+    8.0
+   ],
+   [
+    "E5",
+    4.5
+   ],
+   [
+    "E6",
+    4.5
+   ]
+  ]
+ },
+ "d8a6a504c9e2efef": {
+  "line": "OM",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OM",
+    6.5
+   ],
+   [
+    "OP",
+    6.0
+   ],
+   [
+    "C",
+    5.0
+   ]
+  ]
+ },
+ "dbbea64440acf12f": {
+  "line": "K",
+  "confidence": "high",
+  "trips": 6,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.KACZOROWY 02",
+  "headsign": "JASŁO,ul.KACZOROWY 02",
+  "candidates": [
+   [
+    "K",
+    8.0
+   ],
+   [
+    "E4",
+    4.5
+   ],
+   [
+    "E6",
+    4.5
+   ]
+  ]
+ },
+ "dc3561a7935e63a6": {
+  "line": "14",
+  "confidence": "high",
+  "trips": 5,
+  "first": "ZAŁĘŻE Kościół",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "14",
+    7.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "dd3e2fc6eb3c2ba2": {
+  "line": "E",
+  "confidence": "high",
+  "trips": 11,
+  "first": "JASŁO,ul.GĄDKI 04",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "E",
+    8.0
+   ],
+   [
+    "E3",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "dde96752e96b8754": {
+  "line": "10",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "10",
+    5.5
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "9",
+    5.0
+   ]
+  ]
+ },
+ "df15c79e7fd5c2ca": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "MODERÓWKA (PKP SZEBNIE)",
+  "last": "SZEBNIE Szkoła",
+  "headsign": "SZEBNIE Szkoła",
+  "candidates": []
+ },
+ "e0e1a59073bc1dc2": {
+  "line": "9",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "9",
+    6.0
+   ],
+   [
+    "OG",
+    5.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "e1098fd349b890a8": {
+  "line": "22",
+  "confidence": "high",
+  "trips": 16,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "22",
+    9.0
+   ],
+   [
+    "23",
+    5.5
+   ],
+   [
+    "25",
+    5.0
+   ]
+  ]
+ },
+ "e1e60420c5973298": {
+  "line": "E5",
+  "confidence": "high",
+  "trips": 5,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "E5",
+    8.5
+   ],
+   [
+    "D",
+    5.0
+   ],
+   [
+    "OG",
+    5.0
+   ]
+  ]
+ },
+ "e218013eff2712b2": {
+  "line": "4",
+  "confidence": "high",
+  "trips": 4,
+  "first": "NIEPLA 08",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "4",
+    7.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "e2451df0d0b7ea20": {
+  "line": "OG",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "OG",
+    6.5
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "9",
+    1.0
+   ]
+  ]
+ },
+ "e7d663683e0551c1": {
+  "line": "5",
+  "confidence": "high",
+  "trips": 2,
+  "first": "PRZYBÓWKA-SZKOŁA",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "5",
+    7.0
+   ],
+   [
+    "4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "e85fb0fe10c4d819": {
+  "line": "OG",
+  "confidence": "medium",
+  "trips": 2,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "ŁUBNO SZLACHECKIE Dom Ludowy",
+  "headsign": "ŁUBNO SZLACHECKIE Dom Ludowy",
+  "candidates": [
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "10",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "e9118e23d4d11b83": {
+  "line": "9",
+  "confidence": "high",
+  "trips": 2,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "9",
+    7.0
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "12",
+    1.0
+   ]
+  ]
+ },
+ "e96b11ecfc4c13bb": {
+  "line": "9",
+  "confidence": "high",
+  "trips": 1,
+  "first": "JASŁO,ul.P.SKARGI  UM",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "9",
+    6.5
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "E5",
+    4.5
+   ]
+  ]
+ },
+ "e97128b8cc4ee0ae": {
+  "line": "OM",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OM",
+    6.5
+   ],
+   [
+    "OP",
+    6.0
+   ],
+   [
+    "C",
+    5.0
+   ]
+  ]
+ },
+ "e9b3b3d8f292d033": {
+  "line": "12",
+  "confidence": "high",
+  "trips": 1,
+  "first": "ŁAJSCE krzyżówki",
+  "last": "JASŁO,ul.P.SKARGI  UM",
+  "headsign": "JASŁO,ul.P.SKARGI  UM",
+  "candidates": [
+   [
+    "12",
+    6.5
+   ],
+   [
+    "OG",
+    5.0
+   ],
+   [
+    "11",
+    4.5
+   ]
+  ]
+ },
+ "ebae45d2c037ea71": {
+  "line": "32",
+  "confidence": "high",
+  "trips": 4,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "LIPNICA DOLNA koniec",
+  "headsign": "LIPNICA DOLNA koniec",
+  "candidates": [
+   [
+    "32",
+    7.0
+   ],
+   [
+    "E4",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "f06f1164eee31908": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "JARENIÓWKA - SZKOŁA",
+  "last": "TRZCINICA I",
+  "headsign": "TRZCINICA I",
+  "candidates": []
+ },
+ "f20b7aa0245c27f7": {
+  "line": "22",
+  "confidence": "medium",
+  "trips": 3,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "22",
+    6.5
+   ],
+   [
+    "23",
+    5.0
+   ],
+   [
+    "25",
+    5.0
+   ]
+  ]
+ },
+ "f27ed4d5ba2a6979": {
+  "line": "25",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "TRZCINICA-Szkoła 01",
+  "headsign": "TRZCINICA-Szkoła 01",
+  "candidates": [
+   [
+    "25",
+    5.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "f3cf5c49184a79f3": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ŁAZY DĘBOWIECKIE Szkoła",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "OG",
+    4.0
+   ],
+   [
+    "23",
+    4.0
+   ],
+   [
+    "24",
+    3.5
+   ]
+  ]
+ },
+ "f50987b8165473dd": {
+  "line": "K",
+  "confidence": "high",
+  "trips": 7,
+  "first": "JASŁO,ul.KACZOROWY 02",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "K",
+    8.0
+   ],
+   [
+    "E5",
+    4.0
+   ],
+   [
+    "OG",
+    4.0
+   ]
+  ]
+ },
+ "f56c49b760e4c804": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "TRZCINICA I",
+  "last": "JARENIÓWKA - SZKOŁA",
+  "headsign": "JARENIÓWKA - SZKOŁA",
+  "candidates": []
+ },
+ "f60d2a3ccc949132": {
+  "line": null,
+  "confidence": "none",
+  "trips": 1,
+  "first": "ŁAZY DĘBOWIECKIE Szkoła",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "22",
+    4.5
+   ],
+   [
+    "34",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "f8b06c65e43cba97": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "SZEBNIE Szkoła",
+  "last": "NIEPLA Szkoła",
+  "headsign": "NIEPLA Szkoła",
+  "candidates": []
+ },
+ "fb5c2499428faca4": {
+  "line": "OM",
+  "confidence": "medium",
+  "trips": 1,
+  "first": "JASŁO,ul.RYNEK 02",
+  "last": "JASŁO,ul.RYNEK 02",
+  "headsign": "JASŁO,ul.RYNEK 02",
+  "candidates": [
+   [
+    "OM",
+    6.5
+   ],
+   [
+    "OP",
+    6.0
+   ],
+   [
+    "C",
+    5.0
+   ]
+  ]
+ },
+ "fc13f07ca3c43c5b": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "OSOBNICA Centrum",
+  "last": "OSOBNICA 4 IMIELNA",
+  "headsign": "OSOBNICA 4 IMIELNA",
+  "candidates": []
+ },
+ "fcdf3577a99f35c0": {
+  "line": "E",
+  "confidence": "medium",
+  "trips": 7,
+  "first": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "last": "JASŁO,ul.GĄDKI 04",
+  "headsign": "JASŁO,ul.GĄDKI 04",
+  "candidates": [
+   [
+    "E",
+    6.5
+   ],
+   [
+    "E3",
+    5.0
+   ],
+   [
+    "E4",
+    5.0
+   ]
+  ]
+ },
+ "fd5d405d2e44fe1e": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "SZEBNIE Szkoła",
+  "last": "SZEBNIE Szkoła",
+  "headsign": "SZEBNIE Szkoła",
+  "candidates": []
+ },
+ "ff52e9850a4618c8": {
+  "line": "34",
+  "confidence": "high",
+  "trips": 2,
+  "first": "PAGÓREK skrzyżowanie",
+  "last": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "headsign": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "candidates": [
+   [
+    "34",
+    6.0
+   ],
+   [
+    "22",
+    4.5
+   ],
+   [
+    "E5",
+    4.0
+   ]
+  ]
+ },
+ "ff793beceb35885a": {
+  "line": null,
+  "confidence": "none",
+  "trips": 2,
+  "first": "OSOBNICA Górna",
+  "last": "OSOBNICA Kościół",
+  "headsign": "OSOBNICA Kościół",
+  "candidates": []
+ }
+}

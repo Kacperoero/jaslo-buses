@@ -2,8 +2,7 @@ import { Injectable, computed, signal } from '@angular/core';
 
 /**
  * Holds the date & time the user wants to travel at.
- * `null` means "now" – the app then uses live departures (with GPS estimates).
- * A set date switches popups and the route planner to the static timetable for that moment.
+ * `null` means "now". All times come from the published timetable (no live delays).
  */
 @Injectable({
   providedIn: 'root'

@@ -8,9 +8,9 @@ import { escapeHtml } from '../shared/utils/text.utils';
 import { getNearestStops } from '../shared/utils/geo.utils';
 import { TravelTimeService } from '../core/services/travel-time.service';
 import { FavoritesService, RecentRoute } from '../core/services/favorites.service';
+import { GtfsService } from '../core/services/gtfs.service';
 import { TimePickerComponent } from '../shared/components/time-picker/time-picker.component';
 import { RoutePlannerService } from '../features/route-planner/route-planner.service';
-import { LiveVehicle, LiveVehiclesService } from '../features/vehicles/live-vehicles.service';
 import { Connection, ConnectionPoint } from '../features/route-planner/route-planner.models';
 
 @Component({
@@ -27,11 +27,6 @@ export class MainMapComponent implements OnInit, OnDestroy {
   private routeLayerGroup = L.layerGroup();
   private userPointsLayerGroup = L.layerGroup();
 
-  // Live bus positions
-  private vehicleLayer = L.layerGroup();
-  private vehicleMarkers = new Map<string, L.Marker>();
-  /** What each bus icon currently shows – the icon is only replaced when this changes (keeps the glide) */
-  private vehicleIconKeys = new Map<string, string>();
 
   /** Incremented per search, so a slow search can't overwrite results of a newer one */
   private searchCounter = 0;
@@ -122,9 +117,10 @@ export class MainMapComponent implements OnInit, OnDestroy {
     private routePlanner: RoutePlannerService,
     readonly travelTime: TravelTimeService,
     readonly favorites: FavoritesService,
-    readonly liveVehicles: LiveVehiclesService
+    private gtfs: GtfsService
   ) {
-    effect(() => this.renderVehicles(this.liveVehicles.vehicles()));
+    // Start loading the timetable right away, so the first popup / search doesn't wait
+    this.gtfs.index().subscribe({ error: err => console.error('Failed to load the timetable', err) });
 
     // Results are calculated for a specific moment – drop them when the user changes the time
     effect(() => {
@@ -148,7 +144,6 @@ export class MainMapComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.liveVehicles.stop();
     if (this.map) {
       this.map.remove();
     }
@@ -187,16 +182,9 @@ export class MainMapComponent implements OnInit, OnDestroy {
     });
 
     // Load and render stops
-    this.vehicleLayer.addTo(this.map);
-    this.map.on('moveend', () => this.liveVehicles.boundsChanged());
-
     this.mapMarkerService.renderStops(this.map).then((stops) => {
       this.allStops.set(stops);
       this.loading.set(false);
-      this.liveVehicles.configure(stops, () => {
-        const b = this.map.getBounds();
-        return { south: b.getSouth(), west: b.getWest(), north: b.getNorth(), east: b.getEast() };
-      });
     });
   }
 
@@ -538,68 +526,6 @@ export class MainMapComponent implements OnInit, OnDestroy {
       }
     }
     return coords.map(c => new L.LatLng(c[0], c[1]));
-  }
-
-  // ─── Live buses ──────────────────────────────────────
-
-  /** Adds, moves and removes bus markers to match the latest positions. */
-  private renderVehicles(vehicles: LiveVehicle[]): void {
-    const seen = new Set<string>();
-    for (const v of vehicles) {
-      seen.add(v.id);
-      const existing = this.vehicleMarkers.get(v.id);
-      const iconKey = `${v.line}|${(v.delayMin ?? 0) >= 3}`;
-      if (existing) {
-        existing.setLatLng([v.lat, v.lng]);
-        if (this.vehicleIconKeys.get(v.id) !== iconKey) existing.setIcon(this.vehicleIcon(v));
-        existing.setPopupContent(this.vehiclePopup(v));
-      } else {
-        const marker = L.marker([v.lat, v.lng], {
-          icon: this.vehicleIcon(v),
-          zIndexOffset: 1000,
-          title: `Linia ${v.line}`
-        }).bindPopup(this.vehiclePopup(v), { className: 'departure-popup', minWidth: 240 });
-        marker.addTo(this.vehicleLayer);
-        this.vehicleMarkers.set(v.id, marker);
-      }
-      this.vehicleIconKeys.set(v.id, iconKey);
-    }
-    for (const [id, marker] of this.vehicleMarkers) {
-      if (!seen.has(id)) {
-        marker.remove();
-        this.vehicleMarkers.delete(id);
-        this.vehicleIconKeys.delete(id);
-      }
-    }
-  }
-
-  private vehicleIcon(v: LiveVehicle): L.DivIcon {
-    const late = (v.delayMin ?? 0) >= 3;
-    return L.divIcon({
-      className: 'vehicle-marker',
-      html: `<div class="vehicle-badge${late ? ' late' : ''}">${escapeHtml(v.line)}</div>`,
-      iconSize: [36, 22],
-      iconAnchor: [18, 11]
-    });
-  }
-
-  private vehiclePopup(v: LiveVehicle): string {
-    const delay = v.delayMin == null ? ''
-      : v.delayMin > 0 ? `<span class="delay late">Opóźnienie: ${v.delayMin} min</span>`
-      : v.delayMin < 0 ? `<span class="delay early">Przed czasem: ${-v.delayMin} min</span>`
-      : `<span class="delay on-time">Zgodnie z rozkładem</span>`;
-    const next = v.nextStop
-      ? `<div>${v.atStop ? 'Na przystanku' : 'Następny przystanek'}: <strong>${escapeHtml(v.nextStop)}</strong>${v.nextStopEta && !v.atStop ? ` (${escapeHtml(v.nextStopEta)})` : ''}</div>`
-      : '';
-    return `
-      <div class="popup-content">
-        <div class="popup-header">
-          <span class="popup-icon">🚌</span>
-          <h3 class="popup-title">Linia ${escapeHtml(v.line)} → ${escapeHtml(v.direction)}</h3>
-        </div>
-        <div class="vehicle-info">${next}${delay}</div>
-      </div>
-    `;
   }
 
   private plannedStopMarker(stop: Stop, cssClass: string, label: string): L.Marker {

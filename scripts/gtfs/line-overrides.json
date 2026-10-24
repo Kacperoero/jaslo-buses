@@ -1,0 +1,16 @@
+{
+ "_info": "Ręczne poprawki numerów linii. Klucz = podpis wariantu trasy z line-assignments.json. 'line' zmienia cały wariant, 'byStart' pojedyncze kursy (godzina odjazdu z pierwszego przystanku). Wpisy tutaj wygrywają z automatem.",
+ "674f3ce50c6fe65f": {
+  "_why": "PDF: linia 14 kursuje też w soboty o 07:45 i 11:10 ('(6Ł)'), ale ten wiersz stoi tuż pod etykietą linii 7, więc automat przypisał godziny do 7.",
+  "_route": "JASŁO,ul.RYNEK (STAROSTWO POW) → JASŁO,ul.RYNEK (STAROSTWO POW)",
+  "byStart": {
+   "07:45": "14",
+   "11:10": "14"
+  }
+ },
+ "467da655a4724ef1": {
+  "_why": "Kurs łączony: Gądki → Rynek, dalej jako linia A do Warzyc i z powrotem (kiedyprzyjedzie pokazuje cały kurs jako A).",
+  "_route": "JASŁO,ul.GĄDKI 04 → Warzyce Kościół → JASŁO,ul.RYNEK 02",
+  "line": "A"
+ }
+}

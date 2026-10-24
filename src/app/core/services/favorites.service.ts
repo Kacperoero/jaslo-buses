@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 /** A start or end point of a remembered route. */
 export interface SavedPoint {
@@ -34,6 +35,29 @@ interface StoredState {
 })
 export class FavoritesService {
   private state = signal<StoredState>(load());
+  private http = inject(HttpClient, { optional: true });
+
+  constructor() {
+    if (hasLegacyIds(this.state()) && this.http) {
+      // Saved before the switch to the official GTFS (old kiedyprzyjedzie stop IDs) – translate once
+      this.http.get<Record<string, string>>('assets/data/legacy-stop-ids.json')
+        .subscribe({ next: map => this.migrateStopIds(map), error: () => {} });
+    }
+  }
+
+  /** Replaces old stop IDs using `map` (old → new); entries without a match are dropped. */
+  migrateStopIds(map: Record<string, string>): void {
+    const conv = (id: string) => (isLegacyId(id) ? map[id] : id);
+    const convPoint = (p: SavedPoint): SavedPoint | null => {
+      if (!p.stopId || !isLegacyId(p.stopId)) return p;
+      return map[p.stopId] ? { ...p, stopId: map[p.stopId] } : { lat: p.lat, lng: p.lng, name: p.name };
+    };
+    this.update(s => ({
+      favoriteStopIds: [...new Set(s.favoriteStopIds.map(conv).filter(isString))],
+      recentStopIds: [...new Set(s.recentStopIds.map(conv).filter(isString))],
+      recentRoutes: s.recentRoutes.map(r => ({ from: convPoint(r.from)!, to: convPoint(r.to)! }))
+    }));
+  }
 
   readonly favoriteStopIds = computed(() => this.state().favoriteStopIds);
   readonly recentStopIds = computed(() => this.state().recentStopIds);
@@ -120,6 +144,16 @@ function routeKey(r: RecentRoute): string {
 
 function isString(v: unknown): v is string {
   return typeof v === 'string';
+}
+
+/** kiedyprzyjedzie stop IDs look like "1332055:1392178"; GTFS ones like "13890048_1". */
+function isLegacyId(id: string): boolean {
+  return id.includes(':');
+}
+
+function hasLegacyIds(s: StoredState): boolean {
+  return [...s.favoriteStopIds, ...s.recentStopIds].some(isLegacyId)
+    || s.recentRoutes.some(r => [r.from.stopId, r.to.stopId].some(id => id && isLegacyId(id)));
 }
 
 function isPoint(v: unknown): v is SavedPoint {

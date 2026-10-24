@@ -1,105 +1,98 @@
-import { TestBed } from '@angular/core/testing';
-import { provideHttpClient } from '@angular/common/http';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { firstValueFrom } from 'rxjs';
-import { TimetableService, encodeLineName } from './timetable.service';
+import { GtfsData, GtfsIndex } from './gtfs.service';
+import { UNKNOWN_LINE, departures, directions, tripDetails } from './timetable.service';
 
-const STOP = '1332055:1392178';
-const STOP_URL = encodeURIComponent(STOP);
+/**
+ * Tiny timetable: stops A → B → C.
+ *  trip 0: line 10, weekdays, A 07:40, B 07:45, C 07:55
+ *  trip 1: line unknown, every day, A 23:50, B 00:05 (next day), C 00:10
+ *  trip 2: line 10, weekdays, A 09:00 … C 09:20
+ * Service calendar starts Mon 2026-10-19 and lasts 14 days.
+ */
+const WEEKDAYS = bitmap(14, d => d % 7 < 5);
+const EVERY_DAY = bitmap(14, () => true);
 
-describe('encodeLineName', () => {
-  it('uses URL-safe Base64 without padding, like the official site', () => {
-    expect(encodeLineName('10')).toBe('MTA');
-    expect(encodeLineName('E4')).toBe('RTQ');
-    expect(encodeLineName('Ż')).toBe('xbs');
+const DATA: GtfsData = {
+  feed: { file: 'test.zip', publisher: '', validFrom: '2026-10-19', validTo: '2026-11-01', builtAt: '' },
+  stops: [['a', 'A', 49.7, 21.4], ['b', 'B', 49.71, 21.41], ['c', 'C', 49.72, 21.42]],
+  variants: [
+    { line: '10', headsign: 'C', stops: [0, 1, 2] },
+    { line: null, headsign: 'C', stops: [0, 1, 2] }
+  ],
+  trips: [
+    [0, 0, 7 * 60 + 40, 5, 10],
+    [1, 1, 23 * 60 + 50, 15, 5],
+    [0, 0, 9 * 60, 10, 10]
+  ],
+  services: { start: '2026-10-19', days: 14, bitmaps: [WEEKDAYS, EVERY_DAY] }
+};
+
+const index = new GtfsIndex(DATA);
+const at = (d: number, h: number, m: number) => new Date(2026, 9, d, h, m);
+
+describe('GtfsIndex', () => {
+  it('knows on which days a service runs', () => {
+    expect(index.runsOn(0, at(19, 12, 0))).toBe(true);   // Monday
+    expect(index.runsOn(0, at(24, 12, 0))).toBe(false);  // Saturday
+    expect(index.runsOn(1, at(24, 12, 0))).toBe(true);
+    expect(index.runsOn(1, at(2, 12, 0))).toBe(false);   // before the calendar starts
   });
 });
 
-describe('TimetableService scheduled departures', () => {
-  let service: TimetableService;
-  let http: HttpTestingController;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()]
-    });
-    service = TestBed.inject(TimetableService);
-    http = TestBed.inject(HttpTestingController);
-  });
-
-  afterEach(() => http.verify());
-
-  it('merges line timetables into departures starting at the chosen time', async () => {
-    const at = new Date(2026, 9, 26, 7, 30); // Mon 26.10.2026, 07:30
-    const result = firstValueFrom(service.getScheduledDepartures(STOP, at));
-
-    http.expectOne(r => r.url === `/api/directions/${STOP_URL}` && r.params.get('date') === '2026-10-26')
-      .flush({ directions: [
-        { line: '10', direction: 'A', show_name: true, active: true },
-        { line: '34', direction: 'B', show_name: true, active: true },
-        { line: '34', direction: 'C', show_name: true, active: true }
-      ] });
-
-    // One request per unique line
-    http.expectOne(`/api/timetable/${STOP_URL}/MTA?date=2026-10-26`).flush({
-      departures: [
-        { departure: 7 * 3600, line: '10', symbols: '', trip_id: 1, index: 3 },           // 07:00 – before
-        { departure: 8 * 3600 + 15 * 60, line: '10', symbols: '', trip_id: 2, index: 3 }  // 08:15
-      ],
-      directions: [],
-      main_direction: { name: 'KAUFLAND', count: 2, symbol: null }
-    });
-    http.expectOne(`/api/timetable/${STOP_URL}/MzQ?date=2026-10-26`).flush({
-      departures: [
-        { departure: 7 * 3600 + 40 * 60, symbols: 'B', trip_id: 3, index: 8 },           // 07:40, alt direction
-        { departure: 12 * 3600, symbols: '', trip_id: 4, index: 8 }                       // 12:00 – after 3h window
-      ],
-      directions: [{ name: 'WARZYCE', symbol: 'B' }],
-      main_direction: { name: 'RYNEK', count: 1, symbol: null }
-    });
-
-    const res = await result;
-    expect(res.rows?.map(r => [r.line_name, r.static_time, r.time, r.direction])).toEqual([
-      ['34', '07:40', '10 min', 'WARZYCE'],
-      ['10', '08:15', '45 min', 'KAUFLAND']
+describe('departures', () => {
+  it('lists departures in the next 3 hours, soonest first, with planned times', () => {
+    const res = departures(index, 'a', at(19, 7, 30));
+    expect(res.rows!.map(r => [r.line_name, r.static_time, r.time, r.direction])).toEqual([
+      ['10', '07:40', '10 min', 'C'],
+      ['10', '09:00', '90 min', 'C']
     ]);
-    expect(res.rows?.[0].is_estimated).toBe(false);
-    expect(res.rows?.[0].trip_execution_id).toBe('trip:3:8');
-    expect(res.directions?.['WARZYCE']).toBe('WARZYCE');
+    expect(res.rows![0].is_estimated).toBe(false);
+    expect(res.rows![0].trip_execution_id).toBe('trip:0:0');
   });
 
-  it('reuses the cached day timetable for another time on the same day', async () => {
-    const first = firstValueFrom(service.getScheduledDepartures(STOP, new Date(2026, 9, 26, 7, 0)));
-    http.expectOne(r => r.url === `/api/directions/${STOP_URL}`).flush({ directions: [] });
-    await first;
-
-    await firstValueFrom(service.getScheduledDepartures(STOP, new Date(2026, 9, 26, 15, 0)));
-    http.expectNone(r => r.url.startsWith('/api/'));
+  it('respects the service calendar', () => {
+    expect(departures(index, 'a', at(24, 7, 30)).rows).toEqual([]); // Saturday: no weekday trips
   });
 
-  it('asks for a live trip by Base64 id and stop position', async () => {
-    const result = firstValueFrom(service.getTripExecution('Z22:739913:5', 14));
-    http.expectOne('/api/trip_execution/WjIyOjczOTkxMzo1/14').flush({
-      trip: { times: [], direction: '', current_station_id: 0, line: { name: 'OG', type: 'bus', show_name: true } },
-      canceled: [], vehicle_type: 0, estimated: true, at_stop: false,
-      next_departure_index: 0, estimates: [], vehicle_trip_index: 0
-    });
-    expect((await result).trip.line.name).toBe('OG');
+  it('includes trips that run past midnight', () => {
+    // Tuesday 00:00 – the Monday 23:50 trip reaches B at 00:05
+    const res = departures(index, 'b', at(20, 0, 0));
+    expect(res.rows!.map(r => [r.line_name, r.static_time])).toEqual([[UNKNOWN_LINE, '00:05']]);
   });
 
-  it('loads scheduled trips from the planned trip endpoint', async () => {
-    const result = firstValueFrom(service.getTripExecution('trip:46084089:35'));
-    http.expectOne('/api/trip/46084089/35').flush({
-      times: [{ stop_name: 'A', external: false, designator: 1, place_id: 'x', departure_time: '04:40', index: 0 }],
-      direction: 'RYNEK',
-      current_station_id: 1,
-      line: { name: '34', type: 'bus', show_name: true },
-      vehicle_type: 0
-    });
+  it('looks into the next day when the window passes midnight', () => {
+    const res = departures(index, 'a', at(19, 23, 45));
+    expect(res.rows!.map(r => r.static_time)).toEqual(['23:50']);
+  });
 
-    const res = await result;
-    expect(res.trip.times.length).toBe(1);
-    expect(res.trip.line.name).toBe('34');
-    expect(res.estimated).toBe(false);
+  it('does not list the last stop of a trip (the bus only arrives there)', () => {
+    expect(departures(index, 'c', at(19, 7, 30)).rows).toEqual([]);
+  });
+
+  it('can limit the result to some lines', () => {
+    expect(departures(index, 'b', at(19, 23, 0), ['10']).rows).toEqual([]);
   });
 });
+
+describe('directions', () => {
+  it('lists lines calling at a stop that day, including where they end', () => {
+    expect(directions(index, 'c', at(19, 12, 0)).map(d => d.line).sort()).toEqual(['10', UNKNOWN_LINE]);
+    expect(directions(index, 'c', at(24, 12, 0)).map(d => d.line)).toEqual([UNKNOWN_LINE]);
+  });
+});
+
+describe('tripDetails', () => {
+  it('gives the stop sequence with clock times', () => {
+    const res = tripDetails(index, 'trip:1:1');
+    expect(res.trip.times.map(t => [t.place_id, t.departure_time, t.index])).toEqual([
+      ['a', '23:50', 0], ['b', '00:05', 1], ['c', '00:10', 2]
+    ]);
+    expect(res.trip.line.name).toBe(UNKNOWN_LINE);
+    expect(res.next_departure_index).toBe(1);
+  });
+});
+
+function bitmap(days: number, on: (day: number) => boolean): string {
+  const bytes = new Uint8Array(Math.ceil(days / 8));
+  for (let d = 0; d < days; d++) if (on(d)) bytes[d >> 3] |= 1 << (d & 7);
+  return btoa(String.fromCharCode(...bytes));
+}

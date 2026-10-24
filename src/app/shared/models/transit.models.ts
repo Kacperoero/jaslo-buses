@@ -1,6 +1,6 @@
-/** Represents a bus stop from the local stops registry */
+/** A bus stop (public/assets/data/stops-base.json, built from the MKS GTFS) */
 export interface Stop {
-  /** Unique ID matching the MKS/KiedyPrzyjedzie system (e.g. "1332005:1392084") */
+  /** GTFS stop_id from the MKS timetable (e.g. "13890365_1") */
   id: string;
   /** Numeric designator used internally */
   designator: number;
@@ -14,7 +14,10 @@ export interface Stop {
   onlyDisembarking: boolean;
 }
 
-/** Single departure row from the API */
+/**
+ * One departure from a stop. The shape follows the departure boards the app used before the
+ * switch to GTFS, so the planner and popups work unchanged; live-only fields stay optional.
+ */
 export interface Departure {
   /** Bus line number/name */
   line_name?: string;
@@ -42,7 +45,7 @@ export interface Departure {
   at_stop?: boolean;
 }
 
-/** Response from the departures API endpoint */
+/** Departure board of a stop */
 export interface DeparturesResponse {
   timestamp: number;
   designator: number;
@@ -52,7 +55,7 @@ export interface DeparturesResponse {
   directions?: Record<string, string>;
 }
 
-/** Represents a stop in a trip execution sequence */
+/** A stop on a trip, with its planned time */
 export interface TripTime {
   stop_name: string;
   external: boolean;
@@ -62,7 +65,7 @@ export interface TripTime {
   index: number;
 }
 
-/** Response from the trip execution API endpoint */
+/** A trip with its stop sequence (live fields like `vehicle` are not available from GTFS) */
 export interface TripExecutionResponse {
   trip: {
     times: TripTime[];
@@ -97,12 +100,6 @@ export interface TripEstimate {
   to_go: number;
 }
 
-/** Response from GET /api/departures?places=a,b,c (live departures of up to 6 stops) */
-export interface MultiDeparturesResponse {
-  status: string;
-  departures: { designator: number; rows: Departure[] }[];
-}
-
 /** A direction/line serving a stop */
 export interface StopDirection {
   /** Line number */
@@ -115,40 +112,3 @@ export interface StopDirection {
   active: boolean;
 }
 
-/** Response from the directions API endpoint */
-export interface DirectionsResponse {
-  directions: StopDirection[];
-}
-
-// ─── Static timetable (planned schedule for a chosen date) ───
-
-/** One planned departure from GET /api/timetable/{stopId}/{line}?date=YYYY-MM-DD */
-export interface ScheduledDeparture {
-  /** Departure time in seconds after midnight of the requested date */
-  departure: number;
-  line?: string;
-  /** Symbols of non-default directions/notes for this departure (e.g. "B") */
-  symbols: string;
-  trip_id: number;
-  /** Index of this stop within the trip – needed by GET /api/trip/{tripId}/{index} */
-  index: number;
-}
-
-/** Response from GET /api/timetable/{stopId}/{base64url(line)}?date=YYYY-MM-DD */
-export interface LineTimetableResponse {
-  departures: ScheduledDeparture[];
-  /** Alternative directions, referenced by `symbols` on a departure */
-  directions: { name: string; symbol: string }[];
-  /** Default direction for departures without a direction symbol */
-  main_direction: { name: string; count: number; symbol: string | null };
-  show_line_name?: boolean;
-}
-
-/** Response from GET /api/trip/{tripId}/{index} (planned stop sequence of a trip) */
-export interface TripResponse {
-  times: TripTime[];
-  direction: string;
-  current_station_id: number;
-  line: { name: string; type: string; show_name: boolean };
-  vehicle_type: number;
-}

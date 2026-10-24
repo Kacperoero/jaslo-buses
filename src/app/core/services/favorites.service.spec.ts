@@ -67,3 +67,26 @@ describe('FavoritesService', () => {
     expect(fav.recentRoutes()).toEqual([]);
   });
 });
+
+describe('FavoritesService – migration to GTFS stop IDs', () => {
+  beforeEach(() => localStorage.clear());
+
+  it('translates old stop IDs and drops the ones without a match', () => {
+    TestBed.resetTestingModule();
+    const fav = TestBed.inject(FavoritesService);
+    fav.toggleFavorite('1332055:1392178');
+    fav.toggleFavorite('1332999:1399999');
+    fav.addRecentStop('1332055:1392178');
+    fav.addRecentRoute(
+      { lat: 1, lng: 2, name: '3 Maja 01', isStop: true, stopId: '1332055:1392178' },
+      { lat: 3, lng: 4, name: 'Gone', isStop: true, stopId: '1332999:1399999' }
+    );
+
+    fav.migrateStopIds({ '1332055:1392178': '13890048_1' });
+
+    expect(fav.favoriteStopIds()).toEqual(['13890048_1']);
+    expect(fav.recentStopIds()).toEqual(['13890048_1']);
+    expect(fav.recentRoutes()[0].from.stopId).toBe('13890048_1');
+    expect(fav.recentRoutes()[0].to).toEqual({ lat: 3, lng: 4, name: 'Gone' }); // kept as a map point
+  });
+});

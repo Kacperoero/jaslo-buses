@@ -1,16 +1,17 @@
-import { Component, ElementRef, HostListener, inject, input, signal } from '@angular/core';
+import { Component, ElementRef, HostListener, computed, inject, input, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import {
   TravelTimeService,
   toDateInputValue,
   toTimeInputValue
 } from '../../../core/services/travel-time.service';
+import { GtfsService } from '../../../core/services/gtfs.service';
 
-/** How many days ahead the user can pick (timetables further out may still change). */
-const MAX_DAYS_AHEAD = 60;
+/** Until the timetable is loaded, allow picking this many days ahead. */
+const FALLBACK_DAYS_AHEAD = 60;
 
 /**
- * Lets the user choose when they travel: "Teraz" (live data) or a specific date & time.
+ * Lets the user choose when they travel: "Teraz" (now) or a specific date & time.
  * `variant="chip"` – compact button that opens a popover (map view),
  * `variant="inline"` – always-visible controls (route planner panel).
  */
@@ -30,7 +31,11 @@ export class TimePickerComponent {
   popoverOpen = signal(false);
 
   readonly minDate = toDateInputValue(new Date());
-  readonly maxDate = toDateInputValue(new Date(Date.now() + MAX_DAYS_AHEAD * 86400000));
+  private gtfs = inject(GtfsService);
+  /** Last day of the published timetable */
+  readonly maxDate = computed(() =>
+    this.gtfs.feed()?.validTo ?? toDateInputValue(new Date(Date.now() + FALLBACK_DAYS_AHEAD * 86400000)));
+  readonly validToLabel = computed(() => this.maxDate().split('-').reverse().join('.'));
 
   dateValue(): string {
     return toDateInputValue(this.travelTime.referenceTime());

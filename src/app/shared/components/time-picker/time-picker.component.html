@@ -28,7 +28,7 @@
     <div class="mode-toggle" role="radiogroup" aria-label="Kiedy">
       <button type="button" role="radio" [attr.aria-checked]="!travelTime.isScheduled()"
               [class.active]="!travelTime.isScheduled()" (click)="useNow()">
-        Teraz <span class="mode-hint">(na żywo)</span>
+        Teraz
       </button>
       <button type="button" role="radio" [attr.aria-checked]="travelTime.isScheduled()"
               [class.active]="travelTime.isScheduled()" (click)="useCustom()">
@@ -38,7 +38,7 @@
 
     @if (travelTime.isScheduled()) {
       <div class="datetime-row">
-        <input type="date" aria-label="Data" [min]="minDate" [max]="maxDate"
+        <input type="date" aria-label="Data" [min]="minDate" [max]="maxDate()"
                [value]="dateValue()" (change)="onDateChange($any($event.target).value)" />
         <input type="time" aria-label="Godzina" step="300"
                [value]="timeValue()" (change)="onTimeChange($any($event.target).value)" />
@@ -48,7 +48,7 @@
         <button type="button" (click)="usePreset(0, 15)">Dziś 15:00</button>
         <button type="button" (click)="usePreset(1, 7)">Jutro 7:00</button>
       </div>
-      <p class="schedule-note">Godziny z rozkładu jazdy – bez opóźnień na żywo.</p>
+      <p class="schedule-note">Rozkład jazdy MKS ważny do {{ validToLabel() }}.</p>
     }
   </div>
 </ng-template>

@@ -1,24 +1,24 @@
 # JakDojadę Jasło (autobusy)
 
-Webowa aplikacja z mapą komunikacji miejskiej MKS Jasło. Pokazuje wszystkie przystanki na mapie, odjazdy na żywo dla wybranego przystanku i wyszukuje połączenia z punktu A do punktu B (bezpośrednie i z jedną przesiadką).
+Webowa aplikacja z mapą komunikacji MKS Jasło. Pokazuje przystanki na mapie, najbliższe odjazdy z wybranego przystanku i wyszukuje połączenia z punktu A do punktu B (bezpośrednie i z jedną przesiadką).
 
-Dane o odjazdach pochodzą z publicznego API systemu [kiedyprzyjedzie.pl](https://mksjaslo.kiedyprzyjedzie.pl). Pozycje przystanków są trzymane lokalnie w pliku JSON, żeby można je było ręcznie poprawiać.
+Dane pochodzą z **oficjalnego rozkładu jazdy MKS Jasło w formacie GTFS** ([mksjaslo.pl → Strefa pasażera → GTFS](https://www.mksjaslo.pl/strefa-pasazera/gtfs)). Skrypt zamienia go na pliki aplikacji, a wszystko (odjazdy, planer) liczy się w przeglądarce – aplikacja nie odpytuje żadnych serwerów z danymi o autobusach. Nie ma też danych na żywo: wszystkie godziny są planowe.
 
 ## Funkcje
 
-- **Mapa przystanków** – Leaflet + kafelki OpenStreetMap, wyśrodkowana na Jaśle; 586 słupków (ok. 350 unikalnych nazw).
-- **Odjazdy na żywo** – kliknięcie przystanku otwiera dymek z najbliższymi 8 odjazdami (linia, kierunek, czas, znacznik `LIVE` dla czasów z GPS).
+- **Mapa przystanków** – Leaflet + kafelki OpenStreetMap, wyśrodkowana na Jaśle; 554 przystanki z GTFS.
+- **Odjazdy z przystanku** – kliknięcie przystanku otwiera okienko z najbliższymi odjazdami w ciągu 3 godzin (linia, kierunek, za ile minut / godzina).
 - **Wyszukiwarka przystanków** – pole w lewym górnym rogu, po wybraniu mapa przelatuje do przystanku.
-- **Autobusy na żywo** – przycisk „🚌 Autobusy na żywo” (domyślnie wyłączony) pokazuje na mapie jadące autobusy z numerem linii, odświeżane co 20 s. Autobus spóźniony o 3+ min ma pomarańczową plakietkę. Po kliknięciu widać kierunek, następny przystanek z przewidywaną godziną i opóźnienie.
-- **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Teraz” oznacza odjazdy na żywo; „Inny termin” przełącza dymki i planer na rozkład jazdy dla wybranego dnia i godziny (do 60 dni naprzód). Przydaje się też do testowania w nocy, gdy autobusy nie kursują.
-- **Ulubione i ostatnie** – gwiazdka ☆ w okienku przystanku (ulubione mają na mapie żółtą kropkę). Po kliknięciu w puste pole wyszukiwarki widać ulubione i ostatnio oglądane przystanki. W planerze puste pola A/B podpowiadają ulubione, a pod formularzem jest lista ostatnich tras do powtórzenia jednym kliknięciem. Dane są zapisane w przeglądarce (`localStorage`); tras z „Moja lokalizacja” nie zapisujemy.
-- **Planer trasy A → B** – punkt startu/celu można wybrać z listy przystanków, kliknąć na mapie albo użyć swojej lokalizacji. Wyniki są sortowane po łącznym czasie podróży (dojście + czekanie + jazda + dojście), a wybrana trasa jest rysowana na mapie.
+- **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Inny termin” przełącza okienka i planer na wybrany dzień i godzinę (do końca ważności rozkładu).
+- **Ulubione i ostatnie** – gwiazdka ☆ w okienku przystanku (ulubione mają na mapie żółtą kropkę). Po kliknięciu w puste pole wyszukiwarki widać ulubione i ostatnio oglądane przystanki. W planerze puste pola A/B podpowiadają ulubione, a pod formularzem jest lista ostatnich tras. Dane są w przeglądarce (`localStorage`); tras z „Moja lokalizacja” nie zapisujemy.
+- **Planer trasy A → B** – punkt startu/celu z listy przystanków, kliknięty na mapie albo z lokalizacji. Wyniki posortowane po łącznym czasie podróży; wybrana trasa jest rysowana na mapie. Wyszukiwanie trwa kilka–kilkadziesiąt milisekund.
 - **Tryb korekty pozycji** – po ustawieniu `devMode = true` w `MapMarkerService` znaczniki można przeciągać, a nowe współrzędne lądują w konsoli.
 
 ## Wymagania
 
 - Node.js w wersji obsługiwanej przez Angular 21 (20.19+, 22.12+ lub 24)
 - npm 11 (zgodnie z polem `packageManager`)
+- Do aktualizacji numerów linii (rzadko): Python 3 i `pdftotext` (pakiet poppler-utils)
 
 ## Uruchomienie
 
@@ -32,27 +32,47 @@ npm start
 
 Aplikacja wystartuje pod `http://localhost:4200/` i przeładuje się sama po każdej zmianie w kodzie.
 
-W trybie deweloperskim zapytania na `/api/*` są przekierowywane przez proxy (`proxy.conf.json`) do `https://mksjaslo.kiedyprzyjedzie.pl`. Dzięki temu przeglądarka nie blokuje ich przez CORS.
-
 ### Pozostałe komendy
 
 | Komenda | Co robi |
 | --- | --- |
 | `npm run build` | Build produkcyjny do `dist/autobusy/browser` |
-| `npm run watch` | Build deweloperski w trybie obserwowania zmian |
 | `npm test` | Testy jednostkowe (Vitest) |
+| `npm run gtfs:build -- --download` | Pobiera aktualny GTFS ze strony MKS i przebudowuje dane aplikacji |
+| `npm run gtfs:build -- --zip plik.zip` | To samo z lokalnego pliku GTFS |
 
 ## Wdrożenie produkcyjne
 
-Build to statyczne pliki, ale **aplikacja potrzebuje proxy dla `/api`** – w produkcji `proxy.conf.json` nie działa. Serwer (np. nginx) musi przekazywać `/api/` do kiedyprzyjedzie.pl, na przykład:
+Build to zwykłe statyczne pliki (`dist/autobusy/browser`) – można je wrzucić na dowolny hosting (GitHub Pages, Netlify, nginx…). Nie jest potrzebny żaden serwer ani proxy.
 
-```nginx
-location /api/ {
-    proxy_pass https://mksjaslo.kiedyprzyjedzie.pl/api/;
-    proxy_set_header Host mksjaslo.kiedyprzyjedzie.pl;
-    proxy_ssl_server_name on;
-}
+## Dane rozkładowe
+
+### Skąd
+
+MKS publikuje plik GTFS z rozkładem (obecnie `GTFS_1389_20260312125003.zip`, ważny 11.03.2026 – 12.03.2027, przygotowany przez Teroplan S.A. / e-podroznik.pl). Skrypt `scripts/gtfs/build-gtfs.mjs` zamienia go na:
+
+| Plik w `public/assets/data/` | Zawartość |
+| --- | --- |
+| `gtfs.json` (~86 KB, ~17 KB po kompresji) | przystanki, warianty tras z numerami linii, kursy (godziny), kalendarz kursowania |
+| `stops-base.json` | przystanki dla mapy |
+| `legacy-stop-ids.json` | stare identyfikatory przystanków (kiedyprzyjedzie) → nowe, do przeniesienia zapisanych ulubionych |
+
+Pliki są w repozytorium, więc aplikacja działa bez uruchamiania skryptu. Po nowym rozkładzie MKS: `npm run gtfs:build -- --download`, a potem sprawdzić numery linii (niżej).
+
+### Numery linii
+
+GTFS od MKS **nie zawiera numerów linii** – trasy mają tylko nazwy typu „JASŁO - BIERÓWKA - NIEPLA”, a jedna trasa potrafi obejmować kilka linii. Numery przypisuje narzędzie `scripts/gtfs/assign_lines.py` na podstawie [ogólnego rozkładu jazdy w PDF](https://www.mksjaslo.pl/rozklad-jazdy/ogolny-rozklad-jazdy):
+
+1. **Kierunek i trasa** – `scripts/gtfs/line-rules.json`, spisane ręcznie z kolumn „Kierunek” / „przez” w PDF (np. A: z Rynku do Warzyc przez Bieszczadzką; `never` = miejsca, przez które linia nie jedzie).
+2. **Godziny odjazdu** – kursy wariantu szukane w bloku linii w PDF, z uwzględnieniem dni kursowania (D = pon.–pt., C = sob.–nd. itd.).
+
+```bash
+python3 -I scripts/gtfs/assign_lines.py GTFS_….zip "Rozklad jazdy ogolny….pdf"
 ```
+
+Wynik trafia do `scripts/gtfs/line-assignments.json`; błędy poprawia się w `scripts/gtfs/line-overrides.json` (wygrywa z automatem; można zmienić cały wariant albo pojedyncze kursy po godzinie odjazdu). Obecnie numer ma ok. 88% kursów (451 z 515); kursy bez pewnego numeru pokazują „–” i kierunek. Sprawdzone na kilkunastu kursach z porównania z danymi kiedyprzyjedzie – zgodne, ale to heurystyka, więc pojedyncze pomyłki są możliwe.
+
+Ciekawostka: kurs w GTFS to często cały przejazd autobusu przez kilka tras (np. Gądki → Rynek → Warzyce → Rynek), a kiedyprzyjedzie pokazuje go pod jednym numerem linii.
 
 ## Struktura projektu
 
@@ -63,107 +83,78 @@ src/app/
 ├── main-map/                            # Cały interfejs: mapa, wyszukiwarka, planer trasy
 │   └── main-map.component.ts            # Stan UI, rysowanie tras na mapie
 ├── core/services/
-│   ├── timetable.service.ts             # Klient API kiedyprzyjedzie.pl (na żywo + rozkład)
+│   ├── gtfs.service.ts                  # Wczytanie gtfs.json, indeks odjazdów i kalendarza
+│   ├── timetable.service.ts             # Odjazdy, linie przystanku, przebieg kursu (z GTFS)
 │   ├── travel-time.service.ts           # Wybrana data/godzina podróży (null = teraz)
 │   └── favorites.service.ts             # Ulubione, ostatnie przystanki i trasy (localStorage)
 ├── features/
-│   ├── map/services/map-marker.service.ts      # Rysowanie przystanków i dymków z odjazdami
-│   ├── route-planner/route-planner.service.ts  # Algorytm wyszukiwania połączeń (+ testy)
-│   └── vehicles/live-vehicles.service.ts       # Autobusy na żywo: wyszukiwanie i odświeżanie pozycji
+│   ├── map/services/map-marker.service.ts      # Rysowanie przystanków i okienek z odjazdami
+│   └── route-planner/route-planner.service.ts  # Algorytm wyszukiwania połączeń (+ testy)
 └── shared/
-    ├── components/time-picker/          # Wybór „Teraz / Inny termin” (chip na mapie, sekcja w planerze)
+    ├── components/time-picker/          # Wybór „Teraz / Inny termin”
     ├── models/transit.models.ts         # Typy: Stop, Departure, TripExecutionResponse…
-    └── utils/text.utils.ts              # Porównywanie nazw (polskie znaki) i escapowanie HTML
+    └── utils/                           # Tekst (polskie znaki, escapowanie), geometria, czas
 
-public/assets/data/stops-base.json       # Lokalna baza przystanków
-proxy.conf.json                          # Proxy /api → kiedyprzyjedzie.pl (tylko dev)
+scripts/gtfs/
+├── build-gtfs.mjs                       # GTFS → public/assets/data (Node, bez zależności)
+├── assign_lines.py                      # Numery linii z PDF → line-assignments.json
+├── line-rules.json                      # Kierunki i trasy linii (z PDF)
+├── line-assignments.json                # Wynik assign_lines.py
+└── line-overrides.json                  # Ręczne poprawki numerów linii
 ```
 
-Przy wstawianiu danych z API do dymków Leaflet (`bindPopup`, `setContent`) zawsze używaj `escapeHtml()`. Nazwy przystanków i kierunków porównuj przez `namesMatch()`.
-
-## Używane API
-
-Wszystkie zapytania idą przez `/api` (proxy). Identyfikator przystanku ma postać `1332005:1392084` i jest kodowany w URL.
-
-| Endpoint | Do czego |
-| --- | --- |
-| `GET /api/departures/{stopId}` | Najbliższe odjazdy z przystanku |
-| `GET /api/directions/{stopId}` | Linie i kierunki obsługujące przystanek |
-| `GET /api/trip_execution/{base64(trip_execution_id)}/{trip_index}` | Pełna lista przystanków i godzin konkretnego kursu (na żywo) + pozycja GPS pojazdu. Bez `trip_index` (pozycja przystanku w kursie, z odjazdu) API zwraca 404 |
-| `GET /api/directions/{stopId}?date=RRRR-MM-DD` | Linie kursujące przez przystanek w danym dniu |
-| `GET /api/timetable/{stopId}/{base64url(linia)}?date=RRRR-MM-DD` | Rozkład jednej linii na przystanku w danym dniu (czasy w sekundach od północy) |
-| `GET /api/departures?places=a,b,c` | Odjazdy na żywo kilku przystanków naraz – **maksymalnie 6** (więcej jest pomijane, ~150 daje 502) |
-| `GET /api/trip/{tripId}/{index}` | Planowa lista przystanków kursu z rozkładu (`index` = pozycja przystanku w kursie) |
-
-W trybie „Inny termin” `TimetableService.getScheduledDepartures()` pobiera rozkłady wszystkich linii danego dnia równolegle i zamienia je na ten sam format, co odjazdy na żywo. Dzięki temu planer działa tak samo w obu trybach. Kursy z rozkładu mają identyfikator `trip:<tripId>:<index>`. Rozkład dnia jest zapamiętywany na czas sesji.
-
-Do rysowania tras (dojście pieszo, przejazd autobusu) używane są publiczne serwery OSRM: `routing.openstreetmap.de`, a w razie błędu `router.project-osrm.org`. Gdy oba zawiodą, rysowana jest linia prosta.
+Przy wstawianiu tekstu do okienek Leaflet (`bindPopup`, `setContent`) zawsze używaj `escapeHtml()`. Nazwy przystanków i kierunków porównuj przez `namesMatch()`.
 
 ## Jak działa wyszukiwanie połączeń
 
-Algorytm siedzi w `RoutePlannerService`.
+Algorytm siedzi w `RoutePlannerService`, dane daje `TimetableService` (z GTFS, w przeglądarce).
 
 1. **Kandydaci** – wybrany przystanek razem z jego drugim słupkiem (ta sama nazwa, do 400 m), albo 10 przystanków najbliższych punktu na mapie.
-2. **Połączenia bezpośrednie** – dla odjazdów z przystanków startowych planer pobiera przebieg kursu (listę przystanków z godzinami) i sprawdza, czy autobus dojeżdża później do któregoś przystanku docelowego. Nie porównuje nazw kierunków, bo wiele linii jeździ w pętli i zmienia tablicę po drodze (np. E4 „do Rynku” jedzie dalej, do Szpitala). Brane są tylko linie, które zatrzymują się przy celu albo kończą tam bieg. Każdy kurs autobusu pojawia się raz, z najlepszym przystankiem wsiadania i wysiadania.
-3. **Przesiadki** – szukane, gdy połączeń bezpośrednich jest mniej niż 3 albo na najlepsze trzeba czekać ponad 20 minut. Planer jedzie kursem ze startu i na kolejnych przystankach szuka autobusu, który według swojego przebiegu dojeżdża do celu (min. 2 minuty na przesiadkę). Pomija przesiadki, które nie mogą być szybsze od najlepszego połączenia bezpośredniego.
-4. **Brak kursów** – gdy nic nie odjeżdża, planer pokazuje linie łączące przystanki z dopiskiem „Brak kursu” (tu nadal na podstawie nazw kierunków).
-5. **Sortowanie** – po łącznym czasie (dojście + czekanie + jazda + dojście), maks. 8 wyników. Czas dojścia liczony jest jako 80 m/min w linii prostej.
+2. **Połączenia bezpośrednie** – dla odjazdów z przystanków startowych planer bierze przebieg kursu (listę przystanków z godzinami) i sprawdza, czy autobus dojeżdża później do któregoś przystanku docelowego. Nie porównuje nazw kierunków, bo wiele linii jeździ w pętli i zmienia tablicę po drodze. Każdy kurs pojawia się raz, z najlepszym przystankiem wsiadania i wysiadania.
+3. **Przesiadki** – gdy połączeń bezpośrednich jest mniej niż 3 albo na najlepsze trzeba czekać ponad 20 minut. Planer jedzie kursem ze startu i na kolejnych przystankach szuka autobusu, który według przebiegu dojeżdża do celu (min. 2 minuty na przesiadkę). Pomija przesiadki, które nie mogą być szybsze od połączenia bezpośredniego, i takie, w których drugi autobus wraca przez przystanek startowy.
+4. **Brak kursów** – gdy nic nie odjeżdża w ciągu 3 godzin, planer pokazuje linie łączące przystanki z dopiskiem „Brak kursu”.
+5. **Sortowanie** – po łącznym czasie (dojście + czekanie + jazda + dojście), maks. 8 wyników. Dojście liczone jako 80 m/min w linii prostej.
 
-Zapytania do API idą równolegle, a te same nigdy nie są wysyłane dwa razy (przebieg kursu pobierany jest raz na kurs, niezależnie od przystanku). W trybie „Inny termin” rozkład pobierany jest tylko dla potrzebnych linii.
+Kursy po północy są uwzględniane (odjazdy z poprzedniego i następnego dnia, gdy okno 3 godzin przechodzi przez północ).
+
+Do rysowania tras (dojście pieszo, przejazd autobusu) używane są publiczne serwery OSRM: `routing.openstreetmap.de`, a w razie błędu `router.project-osrm.org`. Gdy oba zawiodą, rysowana jest linia prosta.
 
 ## Poprawianie pozycji przystanków
 
 1. W `map-marker.service.ts` ustaw `devMode = true`.
 2. Przeciągnij znacznik w miejsce, gdzie faktycznie stoi wiata.
-3. Skopiuj obiekt JSON z konsoli przeglądarki i podmień wpis w `public/assets/data/stops-base.json` (pole `id` musi zostać bez zmian).
+3. Skopiuj obiekt JSON z konsoli przeglądarki.
 4. Przywróć `devMode = false`.
+
+Uwaga: `npm run gtfs:build` nadpisuje `stops-base.json` i `gtfs.json`, więc poprawek nie wpisuj na razie bezpośrednio do tych plików – patrz „Do zrobienia → 2”.
 
 ## Znane ograniczenia
 
-- Planer nadal potrzebuje kilkudziesięciu zapytań do API na jedno wyszukiwanie (ok. 2 s). Dalsze przyspieszenie wymagałoby własnego backendu albo danych GTFS.
+- Brak danych na żywo (opóźnień, pozycji autobusów) – MKS udostępnia je tylko przez płatny system kiedyprzyjedzie, bez publicznego API dla innych. Warstwa „Autobusy na żywo” była zrobiona na tym API i została usunięta; jej kod jest w historii git (commit `b790d54`), gdyby pojawiło się legalne źródło.
+- Numery linii są przypisane heurystycznie (patrz „Numery linii”).
 - Obsługiwana jest maksymalnie jedna przesiadka.
-
-## Jak działają autobusy na żywo
-
-Publiczne API nie ma listy wszystkich pojazdów (`/api/vehicles` wymaga logowania). Dlatego `LiveVehiclesService` szuka autobusów przez odjazdy:
-
-1. Pyta przystanki w widocznym obszarze (z 20% marginesem), które autobusy przyjadą w ciągu 15 min. Po włączeniu pyta 72 przystanki najbliżej środka mapy (12 zapytań), a potem przy każdym odświeżeniu kolejne 24 (4 zapytania) – po kilku minutach przejdzie cały widok. Po przesunięciu mapy zaczyna od nowa od środka.
-2. Dla każdego znalezionego kursu pobiera `trip_execution`, które zawiera pozycję GPS, następny przystanek i przewidywane godziny. Kursy zakończone albo bez pozycji przestaje śledzić.
-
-Obciążenie: co 20 s ok. 4 zapytania o odjazdy plus jedno na każdy śledzony autobus (maks. 40). Odświeżanie wstrzymuje się, gdy karta przeglądarki jest ukryta.
-
+- Rysowanie tras korzysta z publicznych serwerów OSRM, a mapa z kafelków OpenStreetMap – mają własne zasady użycia, przed publikacją warto to sprawdzić (lub użyć własnego/płatnego dostawcy).
 
 ## Do zrobienia
 
-### 1. Przejście na oficjalne dane MKS (GTFS) zamiast API kiedyprzyjedzie
-
-Kiedyprzyjedzie to płatny system informacji pasażerskiej, z którego korzysta MKS. Jego API nie jest udostępnione innym, więc nie chcemy z niego korzystać ani obciążać jego serwerów. MKS publikuje rozkład jako GTFS: [mksjaslo.pl → Strefa pasażera → GTFS](https://www.mksjaslo.pl/strefa-pasazera/gtfs).
-
-- Skrypt pobierający aktualny GTFS ze strony MKS i zamieniający go na pliki danych aplikacji (przystanki, kursy, kalendarz).
-- Odjazdy, tryb „Inny termin” i planer liczone w przeglądarce z GTFS – bez zapytań do cudzych serwerów; usunięcie proxy `/api`.
-- **Numery linii:** GTFS ich nie zawiera (trasy mają tylko nazwy typu „JASŁO - BIERÓWKA - NIEPLA”). Potrzebna tabela „trasa → numer linii” na podstawie stron [Linie miejskie](https://www.mksjaslo.pl/rozklad-jazdy/linie-miejskie) / [pozamiejskie](https://www.mksjaslo.pl/rozklad-jazdy/linie-pozamiejskie).
-- Przeniesienie ulubionych na nowe identyfikatory przystanków (po nazwie i położeniu).
-- Tryb „Teraz” = rozkład na bieżącą godzinę; warstwa „Autobusy na żywo” wyłączona, dopóki nie będzie legalnego źródła danych na żywo.
-
-### 2. Aktualność GTFS
+### 1. Aktualność GTFS
 
 Plik GTFS na stronie MKS ma rozkład z 11.03.2026, a [ogólny rozkład w PDF](https://www.mksjaslo.pl/rozklad-jazdy/ogolny-rozklad-jazdy) obowiązuje od 01.04.2026. Sprawdzone 24.10.2026 (odjazdy z przystanku początkowego Rynek, dzień roboczy / sobota / niedziela):
 
 - linie **C, D, E2** – zgodne co do minuty,
 - linia **A** – 9 z 12 kursów zgodnych; różnice: PDF 06:40 / GTFS 06:45, kurs 07:50 w PDF od pon. do sob. / w GTFS tylko w sobotę, kursu 10:05 (pon.–pt.) brak w GTFS.
 
-Na przystankach pośrednich (3 Maja 01) ok. 20% godzin różni się od danych kiedyprzyjedzie, głównie o 1 minutę – PDF podaje tylko godziny z przystanku początkowego, więc tego nie da się nim sprawdzić. Do zrobienia: sprawdzić pozostałe linie i zapytać MKS o aktualizację pliku GTFS.
+Na przystankach pośrednich (3 Maja 01) ok. 20% godzin różniło się od danych kiedyprzyjedzie, głównie o 1 minutę. Do zrobienia: sprawdzić pozostałe linie i zapytać MKS o aktualizację pliku GTFS.
 
-### 3. Ręczne poprawienie położenia przystanków
+### 2. Ręczne poprawienie położenia przystanków
 
-Część przystanków ma współrzędne nie tam, gdzie faktycznie stoi wiata (np. po złej stronie drogi albo kilkadziesiąt metrów obok), przez co planer czasem pokazuje złe miejsce wsiadania lub wysiadania. GTFS ma **te same współrzędne** co obecny plik, więc przejście na GTFS tego nie naprawi.
+Część przystanków ma współrzędne nie tam, gdzie faktycznie stoi wiata (np. po złej stronie drogi albo kilkadziesiąt metrów obok), przez co planer czasem pokazuje złe miejsce wsiadania lub wysiadania. To współrzędne z GTFS (MKS), więc nowe wersje pliku tego same nie naprawią.
 
-- Poprawki trzymać w osobnym pliku (np. `stop-overrides.json`), a nie w pliku z danymi – żeby aktualizacja GTFS ich nie nadpisywała. Klucz: nazwa przystanku + przybliżone położenie (identyfikatory mogą się zmieniać między wersjami GTFS).
-- Narzędziem jest tryb przeciągania znaczników (`devMode` w `MapMarkerService`, patrz „Poprawianie pozycji przystanków”) – do rozbudowy o zapis poprawek do pliku zamiast do konsoli.
+- Poprawki trzymać w osobnym pliku (np. `scripts/gtfs/stop-overrides.json`), który `build-gtfs.mjs` nakłada na dane – żeby aktualizacja GTFS ich nie nadpisywała. Klucz: nazwa przystanku + przybliżone położenie (identyfikatory mogą się zmieniać między wersjami GTFS).
+- Narzędziem jest tryb przeciągania znaczników (`devMode` w `MapMarkerService`) – do rozbudowy o zapis poprawek do pliku zamiast do konsoli.
 - Weryfikacja: porównanie z mapą OSM (wiaty / `highway=bus_stop`) lub objazd w terenie.
 
-### 4. Pozostałe
+### 3. Pozostałe
 
-- Kursy po północy w trybie „Inny termin” (dziś widać tylko kursy z wybranego dnia).
 - Własna nazwa aplikacji przed publikacją (nazwa „JakDojade” należy do istniejącej aplikacji).
-- Przed publikacją: mail do MKS (biuro@mksjaslo.com.pl) – zgoda na użycie GTFS, aktualizacja pliku i numery linii, możliwość udostępnienia danych na żywo (np. GTFS-Realtime z systemu kiedyprzyjedzie).
+- Przed publikacją: mail do MKS (biuro@mksjaslo.com.pl) – zgoda na użycie GTFS, aktualizacja pliku, dopisanie numerów linii do GTFS, możliwość udostępnienia danych na żywo (np. GTFS-Realtime z systemu kiedyprzyjedzie).

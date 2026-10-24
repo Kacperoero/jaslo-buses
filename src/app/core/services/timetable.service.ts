@@ -1,259 +1,158 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map, catchError, of, forkJoin, shareReplay, switchMap } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, map } from 'rxjs';
 import {
   Departure,
   DeparturesResponse,
-  DirectionsResponse,
-  MultiDeparturesResponse,
-  LineTimetableResponse,
   StopDirection,
-  TripExecutionResponse,
-  TripResponse
+  TripExecutionResponse
 } from '../../shared/models/transit.models';
-import { toDateInputValue, toTimeInputValue } from './travel-time.service';
+import { GtfsIndex, GtfsService } from './gtfs.service';
 
 /**
- * Trip ids of scheduled departures are encoded as "trip:<tripId>:<stopIndex>",
- * so the planner can treat them like live `trip_execution_id`s (see getTripExecution).
+ * Trip ids are "trip:<trip>:<stop position>". The planner treats them as opaque ids and
+ * groups by "trip:<trip>" (one bus run), see RoutePlannerService.
  */
-const SCHEDULED_TRIP_PREFIX = 'trip:';
+const TRIP_PREFIX = 'trip:';
 
-/** How far ahead (minutes) and how many departures a scheduled board shows. */
-const SCHEDULE_WINDOW_MIN = 180;
-const SCHEDULE_MAX_ROWS = 15;
+/** How far ahead (minutes) and how many departures a departure board shows. */
+const WINDOW_MIN = 180;
+const MAX_ROWS = 15;
 
-/** /api/departures?places=… answers for at most this many stops. */
-export const MAX_STOPS_PER_MULTI_REQUEST = 6;
+/** Shown instead of a line number when the timetable doesn't say which line a trip is. */
+export const UNKNOWN_LINE = '–';
 
+/**
+ * Departures, lines and trip details from the official MKS timetable (GTFS), computed in
+ * the browser. There is no live data (delays, GPS): every time is the planned one.
+ */
 @Injectable({
   providedIn: 'root'
 })
 export class TimetableService {
-  /**
-   * Use relative /api path — in dev mode this is proxied to kiedyprzyjedzie.pl.
-   * In production, configure the same proxy at the reverse-proxy level.
-   */
-  private readonly baseUrl = '/api';
-
-  /** A line's timetable at a stop never changes during a session – cached per stop + line + date. */
-  private lineDayCache = new Map<string, Observable<ScheduledRow[]>>();
-  private directionsCache = new Map<string, Observable<StopDirection[]>>();
-
-  constructor(private http: HttpClient) {}
+  private gtfs = inject(GtfsService);
 
   /**
-   * Departures for a stop: live ones when `at` is null ("now"),
-   * otherwise planned ones from the timetable, starting at `at`.
-   * `lines` limits the result to those lines – for planned departures this also saves requests
-   * (the timetable is fetched per line); live departures come in one request anyway.
+   * Departures from a stop in the next 3 hours after `at` (now when null), soonest first.
+   * `time` is "N min" relative to `at`, `static_time` is "HH:MM". `lines` limits the lines.
    */
   getDepartures(stopId: string, at: Date | null, lines?: Iterable<string>): Observable<DeparturesResponse> {
-    if (at) return this.getScheduledDepartures(stopId, at, lines);
-    if (!lines) return this.getDeparturesForStop(stopId);
-    const wanted = new Set(lines);
-    return this.getDeparturesForStop(stopId).pipe(
-      map(res => ({ ...res, rows: (res.rows || []).filter(r => wanted.has(r.line_name || r.line || '')) }))
-    );
+    return this.gtfs.index().pipe(map(index => departures(index, stopId, at ?? new Date(), lines)));
   }
 
   /**
-   * Fetch live departures for a given stop by its placeId.
-   * The placeId must be URL-encoded since it contains a colon.
-   */
-  getDeparturesForStop(stopId: string): Observable<DeparturesResponse> {
-    const encodedId = encodeURIComponent(stopId);
-    return this.http.get<DeparturesResponse>(
-      `${this.baseUrl}/departures/${encodedId}`
-    );
-  }
-
-  /**
-   * Live departures of several stops in one request. The API answers for at most
-   * MAX_STOPS_PER_MULTI_REQUEST stops (more are silently dropped, too many fail), so call it
-   * with small groups. Rows are grouped by stop `designator`.
-   */
-  getDeparturesForStops(stopIds: string[]): Observable<MultiDeparturesResponse> {
-    return this.http.get<MultiDeparturesResponse>(
-      `${this.baseUrl}/departures`, { params: { places: stopIds.join(',') } }
-    );
-  }
-
-  /**
-   * Planned departures from a stop starting at `at`, in the same shape as live departures:
-   * `time` is "N min" relative to `at`, `static_time` is "HH:MM", `is_estimated` is false.
-   */
-  getScheduledDepartures(stopId: string, at: Date, lines?: Iterable<string>): Observable<DeparturesResponse> {
-    const fromSec = at.getHours() * 3600 + at.getMinutes() * 60;
-    const toSec = fromSec + SCHEDULE_WINDOW_MIN * 60;
-
-    return this.getDayTimetable(stopId, toDateInputValue(at), lines).pipe(
-      map(all => {
-        const rows = all
-          .filter(d => {
-            const sec = (d as ScheduledRow)._sec;
-            return sec >= fromSec && sec <= toSec;
-          })
-          .slice(0, SCHEDULE_MAX_ROWS)
-          .map(d => {
-            const minutes = Math.round(((d as ScheduledRow)._sec - fromSec) / 60);
-            return { ...d, time: `${minutes} min`, minutes_to_departure: minutes };
-          });
-
-        // Directions are passed by name, so the map is name → name
-        const directions: Record<string, string> = {};
-        for (const r of rows) {
-          if (r.direction) directions[r.direction] = r.direction;
-        }
-
-        return {
-          timestamp: at.getTime(),
-          designator: 0,
-          station_name: '',
-          only_disembarking: false,
-          rows,
-          directions
-        };
-      })
-    );
-  }
-
-  /**
-   * Fetch which bus lines/directions serve a given stop.
-   * Pass `date` ("YYYY-MM-DD") to get the lines running on that day.
+   * Lines (and their directions) calling at a stop on a date ("YYYY-MM-DD", today when omitted),
+   * including lines that end there.
    */
   getDirectionsForStop(stopId: string, date?: string): Observable<StopDirection[]> {
-    // Lines of a stop rarely change, and both the planner and the timetable loader ask for them
-    const key = `${stopId}|${date ?? 'now'}`;
-    const cached = this.directionsCache.get(key);
-    if (cached) return cached;
-
-    const encodedId = encodeURIComponent(stopId);
-    const params: Record<string, string> = date ? { date } : {};
-    const request = this.http.get<DirectionsResponse>(
-      `${this.baseUrl}/directions/${encodedId}`, { params }
-    ).pipe(
-      map(res => res.directions || []),
-      catchError(() => {
-        this.directionsCache.delete(key); // don't remember failures – retry next time
-        return of([]);
-      }),
-      shareReplay(1)
-    );
-    this.directionsCache.set(key, request);
-    return request;
+    return this.gtfs.index().pipe(map(index => directions(index, stopId, date ? parseDate(date) : new Date())));
   }
 
-  /**
-   * Fetch details (stop sequence and times) of a specific trip.
-   * Live ids are Base64-encoded as required by the API and need the stop's position in the
-   * trip (`trip_index` of the departure – any position returns the same stop list, but the
-   * endpoint answers 404 without one). Scheduled ids ("trip:<id>:<index>") are fetched from
-   * the planned trip endpoint instead.
-   */
-  getTripExecution(tripExecutionId: string, index = 0): Observable<TripExecutionResponse> {
-    if (tripExecutionId.startsWith(SCHEDULED_TRIP_PREFIX)) {
-      const [tripId, index] = tripExecutionId.slice(SCHEDULED_TRIP_PREFIX.length).split(':');
-      return this.getTrip(tripId, Number(index)).pipe(
-        map(trip => ({
-          trip: {
-            times: trip.times,
-            direction: trip.direction,
-            current_station_id: trip.current_station_id,
-            line: trip.line
-          },
-          canceled: [],
-          vehicle_type: trip.vehicle_type,
-          estimated: false,
-          at_stop: false,
-          next_departure_index: Number(index),
-          estimates: [],
-          vehicle_trip_index: 0
-        }))
-      );
-    }
-
-    const encodedId = encodeURIComponent(btoa(tripExecutionId));
-    return this.http.get<TripExecutionResponse>(
-      `${this.baseUrl}/trip_execution/${encodedId}/${index}`
-    );
-  }
-
-  /** Planned stop sequence of a trip. `index` is the position of the boarding stop. */
-  getTrip(tripId: string | number, index: number): Observable<TripResponse> {
-    return this.http.get<TripResponse>(`${this.baseUrl}/trip/${tripId}/${index}`);
-  }
-
-  /** Timetable of one line at a stop for a date ("YYYY-MM-DD"). */
-  getLineTimetable(stopId: string, line: string, date: string): Observable<LineTimetableResponse> {
-    const encodedId = encodeURIComponent(stopId);
-    return this.http.get<LineTimetableResponse>(
-      `${this.baseUrl}/timetable/${encodedId}/${encodeLineName(line)}`, { params: { date } }
-    );
-  }
-
-  /**
-   * All planned departures from a stop on a date (optionally only some lines), sorted by time.
-   * The API has no per-stop endpoint that includes line names, so this asks for the day's
-   * lines and then fetches each line's timetable in parallel.
-   */
-  private getDayTimetable(stopId: string, date: string, onlyLines?: Iterable<string>): Observable<Departure[]> {
-    const wanted = onlyLines ? new Set(onlyLines) : null;
-    return this.getDirectionsForStop(stopId, date).pipe(
-      switchMap(dirs => {
-        const lines = [...new Set(dirs.map(d => d.line))].filter(l => !wanted || wanted.has(l));
-        if (lines.length === 0) return of([] as ScheduledRow[][]);
-        return forkJoin(lines.map(line => this.getLineDay(stopId, line, date)));
-      }),
-      map(perLine => perLine.flat().sort((a, b) => a._sec - b._sec)),
-      catchError(() => of([] as Departure[]))
-    );
-  }
-
-  private getLineDay(stopId: string, line: string, date: string): Observable<ScheduledRow[]> {
-    const key = `${stopId}|${line}|${date}`;
-    const cached = this.lineDayCache.get(key);
-    if (cached) return cached;
-
-    const request = this.getLineTimetable(stopId, line, date).pipe(
-      map(tt => toDepartures(tt, line)),
-      catchError(() => {
-        this.lineDayCache.delete(key); // don't remember failures – retry next time
-        return of([] as ScheduledRow[]);
-      }),
-      shareReplay(1)
-    );
-    this.lineDayCache.set(key, request);
-    return request;
+  /** Stop sequence and planned times of a trip, by an id from a departure row. */
+  getTripExecution(tripExecutionId: string, _index = 0): Observable<TripExecutionResponse> {
+    return this.gtfs.index().pipe(map(index => tripDetails(index, tripExecutionId)));
   }
 }
 
-/** Departure with the raw seconds-after-midnight kept for filtering. */
-type ScheduledRow = Departure & { _sec: number };
+export function departures(index: GtfsIndex, stopId: string, at: Date, lines?: Iterable<string>): DeparturesResponse {
+  const empty: DeparturesResponse = {
+    timestamp: at.getTime(), designator: 0, station_name: '', only_disembarking: false, rows: [], directions: {}
+  };
+  const stop = index.stopPosition(stopId);
+  if (stop === undefined) return empty;
 
-function toDepartures(tt: LineTimetableResponse, line: string): ScheduledRow[] {
-  const altDirections = tt.directions || [];
-  return (tt.departures || []).map(dep => {
-    const alt = altDirections.find(d => d.symbol && dep.symbols?.includes(d.symbol));
-    const direction = alt?.name ?? tt.main_direction?.name ?? '';
-    const hhmm = toTimeInputValue(new Date(2000, 0, 1, 0, 0, dep.departure));
+  const wanted = lines ? new Set(lines) : null;
+  const nowMin = at.getHours() * 60 + at.getMinutes();
+  const found: { rel: number; trip: number; pos: number; minute: number }[] = [];
+
+  // Trips of yesterday (running past midnight), today and tomorrow (when the window passes midnight)
+  for (const dayOffset of [-1, 0, 1]) {
+    const day = new Date(at.getFullYear(), at.getMonth(), at.getDate() + dayOffset);
+    for (const call of index.callsByStop[stop]) {
+      const rel = call.minute + dayOffset * 1440 - nowMin;
+      if (rel < 0 || rel > WINDOW_MIN) continue;
+      const trip = index.trips[call.trip];
+      if (call.pos === trip.times.length - 1) continue; // last stop – the bus only arrives here
+      if (wanted && !wanted.has(lineOf(trip.variant.line))) continue;
+      if (!index.runsOn(trip.service, day)) continue;
+      found.push({ rel, trip: call.trip, pos: call.pos, minute: call.minute });
+    }
+  }
+  found.sort((a, b) => a.rel - b.rel);
+
+  const rows: Departure[] = found.slice(0, MAX_ROWS).map(f => {
+    const variant = index.trips[f.trip].variant;
     return {
-      _sec: dep.departure,
-      line_name: dep.line ?? line,
-      time: hhmm,
-      static_time: hhmm,
-      direction_id: direction,
-      direction,
+      line_name: lineOf(variant.line),
+      time: `${f.rel} min`,
+      static_time: hhmm(f.minute),
+      minutes_to_departure: f.rel,
+      direction_id: variant.headsign,
+      direction: variant.headsign,
       is_estimated: false,
-      trip_execution_id: `${SCHEDULED_TRIP_PREFIX}${dep.trip_id}:${dep.index}`
+      trip_execution_id: `${TRIP_PREFIX}${f.trip}:${f.pos}`,
+      trip_index: f.pos
     };
   });
+
+  const directionsMap: Record<string, string> = {};
+  for (const r of rows) directionsMap[r.direction!] = r.direction!;
+  return { ...empty, station_name: index.stopName(stop), rows, directions: directionsMap };
 }
 
-/** Line names go into the URL as URL-safe Base64 without padding (same as the official site). */
-export function encodeLineName(line: string): string {
-  const bytes = new TextEncoder().encode(line);
-  let binary = '';
-  bytes.forEach(b => (binary += String.fromCharCode(b)));
-  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+export function directions(index: GtfsIndex, stopId: string, date: Date): StopDirection[] {
+  const stop = index.stopPosition(stopId);
+  if (stop === undefined) return [];
+  const seen = new Map<string, StopDirection>();
+  for (const call of index.callsByStop[stop]) {
+    const trip = index.trips[call.trip];
+    if (!index.runsOn(trip.service, date)) continue;
+    const line = lineOf(trip.variant.line);
+    const key = `${line}|${trip.variant.headsign}`;
+    if (!seen.has(key)) seen.set(key, { line, direction: trip.variant.headsign, show_name: true, active: true });
+  }
+  return [...seen.values()];
+}
+
+export function tripDetails(index: GtfsIndex, tripExecutionId: string): TripExecutionResponse {
+  const [, tripStr, posStr] = tripExecutionId.split(':');
+  const trip = tripExecutionId.startsWith(TRIP_PREFIX) ? index.trips[Number(tripStr)] : undefined;
+  if (!trip) throw new Error(`Unknown trip ${tripExecutionId}`);
+
+  return {
+    trip: {
+      times: trip.variant.stops.map((stop, i) => ({
+        stop_name: index.stopName(stop),
+        external: false,
+        designator: 0,
+        place_id: index.stopId(stop),
+        departure_time: hhmm(trip.times[i]),
+        index: i
+      })),
+      direction: trip.variant.headsign,
+      current_station_id: 0,
+      line: { name: lineOf(trip.variant.line), type: 'bus', show_name: true }
+    },
+    canceled: [],
+    vehicle_type: 0,
+    estimated: false,
+    at_stop: false,
+    next_departure_index: Number(posStr) || 0,
+    estimates: [],
+    vehicle_trip_index: -1
+  };
+}
+
+function lineOf(line: string | null): string {
+  return line ?? UNKNOWN_LINE;
+}
+
+/** Minutes after midnight (may pass 24 h) → "HH:MM" on the clock */
+function hhmm(minutes: number): string {
+  const m = ((minutes % 1440) + 1440) % 1440;
+  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+}
+
+function parseDate(s: string): Date {
+  const [y, m, d] = s.split('-').map(Number);
+  return new Date(y, m - 1, d);
 }
