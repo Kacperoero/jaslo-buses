@@ -39,9 +39,9 @@ const SIMPLIFY_M = 4;             // Douglas–Peucker tolerance
 const MAX_DETOUR_RATIO = 3;       // road path longer than this × straight line …
 const MAX_DETOUR_EXTRA_M = 1000;  // … and longer by more than this → keep straight
 const MAX_DIRECTION_DIFF = 75;    // a road counts as running the bus's way within this angle
-const DEGREE_COST_M = 0.5;
+const DEGREE_COST_M = 0.5;        // snapping: 1° off the travel direction costs like 0.5 m further
 const MANUAL_SNAP_M = 30;         // a road point placed by hand is snapped to a road this close
-const MANUAL_MAX_M = 200;         // … and must be this close to its stop (else it's a mistake)        // snapping: 1° off the travel direction costs like 0.5 m further
+const MANUAL_MAX_M = 200;         // … and must be this close to its stop (else it's a mistake)
 
 /** Cost factor per road type – buses prefer bigger roads; service roads only when needed. */
 const ROAD_COST = {
