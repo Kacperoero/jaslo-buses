@@ -39,7 +39,9 @@ const SIMPLIFY_M = 4;             // Douglas–Peucker tolerance
 const MAX_DETOUR_RATIO = 3;       // road path longer than this × straight line …
 const MAX_DETOUR_EXTRA_M = 1000;  // … and longer by more than this → keep straight
 const MAX_DIRECTION_DIFF = 75;    // a road counts as running the bus's way within this angle
-const DEGREE_COST_M = 0.5;        // snapping: 1° off the travel direction costs like 0.5 m further
+const DEGREE_COST_M = 0.5;
+const MANUAL_SNAP_M = 30;         // a road point placed by hand is snapped to a road this close
+const MANUAL_MAX_M = 200;         // … and must be this close to its stop (else it's a mistake)        // snapping: 1° off the travel direction costs like 0.5 m further
 
 /** Cost factor per road type – buses prefer bigger roads; service roads only when needed. */
 const ROAD_COST = {
@@ -148,13 +150,25 @@ const overrides = stopOverrides(gtfs.stops);
 const groups = stopDirections(gtfs.stops, gtfs.variants).map((g, i) => withOverride(g, overrides[i]));
 const roadNodes = stops.map(() => []);  // stop position -> graph node per direction group
 const bySegment = new Map();            // segment -> [{ t, node }]
-const report = { farFromRoad: [], directionFallback: [], straightPairs: [] };
+const report = { farFromRoad: [], directionFallback: [], manualOffRoad: [], straightPairs: [] };
 const snapDistances = [];
 
 stops.forEach((stop, pos) => {
   const candidates = nearbySegments(stop.lat, stop.lng);
   const dirs = groups[pos].length ? groups[pos] : [{ bearing: null, visits: 0 }];
   for (const group of dirs) {
+    // Road point placed by hand in the stop editor
+    const manual = manualRoadPoint(overrides[pos]?.roadPoints, group, dirs.length);
+    if (manual && dist(stop.lat, stop.lng, manual[0], manual[1]) > MANUAL_MAX_M) {
+      report.manualOffRoad.push({ id: stop.id, name: stop.name, point: manual, reason: `> ${MANUAL_MAX_M} m from the stop` });
+    } else if (manual) {
+      const near = nearbySegments(manual[0], manual[1]).filter(c => c.d <= MANUAL_SNAP_M);
+      if (near.length) {
+        roadNodes[pos].push(addRoadPoint(near.reduce((x, y) => (x.d <= y.d ? x : y))));
+        continue;
+      }
+      report.manualOffRoad.push({ id: stop.id, name: stop.name, point: manual, reason: `> ${MANUAL_SNAP_M} m from a road` });
+    }
     let best = null;
     for (const c of candidates) {
       const seg = segments[c.segment];
@@ -177,6 +191,18 @@ stops.forEach((stop, pos) => {
     snapDistances.push(best.d);
   }
 });
+
+/** The hand-placed road point (if any) for a direction group: the one with the closest bearing. */
+function manualRoadPoint(points, group, groupCount) {
+  if (!points?.length) return null;
+  if (groupCount === 1 && points.length === 1) return points[0];
+  let best = null;
+  for (const p of points) {
+    const d = group.bearing == null || p[2] == null ? 180 : angleDiff(p[2], group.bearing);
+    if (d < 60 && (!best || d < best.d)) best = { p, d };
+  }
+  return best?.p ?? null;
+}
 
 /** Segments within SNAP_MAX_M of a point, with the nearest point on each. */
 function nearbySegments(plat, plng) {
@@ -277,6 +303,9 @@ writeFileSync(REPORT, JSON.stringify(report, null, 1) + '\n');
 console.log(`shapes.json: ${(JSON.stringify(shapes).length / 1024).toFixed(0)} KB, ` +
   `${report.straightPairs.length} straight pairs, ${report.farFromRoad.length} stops > ${SNAP_MAX_M} m from roads, ` +
   `${report.snappedFarStops.length} stops 40–${SNAP_MAX_M} m from roads (see shapes-report.json)`);
+for (const m of report.manualOffRoad) {
+  console.warn(`⚠ ${m.name}: road point set by hand is ${m.reason} – placed automatically`);
+}
 
 // ── helpers ──────────────────────────────────────────────────────────
 async function loadRoads() {

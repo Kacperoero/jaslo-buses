@@ -1,5 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ShapesService } from '../../core/services/shapes.service';
 import { StopsService } from '../../core/services/stops.service';
 import { Stop } from '../../shared/models/transit.models';
 
@@ -7,7 +8,13 @@ import { Stop } from '../../shared/models/transit.models';
 export interface StopOverride {
   name: string;
   directions: 1 | 2;
+  /** Where the stop really is (moved by hand) */
+  lat?: number;
+  lng?: number;
+  /** Where buses stop on the road, per direction: [lat, lng, travel bearing] (moved by hand) */
+  roadPoints?: RoadPoint[];
 }
+export type RoadPoint = [number, number, number | null];
 export type StopOverrides = Record<string, StopOverride>;
 export type EditorFilter = 'all' | 'unchecked' | 'changed';
 
@@ -21,8 +28,8 @@ export function stopEditorEnabled(search = location.search): boolean {
 }
 
 /**
- * State of the developer stop editor: walking through the stops one by one and marking each
- * as one-direction or both-direction. Checked stops are kept in the browser until exported as
+ * State of the developer stop editor: walking through the stops one by one, marking each as
+ * one-direction or both-direction and moving the stop or its road points where they really are. Checked stops are kept in the browser until exported as
  * stop-overrides.json and applied with `npm run gtfs:stops -- --import <file>`.
  */
 @Injectable({
@@ -31,6 +38,7 @@ export function stopEditorEnabled(search = location.search): boolean {
 export class StopEditorService {
   private http = inject(HttpClient);
   private stopsService = inject(StopsService);
+  private shapes = inject(ShapesService);
 
   /** Checked stops already in scripts/gtfs/stop-overrides.json */
   readonly saved = signal<StopOverrides>({});
@@ -71,6 +79,30 @@ export class StopEditorService {
     return stop ? (this.entries()[stop.id]?.directions ?? timetableDirections(stop)) : null;
   });
 
+  /** Where the current stop is: moved by hand, or the GTFS position */
+  readonly currentPosition = computed<[number, number] | null>(() => {
+    const stop = this.current();
+    if (!stop) return null;
+    const entry = this.entries()[stop.id];
+    if (entry?.lat != null && entry.lng != null) return [entry.lat, entry.lng];
+    return stop.gtfsPosition ?? [stop.lat, stop.lng];
+  });
+
+  /** Road points of the current stop: moved by hand, or as last computed (shapes.json) */
+  readonly currentRoadPoints = computed<RoadPoint[]>(() => {
+    const stop = this.current();
+    this.shapes.loaded();
+    if (!stop) return [];
+    return this.entries()[stop.id]?.roadPoints
+      ?? this.shapes.roadPoints(stop.id).map(p => [p.lat, p.lng, p.bearing] as RoadPoint);
+  });
+
+  /** Whether the current stop's position or road points were moved by hand */
+  readonly currentMoved = computed(() => {
+    const entry = this.entries()[this.currentId() ?? ''];
+    return { stop: entry?.lat != null, roadPoints: !!entry?.roadPoints };
+  });
+
   private started = false;
 
   /** Loads the saved corrections and the work in progress; starts at the first unchecked stop. */
@@ -89,7 +121,7 @@ export class StopEditorService {
     this.saved.set(saved);
     // Drop local entries that are already saved in the file (exported and applied)
     const local = Object.fromEntries(Object.entries(stored.local ?? {})
-      .filter(([id, o]) => saved[id]?.directions !== o.directions));
+      .filter(([id, o]) => !sameEntry(saved[id], o)));
     this.local.set(local);
     this.stopsService.load().subscribe(() => {
       const first = this.list()[0];
@@ -116,11 +148,35 @@ export class StopEditorService {
 
   /** Marks the current stop as checked with the given number of directions. */
   setDirections(directions: 1 | 2): void {
+    this.update({ directions });
+  }
+
+  /** Moves the current stop (marks it as checked). */
+  moveStop(lat: number, lng: number): void {
+    this.update({ lat: round6(lat), lng: round6(lng) });
+  }
+
+  /** Moves one road point of the current stop (marks it as checked). */
+  moveRoadPoint(index: number, lat: number, lng: number): void {
+    const points = this.currentRoadPoints().map(p => [...p] as RoadPoint);
+    if (!points[index]) return;
+    points[index] = [round6(lat), round6(lng), points[index][2]];
+    this.update({ roadPoints: points });
+  }
+
+  /** Back to the GTFS position and automatic road points (directions stay). */
+  resetPosition(): void {
+    this.update({ lat: undefined, lng: undefined, roadPoints: undefined });
+  }
+
+  private update(patch: Partial<StopOverride>): void {
     const stop = this.current();
-    if (!stop) return;
+    const directions = this.currentDirections();
+    if (!stop || !directions) return;
+    const entry = clean({ ...this.entries()[stop.id], name: stop.name, directions, ...patch });
     const local = { ...this.local() };
-    if (this.saved()[stop.id]?.directions === directions) delete local[stop.id];
-    else local[stop.id] = { name: stop.name, directions };
+    if (sameEntry(this.saved()[stop.id], entry)) delete local[stop.id];
+    else local[stop.id] = entry;
     this.local.set(local);
     this.persist();
   }
@@ -151,7 +207,7 @@ export class StopEditorService {
     const entries = this.entries();
     const ordered = Object.keys(entries).sort((a, b) =>
       entries[a].name.localeCompare(entries[b].name, 'pl') || a.localeCompare(b));
-    return JSON.stringify(Object.fromEntries(ordered.map(id => [id, entries[id]])), null, 2) + '\n';
+    return JSON.stringify(Object.fromEntries(ordered.map(id => [id, clean(entries[id])])), null, 2) + '\n';
   }
 
   private persist(): void {
@@ -176,6 +232,25 @@ function readStorage(): Stored {
   } catch {
     return {};
   }
+}
+
+/** Entry with fields in a fixed order and without empty ones (for the file and comparisons). */
+function clean(o: Partial<StopOverride>): StopOverride {
+  const out: StopOverride = { name: o.name ?? '', directions: o.directions ?? 1 };
+  if (o.lat != null && o.lng != null) {
+    out.lat = o.lat;
+    out.lng = o.lng;
+  }
+  if (o.roadPoints?.length) out.roadPoints = o.roadPoints;
+  return out;
+}
+
+function sameEntry(a: StopOverride | undefined, b: StopOverride): boolean {
+  return !!a && JSON.stringify(clean(a)) === JSON.stringify(clean(b));
+}
+
+function round6(x: number): number {
+  return Math.round(x * 1e6) / 1e6;
 }
 
 /** Number of directions according to the timetable (before any manual correction). */

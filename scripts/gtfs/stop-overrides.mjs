@@ -6,6 +6,9 @@
  *
  *   directions 1 – buses stop on one side of the road only (one road point for all of them)
  *   directions 2 – buses stop on both sides
+ *   lat, lng     – (optional) where the stop really is, instead of the GTFS position
+ *   roadPoints   – (optional) where buses stop on the road: [lat, lng, travel bearing] per
+ *                  direction; build-shapes.mjs snaps each to the nearest road
  *
  * Entries are matched by stop id and name; when a new GTFS file renumbers stops, by name and
  * position (within MATCH_M). Used by build-stops.mjs and build-shapes.mjs.

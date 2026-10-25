@@ -62,3 +62,33 @@ describe('StopEditorService', () => {
     expect(editor.currentDirections()).toBe(1);
   });
 });
+
+describe('StopEditorService moving stops', () => {
+  let editor: StopEditorService;
+  let http: HttpTestingController;
+
+  beforeEach(() => {
+    localStorage.clear();
+    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
+    editor = TestBed.inject(StopEditorService);
+    http = TestBed.inject(HttpTestingController);
+    editor.start();
+    http.expectOne('assets/dev/stop-overrides.json').flush({});
+    http.expectOne('assets/data/stops-base.json').flush([stop('a', 'A', 2)]);
+  });
+
+  it('records a moved stop and moved road points, and can go back to the GTFS position', () => {
+    // road points as last computed come from shapes.json – none loaded here
+    expect(editor.currentRoadPoints()).toEqual([]);
+    editor.moveStop(49.71234567, 21.41);
+    expect(editor.currentPosition()).toEqual([49.712346, 21.41]);
+    expect(editor.local()['a']).toEqual({ name: 'A', directions: 2, lat: 49.712346, lng: 21.41 });
+
+    editor.setDirections(1);                 // keeps the position
+    expect(editor.local()['a'].lat).toBe(49.712346);
+
+    editor.resetPosition();
+    expect(editor.currentPosition()).toEqual([49.7, 21.4]);
+    expect(editor.local()['a']).toEqual({ name: 'A', directions: 1 });
+  });
+});

@@ -29,8 +29,14 @@ export class StopEditorComponent {
     this.editor.start();
     effect(() => {
       const stop = this.editor.current();
+      const position = this.editor.currentPosition();
+      const roadPoints = this.editor.currentRoadPoints();
       this.shapes.loaded(); // redraw once the road lines arrive
-      untracked(() => this.layer.show(stop));
+      untracked(() => this.layer.show(stop && position ? {
+        stop, position, roadPoints,
+        onMoveStop: (lat, lng) => this.editor.moveStop(lat, lng),
+        onMoveRoadPoint: (i, lat, lng) => this.editor.moveRoadPoint(i, lat, lng)
+      } : null));
     });
     // Clicking a stop on the map makes it the current one
     effect(() => {

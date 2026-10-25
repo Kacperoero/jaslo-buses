@@ -7,6 +7,7 @@
  *
  * Writes (all served from public/assets/data):
  *   gtfs.json             stops, route variants with line numbers, trips, service calendar
+ *                         (moved stops: see build-stops.mjs)
  *   stops-base.json       stops for the map (build-stops.mjs, with scripts/gtfs/stop-overrides.json)
  *   legacy-stop-ids.json  old stop IDs (kiedyprzyjedzie) → GTFS IDs, to migrate saved favourites
  *
@@ -216,7 +217,7 @@ const gtfs = {
   trips: outTrips,
   services: { start: iso(firstDate), days: dayCount, bitmaps: serviceBitmaps }
 };
-writeFileSync(join(OUT, 'gtfs.json'), JSON.stringify(gtfs));
+// gtfs.json is written by writeStops() below, with the manual stop corrections applied
 
 // ── stops-base.json + migration of old stop IDs ──────────────────────
 const stopsBasePath = join(OUT, 'stops-base.json');

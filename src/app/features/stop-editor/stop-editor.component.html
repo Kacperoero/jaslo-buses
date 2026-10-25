@@ -24,6 +24,8 @@
         {{ timetableDirections(stop) === 2 ? 'oba kierunki' : 'jeden kierunek' }}
         @if (stop.towards && timetableDirections(stop) === 1) { (→ {{ short(stop.towards) }}) }
         @if (editor.entries()[stop.id]) { · <span class="checked">✓ sprawdzony</span> }
+        @if (editor.currentMoved().stop) { · <span class="moved">przystanek przesunięty</span> }
+        @if (editor.currentMoved().roadPoints) { · <span class="moved">punkty na drodze ustawione ręcznie</span> }
       </p>
 
       <div class="choice" role="group" aria-label="Kierunki">
@@ -40,14 +42,18 @@
       <div class="actions">
         <button type="button" class="primary" (click)="editor.confirmAndNext()">Zatwierdź i dalej <kbd>Enter</kbd></button>
         @if (editor.local()[stop.id]) {
-          <button type="button" class="link" (click)="editor.undoCurrent()">cofnij</button>
+          <button type="button" class="link" (click)="editor.undoCurrent()" title="Cofnij niezapisane zmiany tego przystanku">cofnij</button>
+        }
+        @if (editor.currentMoved().stop || editor.currentMoved().roadPoints) {
+          <button type="button" class="link" (click)="editor.resetPosition()">położenie z GTFS</button>
         }
       </div>
 
       <p class="legend">
-        <span class="arrow">▲</span> czerwony punkt zatrzymania na drodze (kierunek jazdy) ·
+        <span class="stop-dot"></span> przystanek (wiata) · <span class="arrow">▲</span> punkt zatrzymania na drodze, strzałka = kierunek jazdy ·
         <span class="line arriving"></span> dojazd · <span class="line leaving"></span> odjazd
-        <br>Mapa pokazuje stan z ostatniego <code>npm run gtfs:stops</code>.
+        <br>Przeciągnij przystanek albo punkty na drodze tam, gdzie są naprawdę. Punkty zostaną dociągnięte do najbliższej drogi,
+        a linie przeliczone po <code>npm run gtfs:stops</code>.
       </p>
     } @else {
       <p class="meta">Brak przystanków dla tego filtra.</p>

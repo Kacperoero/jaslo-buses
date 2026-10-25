@@ -79,6 +79,7 @@ h2 {
   font-size: 12px;
 
   .checked { color: #059669; font-weight: 600; }
+  .moved { color: #b45309; font-weight: 600; }
 }
 
 .choice {
@@ -112,6 +113,16 @@ kbd {
 }
 
 .arrow { color: #dc2626; }
+
+.stop-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 3px solid #2563eb;
+  background: #fff;
+  vertical-align: middle;
+}
 
 .line {
   display: inline-block;

@@ -18,6 +18,8 @@ export interface Stop {
   towards?: string;
   /** Only when a manual correction (scripts/gtfs/stop-overrides.json) changed `directions`: what the timetable says */
   timetableDirections?: 1 | 2;
+  /** Only for stops moved by hand: [lat, lng] from the GTFS file */
+  gtfsPosition?: [number, number];
 }
 
 /**

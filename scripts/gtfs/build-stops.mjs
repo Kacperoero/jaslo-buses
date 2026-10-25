@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 /**
- * Writes public/assets/data/stops-base.json (stops for the map) from gtfs.json and the manual
- * corrections in scripts/gtfs/stop-overrides.json. Runs as part of build-gtfs.mjs; on its own:
+ * Applies the manual corrections in scripts/gtfs/stop-overrides.json: moved stops get their new
+ * position in gtfs.json (the GTFS position is kept in its `originalPositions`, so a correction
+ * can be undone), and public/assets/data/stops-base.json (stops for the map) is written.
+ * Runs as part of build-gtfs.mjs; on its own:
  *
  *   npm run gtfs:stops                                       (also redraws road shapes)
  *   npm run gtfs:stops -- --import ~/Pobrane/stop-overrides.json
@@ -22,9 +24,9 @@ const DATA = join(HERE, '..', '..', 'public', 'assets', 'data');
  *   directions           1: one side of the road / one direction, 2: both directions
  *   towards              one-direction stops: the usual next stop
  *   timetableDirections  only when a manual override changed `directions`: what the timetable says
+ *   gtfsPosition         only for moved stops: [lat, lng] from the GTFS file
  */
-export function buildStops({ stops, variants }) {
-  const overrides = stopOverrides(stops);
+export function buildStops({ stops, variants }, overrides, originalPositions = {}) {
   const groups = stopDirections(stops, variants);
   const served = new Set(variants.flatMap(v => v.stops));
   const nextVotes = stops.map(() => new Map());
@@ -45,17 +47,38 @@ export function buildStops({ stops, variants }) {
       id, designator: i + 1, name, lat, lng, onlyDisembarking: false,
       directions,
       ...(towards ? { towards } : {}),
-      ...(directions !== timetable ? { timetableDirections: timetable } : {})
+      ...(directions !== timetable ? { timetableDirections: timetable } : {}),
+      ...(originalPositions[id] ? { gtfsPosition: originalPositions[id] } : {})
     }];
   });
   return { stops: out, checked: overrides.filter(Boolean).length };
 }
 
+/** Applies the corrections to `gtfs` (and gtfs.json) and writes stops-base.json. */
 export function writeStops(gtfs) {
-  const { stops: out, checked } = buildStops(gtfs);
+  // Start from the GTFS positions, then move the corrected stops
+  const original = gtfs.originalPositions ?? {};
+  for (const s of gtfs.stops) {
+    if (original[s[0]]) [s[2], s[3]] = original[s[0]];
+  }
+  const overrides = stopOverrides(gtfs.stops);
+  const moved = {};
+  gtfs.stops.forEach((s, i) => {
+    const o = overrides[i];
+    if (typeof o?.lat !== 'number' || typeof o?.lng !== 'number') return;
+    moved[s[0]] = [s[2], s[3]];
+    [s[2], s[3]] = [o.lat, o.lng];
+  });
+  delete gtfs.originalPositions;
+  if (Object.keys(moved).length) gtfs.originalPositions = moved;
+  writeFileSync(join(DATA, 'gtfs.json'), JSON.stringify(gtfs));
+
+  const { stops: out, checked } = buildStops(gtfs, overrides, moved);
   writeFileSync(join(DATA, 'stops-base.json'), JSON.stringify(out, null, 2) + '\n');
   const changed = out.filter(s => s.timetableDirections).length;
-  console.log(`stops-base.json: ${out.length} stops; ${checked} checked by hand, ${changed} with directions changed by hand`);
+  const roadPoints = overrides.filter(o => o?.roadPoints?.length).length;
+  console.log(`stops-base.json: ${out.length} stops; ${checked} checked by hand – ${changed} with directions changed, ` +
+    `${Object.keys(moved).length} moved, ${roadPoints} with road points set by hand`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
