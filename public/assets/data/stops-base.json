@@ -12,11 +12,15 @@
     "id": "13890351_1",
     "designator": 2,
     "name": "JASŁO,ul.K.WIELKIEGO",
-    "lat": 49.748007,
-    "lng": 21.47384,
+    "lat": 49.747984,
+    "lng": 21.473783,
     "onlyDisembarking": false,
     "directions": 1,
-    "towards": "JASŁO,ul.LWOWSKA Szpital"
+    "towards": "JASŁO,ul.LWOWSKA Szpital",
+    "gtfsPosition": [
+      49.748007,
+      21.47384
+    ]
   },
   {
     "id": "13890090_1",
