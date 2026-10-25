@@ -1,0 +1,28 @@
+@if (buses.details(); as bus) {
+  <aside class="bus-panel" aria-label="Wybrany autobus">
+    <header>
+      <span class="badge" [class.waiting]="bus.waiting">{{ bus.line }}</span>
+      <div class="title">
+        <strong>Linia {{ bus.line }}</strong>
+        <span>→ {{ bus.headsign }}</span>
+      </div>
+      <button type="button" class="close" (click)="close()" aria-label="Zamknij">×</button>
+    </header>
+
+    <p class="status">
+      {{ bus.waiting ? 'Czeka na odjazd' : 'Następne przystanki' }}
+      @if (bus.passed > 0) { <span class="passed">· minął {{ bus.passed }} z {{ bus.total }}</span> }
+    </p>
+
+    <ol class="stops">
+      @for (stop of bus.ahead; track $index; let first = $first) {
+        <li [class.next]="first">
+          <span class="time">{{ stop.time }}</span>
+          <span class="name">{{ stop.name }}</span>
+        </li>
+      }
+    </ol>
+
+    <p class="note">Położenie według rozkładu jazdy, nie GPS – autobus może być opóźniony.</p>
+  </aside>
+}

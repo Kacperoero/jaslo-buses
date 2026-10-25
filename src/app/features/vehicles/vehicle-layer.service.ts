@@ -4,7 +4,7 @@ import { GtfsIndex, GtfsService } from '../../core/services/gtfs.service';
 import { ShapesService } from '../../core/services/shapes.service';
 import { Stop } from '../../shared/models/transit.models';
 import { escapeHtml } from '../../shared/utils/text.utils';
-import { ScheduledBus } from './scheduled-buses';
+import { ScheduledBus, clock } from './scheduled-buses';
 
 const AHEAD_COLOR = '#10b981';
 const PASSED_COLOR = '#94a3b8';
@@ -12,8 +12,8 @@ const PASSED_COLOR = '#94a3b8';
 /**
  * Draws the timetable-based bus positions: a badge with the line number and an arrow for the
  * direction. Markers are reused between refreshes, so they glide (CSS transition) instead of jumping.
- * Clicking a bus draws its route (the part still ahead in green) with the stops it calls at, and
- * lists the stops still ahead with their times.
+ * The selected (clicked) bus gets its route drawn – the part still ahead in green – with the
+ * stops it calls at; its details are in the side panel (BusPanelComponent).
  */
 @Injectable({
   providedIn: 'root'
@@ -24,17 +24,14 @@ export class VehicleLayerService {
   private readonly routeLayer = L.layerGroup();
   private readonly layer = L.layerGroup();
   private readonly markers = new Map<string, L.Marker>();
-  private readonly latest = new Map<string, ScheduledBus>();
   /** What each marker's icon shows – swapped only when this changes (a new icon would stop the glide) */
   private readonly looks = new Map<string, string>();
-  /** Popup contents shown – rebuilt only when the next stop changes (keeps the list's scroll) */
-  private readonly popupLooks = new Map<string, string>();
   private index: GtfsIndex | null = null;
   /** The clicked bus and the next stop its route was drawn for */
   private selected: { key: string; nextIndex: number } | null = null;
 
   constructor() {
-    this.gtfs.index().subscribe(index => (this.index = index));
+    this.gtfs.index().subscribe({ next: index => (this.index = index), error: () => {} });
   }
 
   attach(map: L.Map): void {
@@ -48,65 +45,50 @@ export class VehicleLayerService {
     this.routeLayer.clearLayers();
     this.layer.clearLayers();
     this.markers.clear();
-    this.latest.clear();
     this.looks.clear();
-    this.popupLooks.clear();
     this.selected = null;
   }
 
-  update(buses: ScheduledBus[]): void {
+  /** Called with the key of a clicked bus */
+  onSelect: (key: string) => void = () => {};
+
+  /** Moves the buses; draws the route of the selected one (`selectedKey`). */
+  update(buses: ScheduledBus[], selectedKey: string | null): void {
     const seen = new Set<string>();
+    let selected: ScheduledBus | null = null;
     for (const bus of buses) {
       seen.add(bus.key);
-      this.latest.set(bus.key, bus);
+      if (bus.key === selectedKey) selected = bus;
       let marker = this.markers.get(bus.key);
       if (!marker) {
-        marker = this.createMarker(bus);
+        marker = L.marker([bus.lat, bus.lng], { zIndexOffset: 2000, keyboard: false })
+          .on('click', () => this.onSelect(bus.key))
+          .addTo(this.layer);
         this.markers.set(bus.key, marker);
       } else {
         marker.setLatLng([bus.lat, bus.lng]);
       }
 
-      const look = `${bus.line}|${bus.waiting}|${bus.bearing === null}`;
+      const isSelected = bus.key === selectedKey;
+      const look = `${bus.line}|${bus.waiting}|${bus.bearing === null}|${isSelected}`;
       if (this.looks.get(bus.key) !== look) {
-        marker.setIcon(this.icon(bus));
+        marker.setIcon(this.icon(bus, isSelected)).setZIndexOffset(isSelected ? 3000 : 2000);
         this.looks.set(bus.key, look);
       } else if (bus.bearing !== null) {
         const arrow = marker.getElement()?.querySelector<HTMLElement>('.vehicle-arrow');
         if (arrow) arrow.style.transform = `rotate(${Math.round(bus.bearing)}deg)`;
       }
-
-      const popupLook = `${bus.nextIndex}|${bus.waiting}`;
-      if (this.popupLooks.get(bus.key) !== popupLook) {
-        marker.setPopupContent(this.popup(bus));
-        this.popupLooks.set(bus.key, popupLook);
-      }
-      if (this.selected?.key === bus.key && this.selected.nextIndex !== bus.nextIndex) this.drawRoute(bus);
     }
 
     for (const [key, marker] of this.markers) {
       if (seen.has(key)) continue;
       marker.remove();
       this.markers.delete(key);
-      this.latest.delete(key);
       this.looks.delete(key);
-      this.popupLooks.delete(key);
-      if (this.selected?.key === key) this.clearRoute();
     }
-  }
 
-  private createMarker(bus: ScheduledBus): L.Marker {
-    const marker = L.marker([bus.lat, bus.lng], { zIndexOffset: 2000, keyboard: false })
-      .bindPopup('', { className: 'vehicle-popup', offset: [0, -6], maxWidth: 300, autoPanPaddingTopLeft: [20, 80] })
-      .addTo(this.layer);
-    marker.on('popupopen', () => {
-      const current = this.latest.get(bus.key);
-      if (current) this.drawRoute(current);
-    });
-    marker.on('popupclose', () => {
-      if (this.selected?.key === bus.key) this.clearRoute();
-    });
-    return marker;
+    if (!selected) this.clearRoute();
+    else if (this.selected?.key !== selected.key || this.selected.nextIndex !== selected.nextIndex) this.drawRoute(selected);
   }
 
   /** The bus's whole route: the part already driven in grey, the rest in green, with its stops. */
@@ -146,45 +128,19 @@ export class VehicleLayerService {
     this.selected = null;
   }
 
-  private icon(bus: ScheduledBus): L.DivIcon {
+  private icon(bus: ScheduledBus, selected: boolean): L.DivIcon {
     const arrow = bus.bearing === null ? '' :
       `<span class="vehicle-arrow" style="transform: rotate(${Math.round(bus.bearing)}deg)"></span>`;
     return L.divIcon({
       className: 'vehicle-marker',
-      html: `${arrow}<div class="vehicle-badge${bus.waiting ? ' waiting' : ''}">${escapeHtml(bus.line)}</div>`,
+      html: `${arrow}<div class="vehicle-badge${bus.waiting ? ' waiting' : ''}${selected ? ' selected' : ''}">${escapeHtml(bus.line)}</div>`,
       iconSize: [40, 40],
       iconAnchor: [20, 20]
     });
-  }
-
-  private popup(bus: ScheduledBus): string {
-    const index = this.index;
-    if (!index) return '';
-    const trip = index.trips[bus.trip];
-    const stops = trip.variant.stops;
-    const rows = stops.slice(bus.nextIndex).map((pos, k) => {
-      const i = bus.nextIndex + k;
-      return `<li${k === 0 ? ' class="next"' : ''}><span class="time">${clock(trip.times[i] + bus.dayOffset * 1440)}</span>` +
-        `<span>${escapeHtml(index.stopName(pos))}</span></li>`;
-    }).join('');
-    const status = bus.waiting ? 'Czeka na odjazd' : 'Następne przystanki';
-    const passed = bus.nextIndex > 0 ? ` <span class="passed">(minął ${bus.nextIndex} z ${stops.length})</span>` : '';
-    return `<div class="vehicle-info">
-      <div><strong>Linia ${escapeHtml(bus.line)}</strong> → ${escapeHtml(bus.headsign)}</div>
-      <div class="vehicle-status">${status}${passed}</div>
-      <ol class="vehicle-stops">${rows}</ol>
-      <div class="vehicle-note">Położenie według rozkładu jazdy, nie GPS – autobus może być opóźniony.</div>
-    </div>`;
   }
 }
 
 function stopAt(index: GtfsIndex, pos: number): Stop {
   const [id, name, lat, lng] = index.stops[pos];
   return { id, name, lat, lng, designator: pos + 1, onlyDisembarking: false };
-}
-
-/** Minutes after midnight (may be negative or pass 24 h) → "HH:MM" */
-function clock(minutes: number): string {
-  const m = ((minutes % 1440) + 1440) % 1440;
-  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 }

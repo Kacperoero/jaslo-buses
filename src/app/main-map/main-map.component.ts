@@ -12,11 +12,14 @@ import { StopEditorLayerService } from '../features/stop-editor/stop-editor-laye
 import { StopEditorComponent } from '../features/stop-editor/stop-editor.component';
 import { stopEditorEnabled } from '../features/stop-editor/stop-editor.service';
 import { StopSearchComponent } from '../features/stop-search/stop-search.component';
+import { BusPanelComponent } from '../features/vehicles/bus-panel/bus-panel.component';
 import { ScheduledBusesService } from '../features/vehicles/scheduled-buses.service';
 import { VehicleLayerService } from '../features/vehicles/vehicle-layer.service';
 import { Stop } from '../shared/models/transit.models';
 
 const JASLO_CENTRE: L.LatLngTuple = [49.745, 21.472];
+/** Width of the bus side panel on wide screens (bus-panel.component.scss) */
+const BUS_PANEL_WIDTH_PX = 320;
 
 /**
  * The map view: Leaflet map with stop markers, the planner's points and selected route,
@@ -25,7 +28,7 @@ const JASLO_CENTRE: L.LatLngTuple = [49.745, 21.472];
 @Component({
   selector: 'app-main-map',
   standalone: true,
-  imports: [StopSearchComponent, PlannerPanelComponent, StopEditorComponent],
+  imports: [StopSearchComponent, PlannerPanelComponent, StopEditorComponent, BusPanelComponent],
   templateUrl: './main-map.component.html',
   styleUrl: './main-map.component.scss'
 })
@@ -65,7 +68,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
     // Buses where the timetable says they are
     effect(() => {
       const buses = this.buses.buses();
-      untracked(() => this.vehicleLayer.update(buses));
+      const selected = this.buses.selectedKey();
+      untracked(() => this.vehicleLayer.update(buses, selected));
     });
   }
 
@@ -79,7 +83,10 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
     this.routeLayer.attach(this.map);
     if (this.editing) this.editorLayer.attach(this.map);
-    else this.vehicleLayer.attach(this.map);
+    else {
+      this.vehicleLayer.attach(this.map);
+      this.vehicleLayer.onSelect = key => this.selectBus(key);
+    }
     this.map.on('click', (e: L.LeafletMouseEvent) => this.planner.setPointFromMap(e.latlng.lat, e.latlng.lng));
     this.stops.load().subscribe(stops => this.markers.renderStops(this.map, stops));
   }
@@ -89,6 +96,17 @@ export class MainMapComponent implements OnInit, OnDestroy {
     this.editorLayer.detach();
     this.vehicleLayer.detach();
     this.map?.remove();
+  }
+
+  /** Shows a clicked bus in the side panel, moving the map so the panel doesn't cover it. */
+  private selectBus(key: string): void {
+    this.buses.select(key);
+    const bus = this.buses.selected();
+    const size = this.map.getSize();
+    if (!bus || size.x < 768) return; // phones: the panel is a bottom sheet
+    const x = this.map.latLngToContainerPoint([bus.lat, bus.lng]).x;
+    const panelLeft = size.x - BUS_PANEL_WIDTH_PX - 32;
+    if (x > panelLeft - 40) this.map.panBy([x - (panelLeft - 40) + 80, 0]);
   }
 
   /** Flies to a stop picked in the search box and opens its departures. */

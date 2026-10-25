@@ -1,5 +1,5 @@
 import { GtfsData, GtfsIndex } from '../../core/services/gtfs.service';
-import { busesAt, pointAlong } from './scheduled-buses';
+import { busDetails, busesAt, pointAlong } from './scheduled-buses';
 
 // Every day from 2026-10-01 for 64 days
 const everyDay = btoa(String.fromCharCode(...new Array(8).fill(255)));
@@ -71,5 +71,16 @@ describe('pointAlong', () => {
     const [lat, lng] = pointAlong(line, 0.75);
     expect(lat).toBeCloseTo(0.5, 2);
     expect(lng).toBeCloseTo(1, 6);
+  });
+});
+
+describe('busDetails', () => {
+  it('lists the stops still ahead with their times', () => {
+    const ix = index([[0, 0, 480, 10, 10]]);
+    const [bus] = busesAt(ix, new Date(2026, 9, 25, 8, 5), straight(ix));
+    expect(busDetails(ix, bus)).toEqual({
+      line: '3', headsign: 'C', waiting: false, passed: 1, total: 3,
+      ahead: [{ name: 'B', time: '08:10' }, { name: 'C', time: '08:20' }]
+    });
   });
 });

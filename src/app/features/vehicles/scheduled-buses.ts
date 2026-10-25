@@ -99,3 +99,37 @@ function bearing(a: [number, number], b: [number, number]): number {
   const x = Math.cos(a[0] * r) * Math.sin(b[0] * r) - Math.sin(a[0] * r) * Math.cos(b[0] * r) * Math.cos((b[1] - a[1]) * r);
   return ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
 }
+
+/** What the side panel shows about a bus. */
+export interface BusDetails {
+  line: string;
+  headsign: string;
+  waiting: boolean;
+  /** Stops already passed, of `total` */
+  passed: number;
+  total: number;
+  /** Stops still ahead, the next one first */
+  ahead: { name: string; time: string }[];
+}
+
+export function busDetails(index: GtfsIndex, bus: ScheduledBus): BusDetails {
+  const trip = index.trips[bus.trip];
+  const stops = trip.variant.stops;
+  return {
+    line: bus.line,
+    headsign: bus.headsign,
+    waiting: bus.waiting,
+    passed: bus.nextIndex,
+    total: stops.length,
+    ahead: stops.slice(bus.nextIndex).map((pos, k) => ({
+      name: index.stopName(pos),
+      time: clock(trip.times[bus.nextIndex + k] + bus.dayOffset * 1440)
+    }))
+  };
+}
+
+/** Minutes after midnight (may be negative or pass 24 h) → "HH:MM" */
+export function clock(minutes: number): string {
+  const m = ((Math.round(minutes) % 1440) + 1440) % 1440;
+  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+}

@@ -1,9 +1,9 @@
-import { DestroyRef, Injectable, effect, inject, signal, untracked } from '@angular/core';
+import { DestroyRef, Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
 import { GtfsIndex, GtfsService } from '../../core/services/gtfs.service';
 import { ShapesService } from '../../core/services/shapes.service';
 import { TravelTimeService } from '../../core/services/travel-time.service';
 import { Stop } from '../../shared/models/transit.models';
-import { ScheduledBus, busesAt } from './scheduled-buses';
+import { BusDetails, ScheduledBus, busDetails, busesAt } from './scheduled-buses';
 
 const STORAGE_KEY = 'autobusy.scheduledBuses';
 /** How often positions are recalculated while showing "now" */
@@ -26,14 +26,30 @@ export class ScheduledBusesService {
   /** The moment the positions are for */
   readonly at = signal<Date | null>(null);
 
+  /** The clicked bus (its key) – shown in the side panel with its route */
+  readonly selectedKey = signal<string | null>(null);
+  /** The clicked bus while it still runs (null once it reached its last stop) */
+  readonly selected = computed(() => this.buses().find(b => b.key === this.selectedKey()) ?? null);
+  /** Side panel contents: rebuilt only when the bus reaches another stop */
+  readonly details = computed<BusDetails | null>(() => {
+    const bus = this.selected();
+    const index = this.indexLoaded();
+    return bus && index ? busDetails(index, bus) : null;
+  }, { equal: (a, b) => JSON.stringify(a) === JSON.stringify(b) });
+
+  private readonly indexLoaded = signal<GtfsIndex | null>(null);
   private index: GtfsIndex | null = null;
   private paths = new Map<string, [number, number][]>();
   private timer: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
-    this.gtfs.index().subscribe(index => {
-      this.index = index;
-      this.refresh();
+    this.gtfs.index().subscribe({
+      next: index => {
+        this.index = index;
+        this.indexLoaded.set(index);
+        this.refresh();
+      },
+      error: () => {} // no timetable – no buses (MainMapComponent reports the error)
     });
     effect(() => {
       const enabled = this.enabled();
@@ -44,6 +60,7 @@ export class ScheduledBusesService {
         this.stopTimer();
         if (!enabled) {
           this.buses.set([]);
+          this.selectedKey.set(null);
           return;
         }
         this.refresh();
@@ -51,6 +68,10 @@ export class ScheduledBusesService {
       });
     });
     inject(DestroyRef).onDestroy(() => this.stopTimer());
+  }
+
+  select(key: string | null): void {
+    this.selectedKey.set(key);
   }
 
   toggle(): void {

@@ -25,6 +25,8 @@
 }
 
 @if (!editing) {
+<app-bus-panel />
+
 <button type="button" class="vehicles-toggle" [class.active]="buses.enabled()" (click)="buses.toggle()"
         [attr.aria-pressed]="buses.enabled()" aria-label="Autobusy według rozkładu" id="vehicles-toggle-btn"
         title="Gdzie powinny być autobusy według rozkładu jazdy (teraz albo o wybranej godzinie) – bez GPS, bez opóźnień">
