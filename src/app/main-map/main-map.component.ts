@@ -12,6 +12,8 @@ import { StopEditorLayerService } from '../features/stop-editor/stop-editor-laye
 import { StopEditorComponent } from '../features/stop-editor/stop-editor.component';
 import { stopEditorEnabled } from '../features/stop-editor/stop-editor.service';
 import { StopSearchComponent } from '../features/stop-search/stop-search.component';
+import { ScheduledBusesService } from '../features/vehicles/scheduled-buses.service';
+import { VehicleLayerService } from '../features/vehicles/vehicle-layer.service';
 import { Stop } from '../shared/models/transit.models';
 
 const JASLO_CENTRE: L.LatLngTuple = [49.745, 21.472];
@@ -36,6 +38,8 @@ export class MainMapComponent implements OnInit, OnDestroy {
   private gtfs = inject(GtfsService);
   private shapes = inject(ShapesService);
   private editorLayer = inject(StopEditorLayerService);
+  readonly buses = inject(ScheduledBusesService);
+  private vehicleLayer = inject(VehicleLayerService);
 
   /** Developer stop editor instead of the search and planner (app opened with ?dev) */
   readonly editing = stopEditorEnabled();
@@ -58,6 +62,11 @@ export class MainMapComponent implements OnInit, OnDestroy {
       this.shapes.loaded(); // redraw along roads once the road lines arrive
       untracked(() => (conn ? this.routeLayer.drawConnection(conn) : this.routeLayer.clearRoute()));
     });
+    // Buses where the timetable says they are
+    effect(() => {
+      const buses = this.buses.buses();
+      untracked(() => this.vehicleLayer.update(buses));
+    });
   }
 
   ngOnInit(): void {
@@ -70,6 +79,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
 
     this.routeLayer.attach(this.map);
     if (this.editing) this.editorLayer.attach(this.map);
+    else this.vehicleLayer.attach(this.map);
     this.map.on('click', (e: L.LeafletMouseEvent) => this.planner.setPointFromMap(e.latlng.lat, e.latlng.lng));
     this.stops.load().subscribe(stops => this.markers.renderStops(this.map, stops));
   }
@@ -77,6 +87,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.routeLayer.detach();
     this.editorLayer.detach();
+    this.vehicleLayer.detach();
     this.map?.remove();
   }
 

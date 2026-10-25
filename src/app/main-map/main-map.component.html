@@ -24,6 +24,18 @@
 </button>
 }
 
+@if (!editing) {
+<button type="button" class="vehicles-toggle" [class.active]="buses.enabled()" (click)="buses.toggle()"
+        [attr.aria-pressed]="buses.enabled()" aria-label="Autobusy według rozkładu" id="vehicles-toggle-btn"
+        title="Gdzie powinny być autobusy według rozkładu jazdy (teraz albo o wybranej godzinie) – bez GPS, bez opóźnień">
+  <span aria-hidden="true">🚌</span>
+  <span class="toggle-label">Autobusy wg rozkładu</span>
+  @if (buses.enabled()) {
+    <span class="vehicle-count">{{ buses.buses().length }}</span>
+  }
+</button>
+}
+
 <button type="button" class="locate-btn" (click)="locateUser()" aria-label="Pokaż moją lokalizację" id="locate-me-btn">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" aria-hidden="true">
     <circle cx="12" cy="12" r="3"/>

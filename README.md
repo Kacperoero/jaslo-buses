@@ -12,6 +12,7 @@ Dane pochodzą z **oficjalnego rozkładu jazdy MKS Jasło w formacie GTFS** ([mk
 - **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Inny termin” przełącza okienka i planer na wybrany dzień i godzinę (do końca ważności rozkładu).
 - **Ulubione i ostatnie** – gwiazdka ☆ w okienku przystanku (ulubione mają na mapie żółtą kropkę). Po kliknięciu w puste pole wyszukiwarki widać ulubione i ostatnio oglądane przystanki. W planerze puste pola A/B podpowiadają ulubione, a pod formularzem jest lista ostatnich tras. Dane są w przeglądarce (`localStorage`); tras z „Moja lokalizacja” nie zapisujemy.
 - **Planer trasy A → B** – punkt startu/celu z listy przystanków, kliknięty na mapie albo z lokalizacji; „Wyjazd o” albo „Na miejscu o”. Do 3 przesiadek, także z przejściem pieszo na inny przystanek. Wybrana trasa jest rysowana na mapie, każdy autobus innym kolorem. Wyszukiwanie trwa kilka–kilkadziesiąt milisekund.
+- **Autobusy wg rozkładu** – przycisk 🚌 w prawym dolnym rogu pokazuje, gdzie autobusy powinny być według rozkładu: teraz (odświeżane co 5 s, płynny ruch) albo o godzinie wybranej w „Teraz / Inny termin”. Plakietka z numerem linii i strzałką kierunku, szara = czeka na odjazd z pierwszego przystanku (do 3 min przed). Kliknięcie pokazuje kierunek i następny przystanek z godziną. To nie jest GPS – opóźnień nie widać.
 - **Edytor przystanków** (tryb deweloperski, `?dev`) – przechodzenie po przystankach, kierunki, przesuwanie przystanku i punktów zatrzymania na drodze (patrz „Edytor przystanków”).
 
 ## Wymagania
@@ -107,6 +108,8 @@ src/app/
 │   └── geolocation.service.ts           # Lokalizacja użytkownika z przeglądarki
 ├── features/
 │   ├── stop-search/                     # Wyszukiwarka przystanków (lewy górny róg)
+│   ├── vehicles/                        # Autobusy wg rozkładu: pozycje (scheduled-buses.ts), stan, warstwa mapy
+│   ├── stop-editor/                     # Edytor przystanków (?dev)
 │   ├── map/services/
 │   │   ├── map-marker.service.ts        # Znaczniki przystanków i okienka z odjazdami
 │   │   └── route-layer.service.ts       # Rysowanie punktów A/B i wybranego połączenia
@@ -180,7 +183,7 @@ Postęp zapisuje się w przeglądarce. Żeby trafił do danych:
 
 ## Znane ograniczenia
 
-- Brak danych na żywo (opóźnień, pozycji autobusów) – MKS udostępnia je tylko przez płatny system kiedyprzyjedzie, bez publicznego API dla innych. Warstwa „Autobusy na żywo” była zrobiona na tym API i została usunięta; jej kod jest w historii git (commit `b790d54`), gdyby pojawiło się legalne źródło.
+- Brak danych na żywo (opóźnień, pozycji autobusów) – MKS udostępnia je tylko przez płatny system kiedyprzyjedzie, bez publicznego API dla innych. Warstwa „Autobusy na żywo” była zrobiona na tym API i została usunięta; jej kod jest w historii git (commit `b790d54`), gdyby pojawiło się legalne źródło. Zamiast niej jest warstwa „Autobusy wg rozkładu”: pozycja liczona z rozkładu – kurs jedzie równym tempem po drogach między godzinami odjazdu z kolejnych przystanków (rozkład ma dokładność do minuty).
 - Numery linii są przypisane heurystycznie (patrz „Numery linii”).
 - Jedyne zewnętrzne zasoby to kafelki mapy OpenStreetMap i czcionka Google Fonts. Kafelki OSM mają [zasady użycia](https://operations.osmfoundation.org/policies/tiles/) – przy publikacji z większym ruchem warto przejść na własnego lub płatnego dostawcę kafelków.
 - Przebieg po drogach to najkrótsza droga między przystankami według OSM – tam, gdzie autobus jedzie dłuższą trasą (np. objazd, zakaz skrętu, którego nie ma w OSM), linia na mapie może się różnić od prawdziwej. Dojście pieszo nadal liczone jest w linii prostej.
