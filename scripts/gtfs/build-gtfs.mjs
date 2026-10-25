@@ -18,6 +18,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { inflateRawSync } from 'node:zlib';
+import { stopDirections } from './stop-directions.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..');
@@ -236,8 +237,23 @@ if (oldStops.some(s => String(s.id).includes(':'))) {
   console.log(`legacy-stop-ids.json: ${Object.keys(legacy).length} of ${oldStops.length} old stop IDs mapped`);
 }
 const servedStops = new Set(variants.flatMap(v => v.stops));
+// One-direction or both-direction stop, and for one-direction stops the usual next stop
+const directionGroups = stopDirections(outStops, variants);
+const nextStopVotes = outStops.map(() => new Map());
+for (const v of variants) {
+  v.stops.slice(0, -1).forEach((s, i) => {
+    const next = outStops[v.stops[i + 1]][1];
+    nextStopVotes[s].set(next, (nextStopVotes[s].get(next) ?? 0) + 1);
+  });
+}
+const towardsOf = i => [...nextStopVotes[i].entries()].sort((a, b) => b[1] - a[1])[0]?.[0];
 writeFileSync(stopsBasePath, JSON.stringify(outStops
-  .map(([id, name, lat, lng], i) => ({ id, designator: i + 1, name, lat, lng, onlyDisembarking: false, _i: i }))
+  .map(([id, name, lat, lng], i) => ({
+    id, designator: i + 1, name, lat, lng, onlyDisembarking: false,
+    directions: Math.min(2, directionGroups[i].length || 1),
+    ...(directionGroups[i].length === 1 && towardsOf(i) ? { towards: towardsOf(i) } : {}),
+    _i: i
+  }))
   .filter(s => servedStops.has(s._i))
   .map(({ _i, ...s }) => s), null, 2) + '\n');
 

@@ -108,6 +108,14 @@ html, body {
   flex-wrap: wrap;
 }
 
+.badge-direction {
+  flex-basis: 100%;
+  order: 10; // below the name, after the star
+  font-size: 11px;
+  font-weight: 500;
+  color: #64748b;
+}
+
 .popup-fav {
   flex-shrink: 0;
   width: 28px;

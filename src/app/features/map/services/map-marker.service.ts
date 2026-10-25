@@ -127,6 +127,7 @@ export class MapMarkerService {
         <span class="popup-icon">🚏</span>
         <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
         ${stop.onlyDisembarking ? '<span class="badge-warn">Tylko wysiadanie</span>' : ''}
+        ${directionBadge(stop)}
         <button type="button" class="popup-fav${fav ? ' active' : ''}"
                 aria-pressed="${fav}" title="${fav ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'}">
           ${fav ? '★' : '☆'}
@@ -226,4 +227,16 @@ export class MapMarkerService {
       </div>
     `;
   }
+}
+
+/** "↔ oba kierunki" / "→ w stronę: …" under the stop name. */
+function directionBadge(stop: Stop): string {
+  if (stop.directions === 2) {
+    return '<span class="badge-direction" title="Autobusy zatrzymują się tu w obu kierunkach">↔ oba kierunki</span>';
+  }
+  if (stop.directions === 1) {
+    const towards = stop.towards ? ` w stronę: ${escapeHtml(stop.towards.replace('JASŁO,ul.', ''))}` : '';
+    return `<span class="badge-direction" title="Autobusy zatrzymują się tu tylko w jednym kierunku">→ jeden kierunek${towards}</span>`;
+  }
+  return '';
 }

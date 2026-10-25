@@ -5,17 +5,54 @@
    "name": "OSOBNICA 4 IMIELNA"
   }
  ],
+ "directionFallback": [],
  "straightPairs": [
   {
    "from": "JASŁO,ul.TOWAROWA III",
    "to": "JASŁO,ul.FLORIAŃSKA skrz. Żniw",
-   "reason": "detour 2234 m vs 601 m"
+   "reason": "detour 2304 m vs 601 m"
   },
   {
    "from": "JASŁO,ul.FLORIAŃSKA skrz. Żniw",
    "to": "JASŁO,ul.TOWAROWA III",
-   "reason": "detour 2279 m vs 616 m"
+   "reason": "detour 2349 m vs 616 m"
   }
  ],
- "snappedFarStops": []
+ "snappedFarStops": [
+  {
+   "id": "13890115_1",
+   "name": "GLINIK POLSKI Podlas",
+   "metersFromRoad": 86
+  },
+  {
+   "id": "13890245",
+   "name": "JASŁO,ul.TOWAROWA III",
+   "metersFromRoad": 71
+  },
+  {
+   "id": "13890003_1",
+   "name": "JASŁO,ul.3 MAJA 04",
+   "metersFromRoad": 69
+  },
+  {
+   "id": "13890365_1",
+   "name": "JASŁO,ul.RYNEK (STAROSTWO POW)",
+   "metersFromRoad": 67
+  },
+  {
+   "id": "13890226",
+   "name": "WARZYCE k/Irysa",
+   "metersFromRoad": 58
+  },
+  {
+   "id": "13890190_1",
+   "name": "OSOBNICA Górna",
+   "metersFromRoad": 50
+  },
+  {
+   "id": "13890232_2",
+   "name": "RZESZOWSKA zatoka",
+   "metersFromRoad": 43
+  }
+ ]
 }

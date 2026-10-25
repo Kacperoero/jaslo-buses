@@ -52,6 +52,23 @@ describe('ShapesService', () => {
     ]);
   });
 
+  it('joins a straight part to the road points of the neighbouring road lines', () => {
+    const D = stop('d', 45, -128);
+    service.load();
+    http.expectOne('assets/data/shapes.json').flush({
+      source: '', builtAt: '', shapes: {
+        'a>b': encode([[38.6, -120.3], [43.2, -126.4]]),  // road point at A → road point at B
+        'c>d': encode([[44.1, -127.1], [45.1, -128.1]])   // road point at C → road point at D
+      }
+    });
+
+    expect(service.parts([A, B, C, D])).toEqual([
+      { known: true, points: [[38.6, -120.3], [43.2, -126.4]] },
+      { known: false, points: [[43.2, -126.4], [44.1, -127.1]] }, // no gap at either end
+      { known: true, points: [[44.1, -127.1], [45.1, -128.1]] }
+    ]);
+  });
+
   it('treats everything as known until the road lines are loaded', () => {
     expect(service.parts([A, B, C]).map(p => p.known)).toEqual([true]);
   });
@@ -63,3 +80,20 @@ describe('ShapesService', () => {
     expect(service.path([A, B]).length).toBe(2);
   });
 });
+
+/** Google polyline encoder (same as scripts/gtfs/build-shapes.mjs) for test data. */
+function encode(points: [number, number][]): string {
+  let out = '', plat = 0, plng = 0;
+  const enc = (v: number) => {
+    v = v < 0 ? ~(v << 1) : v << 1;
+    let s = '';
+    while (v >= 0x20) { s += String.fromCharCode((0x20 | (v & 0x1f)) + 63); v >>= 5; }
+    return s + String.fromCharCode(v + 63);
+  };
+  for (const [la, ln] of points) {
+    const ilat = Math.round(la * 1e5), ilng = Math.round(ln * 1e5);
+    out += enc(ilat - plat) + enc(ilng - plng);
+    plat = ilat; plng = ilng;
+  }
+  return out;
+}

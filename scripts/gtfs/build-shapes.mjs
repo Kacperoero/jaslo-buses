@@ -8,9 +8,13 @@
  *
  * 1. Road network from OpenStreetMap (one Overpass API request for the area of all stops,
  *    cached in scripts/gtfs/.cache/ – not committed).
- * 2. Every stop is snapped to the nearest point on a road (major roads preferred).
+ * 2. Every stop gets a road point for each direction buses pass it in (from the timetable):
+ *    the nearest point on a road running that way and open to buses in that direction – so a
+ *    stop at a junction isn't put on the cross street, and each side of a dual carriageway
+ *    gets its own point. The stop marker stays where passengers wait.
  * 3. For every pair of consecutive stops a bus drives between, the shortest road path (A*,
- *    respecting one-way streets for buses). Suspiciously long paths keep a straight line.
+ *    respecting one-way streets for buses) from road point to road point. Suspiciously long
+ *    paths keep a straight line.
  * 4. public/assets/data/shapes.json: simplified lines as encoded polylines.
  *
  * Road data © OpenStreetMap contributors, ODbL – shapes.json is derived from it.
@@ -18,6 +22,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { angleDiff, bearing, nearestGroup, stopDirections } from './stop-directions.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..');
@@ -32,6 +37,8 @@ const SNAP_MAX_M = 150;           // stops further from any road keep straight l
 const SIMPLIFY_M = 4;             // Douglas–Peucker tolerance
 const MAX_DETOUR_RATIO = 3;       // road path longer than this × straight line …
 const MAX_DETOUR_EXTRA_M = 1000;  // … and longer by more than this → keep straight
+const MAX_DIRECTION_DIFF = 75;    // a road counts as running the bus's way within this angle
+const DEGREE_COST_M = 0.5;        // snapping: 1° off the travel direction costs like 0.5 m further
 
 /** Cost factor per road type – buses prefer bigger roads; service roads only when needed. */
 const ROAD_COST = {
@@ -135,45 +142,87 @@ segments.forEach((s, i) => {
   }
 });
 
-const snapOf = new Map(); // stop position -> { node, distance, segment }
-const bySegment = new Map(); // segment -> [{ t, node }]
-const report = { farFromRoad: [], straightPairs: [] };
+const groups = stopDirections(gtfs.stops, gtfs.variants); // direction groups per stop
+const roadNodes = stops.map(() => []);  // stop position -> graph node per direction group
+const bySegment = new Map();            // segment -> [{ t, node }]
+const report = { farFromRoad: [], directionFallback: [], straightPairs: [] };
+const snapDistances = [];
+
 stops.forEach((stop, pos) => {
-  let best = null;
-  const cx = Math.floor(stop.lng / CELL), cy = Math.floor(stop.lat / CELL);
+  const candidates = nearbySegments(stop.lat, stop.lng);
+  const dirs = groups[pos].length ? groups[pos] : [{ bearing: null, visits: 0 }];
+  for (const group of dirs) {
+    let best = null;
+    for (const c of candidates) {
+      const seg = segments[c.segment];
+      const off = group.bearing === null ? 0 : directionDiff(seg, group.bearing);
+      if (off > MAX_DIRECTION_DIFF) continue;
+      const score = c.d * seg.factor + off * DEGREE_COST_M;
+      if (!best || score < best.score) best = { ...c, score };
+    }
+    if (!best && candidates.length) {
+      // No road running this way nearby – take the nearest road and note it
+      best = candidates.reduce((x, y) => (x.d * segments[x.segment].factor <= y.d * segments[y.segment].factor ? x : y));
+      report.directionFallback.push({ id: stop.id, name: stop.name, bearing: group.bearing });
+    }
+    if (!best) {
+      if (!report.farFromRoad.some(f => f.id === stop.id)) report.farFromRoad.push({ id: stop.id, name: stop.name });
+      roadNodes[pos].push(null);
+      continue;
+    }
+    roadNodes[pos].push(addRoadPoint(best));
+    snapDistances.push(best.d);
+  }
+});
+
+/** Segments within SNAP_MAX_M of a point, with the nearest point on each. */
+function nearbySegments(plat, plng) {
+  const out = [];
+  const seen = new Set();
+  const cx = Math.floor(plng / CELL), cy = Math.floor(plat / CELL);
   for (let x = cx - 1; x <= cx + 1; x++) {
     for (let y = cy - 1; y <= cy + 1; y++) {
       for (const i of grid.get(`${x},${y}`) ?? []) {
-        const s = segments[i];
-        const p = project(stop.lat, stop.lng, lat[s.a], lng[s.a], lat[s.b], lng[s.b]);
-        const score = p.d * s.factor; // prefer bigger roads a little
-        if (p.d <= SNAP_MAX_M && (!best || score < best.score)) best = { ...p, segment: i, score };
+        if (seen.has(i)) continue;
+        seen.add(i);
+        const sg = segments[i];
+        const p = project(plat, plng, lat[sg.a], lng[sg.a], lat[sg.b], lng[sg.b]);
+        if (p.d <= SNAP_MAX_M) out.push({ ...p, segment: i });
       }
     }
   }
-  if (!best) {
-    report.farFromRoad.push({ id: stop.id, name: stop.name });
-    return;
-  }
-  // A new graph node at the snapped point
+  return out;
+}
+
+/** How far (degrees) a segment's allowed driving directions are from a travel bearing. */
+function directionDiff(seg, travel) {
+  const along = bearing(lat[seg.a], lng[seg.a], lat[seg.b], lng[seg.b]);
+  let d = Infinity;
+  if (seg.forward) d = Math.min(d, angleDiff(along, travel));
+  if (seg.backward) d = Math.min(d, angleDiff((along + 180) % 360, travel));
+  return d;
+}
+
+/** A new graph node at a snapped point (wired into its segment below). */
+function addRoadPoint(p) {
   const node = lat.length;
-  lat.push(best.lat);
-  lng.push(best.lng);
+  lat.push(p.lat);
+  lng.push(p.lng);
   adj.push([]);
-  snapOf.set(pos, { node, distance: Math.round(best.d) });
-  if (!bySegment.has(best.segment)) bySegment.set(best.segment, []);
-  bySegment.get(best.segment).push({ t: best.t, node });
-});
+  if (!bySegment.has(p.segment)) bySegment.set(p.segment, []);
+  bySegment.get(p.segment).push({ t: p.t, node });
+  return node;
+}
 
 // Insert snapped points into their segments: a → p1 → p2 → … → b (keeps one-way rules)
 for (const [i, points] of bySegment) {
-  const s = segments[i];
-  const chain = [s.a, ...points.sort((x, y) => x.t - y.t).map(p => p.node), s.b];
+  const sg = segments[i];
+  const chain = [sg.a, ...points.sort((x, y) => x.t - y.t).map(p => p.node), sg.b];
   for (let k = 1; k < chain.length; k++) {
     const a = chain[k - 1], b = chain[k];
     const len = dist(lat[a], lng[a], lat[b], lng[b]);
-    if (s.forward) adj[a].push({ to: b, cost: len * s.factor, len });
-    if (s.backward) adj[b].push({ to: a, cost: len * s.factor, len });
+    if (sg.forward) adj[a].push({ to: b, cost: len * sg.factor, len });
+    if (sg.backward) adj[b].push({ to: a, cost: len * sg.factor, len });
   }
 }
 
@@ -182,9 +231,12 @@ const shapes = {};
 let roadPairs = 0;
 const t0 = Date.now();
 for (const [a, b] of pairs.values()) {
-  const sa = snapOf.get(a), sb = snapOf.get(b);
-  if (!sa || !sb) continue;
-  const path = astar(sa.node, sb.node);
+  // Road point of each stop for the direction of travel between them
+  const travel = bearing(stops[a].lat, stops[a].lng, stops[b].lat, stops[b].lng);
+  const na = roadNodes[a][groups[a].length ? nearestGroup(groups[a], travel) : 0];
+  const nb = roadNodes[b][groups[b].length ? nearestGroup(groups[b], travel) : 0];
+  if (na == null || nb == null) continue;
+  const path = astar(na, nb);
   const straight = dist(stops[a].lat, stops[a].lng, stops[b].lat, stops[b].lng);
   if (!path) {
     report.straightPairs.push({ from: stops[a].name, to: stops[b].name, reason: 'no road path' });
@@ -194,7 +246,7 @@ for (const [a, b] of pairs.values()) {
     report.straightPairs.push({ from: stops[a].name, to: stops[b].name, reason: `detour ${Math.round(path.len)} m vs ${Math.round(straight)} m` });
     continue;
   }
-  const points = [[stops[a].lat, stops[a].lng], ...path.nodes.map(n => [lat[n], lng[n]]), [stops[b].lat, stops[b].lng]];
+  const points = [na, ...path.nodes, nb].map(n => [lat[n], lng[n]]); // road point to road point
   shapes[`${stops[a].id}>${stops[b].id}`] = encodePolyline(simplify(points, SIMPLIFY_M));
   roadPairs++;
 }
@@ -204,12 +256,20 @@ writeFileSync(OUT, JSON.stringify({
   source: 'Road geometry © OpenStreetMap contributors (ODbL), computed by scripts/gtfs/build-shapes.mjs',
   timetable: gtfs.feed.file,
   builtAt: new Date().toISOString(),
-  shapes
+  shapes,
+  // Where buses stop on the road: per stop, one point per direction [lat, lng, travel bearing]
+  roadPoints: Object.fromEntries(stops.map((st, pos) => [st.id, roadNodes[pos]
+    .map((n, g) => (n == null ? null : [round6(lat[n]), round6(lng[n]), groups[pos][g]?.bearing ?? null]))
+    .filter(Boolean)]))
 }));
-report.snappedFarStops = [...snapOf.entries()]
-  .filter(([, s]) => s.distance > 40)
-  .map(([pos, s]) => ({ id: stops[pos].id, name: stops[pos].name, metersFromRoad: s.distance }))
+report.snappedFarStops = stops
+  .map((st, pos) => ({ id: st.id, name: st.name, metersFromRoad: Math.round(Math.max(0, ...roadNodes[pos].filter(n => n != null).map(n => dist(st.lat, st.lng, lat[n], lng[n])))) }))
+  .filter(x => x.metersFromRoad > 40)
   .sort((x, y) => y.metersFromRoad - x.metersFromRoad);
+snapDistances.sort((x, y) => x - y);
+const q = f => Math.round(snapDistances[Math.floor(snapDistances.length * f)] ?? 0);
+console.log(`road points: ${snapDistances.length} for ${stops.length} stops – distance from the stop: median ${q(0.5)} m, ` +
+  `90% ${q(0.9)} m; ${report.directionFallback.length} without a road running the bus's way`);
 writeFileSync(REPORT, JSON.stringify(report, null, 1) + '\n');
 console.log(`shapes.json: ${(JSON.stringify(shapes).length / 1024).toFixed(0)} KB, ` +
   `${report.straightPairs.length} straight pairs, ${report.farFromRoad.length} stops > ${SNAP_MAX_M} m from roads, ` +
@@ -253,6 +313,10 @@ function directions(t) {
   if (t.oneway === '-1') return { forward: busTwoWay, backward: true };
   if (oneway && !busTwoWay) return { forward: true, backward: false };
   return { forward: true, backward: true };
+}
+
+function round6(x) {
+  return Math.round(x * 1e6) / 1e6;
 }
 
 function dist(lat1, lng1, lat2, lng2) {

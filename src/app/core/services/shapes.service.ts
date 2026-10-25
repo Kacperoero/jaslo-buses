@@ -14,6 +14,8 @@ interface ShapesFile {
   builtAt: string;
   /** "fromStopId>toStopId" → encoded polyline of the road between two consecutive stops */
   shapes: Record<string, string>;
+  /** Where buses stop on the road: per stop id, one [lat, lng, travel bearing] per direction */
+  roadPoints?: Record<string, [number, number, number | null][]>;
 }
 
 /**
@@ -49,17 +51,20 @@ export class ShapesService {
    * straight for a moment, then redrawn), so the map doesn't flash "unknown" everywhere.
    */
   parts(stops: Stop[]): PathPart[] {
+    // Road lines run from the road point at one stop to the road point at the next; a straight
+    // (unknown) part joins the end of the previous road line to the start of the next one
+    const roads = stops.slice(1).map((b, i) => this.between(stops[i].id, b.id));
     const parts: PathPart[] = [];
-    for (let i = 1; i < stops.length; i++) {
-      const a = stops[i - 1];
-      const b = stops[i];
-      const road = this.between(a.id, b.id);
+    roads.forEach((road, i) => {
       const known = !!road || !this.loaded();
-      const points: [number, number][] = road ?? [[a.lat, a.lng], [b.lat, b.lng]];
+      const points: [number, number][] = road ?? [
+        roads[i - 1]?.at(-1) ?? [stops[i].lat, stops[i].lng],
+        roads[i + 1]?.[0] ?? [stops[i + 1].lat, stops[i + 1].lng]
+      ];
       const last = parts[parts.length - 1];
-      if (last && last.known === known) last.points.push(...points.slice(1));
+      if (last && last.known === known) last.points.push(...points.slice(samePoint(last.points.at(-1), points[0]) ? 1 : 0));
       else parts.push({ known, points: [...points] });
-    }
+    });
     return parts;
   }
 
@@ -82,6 +87,10 @@ export class ShapesService {
     }
     return points;
   }
+}
+
+function samePoint(p?: [number, number], q?: [number, number]): boolean {
+  return !!p && !!q && p[0] === q[0] && p[1] === q[1];
 }
 
 /** Google encoded polyline (precision 5) → [lat, lng] points. */

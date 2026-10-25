@@ -12,6 +12,10 @@ export interface Stop {
   lng: number;
   /** Whether the stop is only for disembarking */
   onlyDisembarking: boolean;
+  /** 1: buses stop here in one direction only (one side of the road), 2: in both directions */
+  directions?: 1 | 2;
+  /** One-direction stops: the next stop buses usually go to from here */
+  towards?: string;
 }
 
 /**
