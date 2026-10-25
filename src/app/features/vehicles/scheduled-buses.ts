@@ -31,48 +31,89 @@ export interface ScheduledBus {
 /** Road line between two consecutive stops (by stop position), first point at the first stop. */
 export type PathBetween = (from: number, to: number) => [number, number][];
 
+/** "12@0": trip 12 of `at`'s day; "40@-1": yesterday's trip 40 (running after midnight) */
+export function tripKey(trip: number, dayOffset: number): string {
+  return `${trip}@${dayOffset}`;
+}
+
+export function parseTripKey(key: string): { trip: number; dayOffset: number } {
+  const [trip, dayOffset] = key.split('@').map(Number);
+  return { trip, dayOffset };
+}
+
 /**
  * Positions of all buses running at `at`: each trip runs between its timetabled times at
  * consecutive stops, at a steady pace along the road line between them.
  */
 export function busesAt(index: GtfsIndex, at: Date, pathBetween: PathBetween): ScheduledBus[] {
-  const now = at.getHours() * 60 + at.getMinutes() + at.getSeconds() / 60;
   const buses: ScheduledBus[] = [];
-
   // Yesterday's trips may still run after midnight
   for (const dayOffset of [-1, 0]) {
     const day = new Date(at.getFullYear(), at.getMonth(), at.getDate() + dayOffset);
-    const t = now - dayOffset * 1440; // minutes after midnight of the trip's service day
+    const t = minutesOf(at) - dayOffset * 1440; // minutes after midnight of the trip's service day
     for (const trip of index.trips) {
       const times = trip.times;
       if (t < times[0] - WAITING_MIN || t >= times[times.length - 1]) continue;
       if (!index.runsOn(trip.service, day)) continue;
-
-      const stops = trip.variant.stops;
-      const base = {
-        key: `${trip.index}@${dayOffset}`,
-        trip: trip.index,
-        dayOffset,
-        line: trip.variant.line ?? UNKNOWN_LINE,
-        headsign: trip.variant.headsign
-      };
-
-      if (t < times[0]) {
-        const [, , lat, lng] = index.stops[stops[0]];
-        buses.push({ ...base, lat, lng, bearing: null, waiting: true, nextStop: stops[0], nextIndex: 0, nextMinute: times[0] + dayOffset * 1440 });
-        continue;
-      }
-
-      // Between stop i (left at times[i]) and stop i + 1 (reached at times[i + 1])
-      let i = 0;
-      while (i < times.length - 2 && times[i + 1] <= t) i++;
-      const span = times[i + 1] - times[i];
-      const fraction = span > 0 ? (t - times[i]) / span : 1;
-      const [lat, lng, bearing] = pointAlong(pathBetween(stops[i], stops[i + 1]), fraction);
-      buses.push({ ...base, lat, lng, bearing, waiting: false, nextStop: stops[i + 1], nextIndex: i + 1, nextMinute: times[i + 1] + dayOffset * 1440 });
+      buses.push(busOf(index, trip.index, dayOffset, t, pathBetween));
     }
   }
   return buses;
+}
+
+export type TripStatus = 'before' | 'waiting' | 'running' | 'after';
+
+/** One trip at `at`: not started yet, waiting at the first stop, on its way, or finished. */
+export interface TripState {
+  key: string;
+  trip: number;
+  dayOffset: number;
+  status: TripStatus;
+  /** Where it is (waiting or running only) */
+  bus: ScheduledBus | null;
+  /** Stops before this index (in the trip) are passed */
+  nextIndex: number;
+}
+
+export function tripState(index: GtfsIndex, at: Date, trip: number, dayOffset: number, pathBetween: PathBetween): TripState {
+  const times = index.trips[trip].times;
+  const t = minutesOf(at) - dayOffset * 1440;
+  const base = { key: tripKey(trip, dayOffset), trip, dayOffset };
+  if (t < times[0] - WAITING_MIN) return { ...base, status: 'before', bus: null, nextIndex: 0 };
+  if (t >= times[times.length - 1]) return { ...base, status: 'after', bus: null, nextIndex: times.length };
+  const bus = busOf(index, trip, dayOffset, t, pathBetween);
+  return { ...base, status: bus.waiting ? 'waiting' : 'running', bus, nextIndex: bus.nextIndex };
+}
+
+/** The bus of a trip that is waiting or running at `t` (minutes after midnight of its service day). */
+function busOf(index: GtfsIndex, tripIndex: number, dayOffset: number, t: number, pathBetween: PathBetween): ScheduledBus {
+  const trip = index.trips[tripIndex];
+  const times = trip.times;
+  const stops = trip.variant.stops;
+  const base = {
+    key: tripKey(tripIndex, dayOffset),
+    trip: tripIndex,
+    dayOffset,
+    line: trip.variant.line ?? UNKNOWN_LINE,
+    headsign: trip.variant.headsign
+  };
+
+  if (t < times[0]) {
+    const [, , lat, lng] = index.stops[stops[0]];
+    return { ...base, lat, lng, bearing: null, waiting: true, nextStop: stops[0], nextIndex: 0, nextMinute: times[0] + dayOffset * 1440 };
+  }
+
+  // Between stop i (left at times[i]) and stop i + 1 (reached at times[i + 1])
+  let i = 0;
+  while (i < times.length - 2 && times[i + 1] <= t) i++;
+  const span = times[i + 1] - times[i];
+  const fraction = span > 0 ? (t - times[i]) / span : 1;
+  const [lat, lng, bearing] = pointAlong(pathBetween(stops[i], stops[i + 1]), fraction);
+  return { ...base, lat, lng, bearing, waiting: false, nextStop: stops[i + 1], nextIndex: i + 1, nextMinute: times[i + 1] + dayOffset * 1440 };
+}
+
+function minutesOf(at: Date): number {
+  return at.getHours() * 60 + at.getMinutes() + at.getSeconds() / 60;
 }
 
 /** The point `fraction` (0–1) of the way along a line, with the direction of travel there. */
@@ -100,30 +141,32 @@ function bearing(a: [number, number], b: [number, number]): number {
   return ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
 }
 
-/** What the side panel shows about a bus. */
+/** What the side panel shows about a trip. */
 export interface BusDetails {
   line: string;
   headsign: string;
-  waiting: boolean;
+  status: TripStatus;
   /** Stops already passed, of `total` */
   passed: number;
   total: number;
-  /** Stops still ahead, the next one first */
-  ahead: { name: string; time: string }[];
+  /** All stops of the trip with their times */
+  stops: { id: string; name: string; time: string; passed: boolean; next: boolean }[];
 }
 
-export function busDetails(index: GtfsIndex, bus: ScheduledBus): BusDetails {
-  const trip = index.trips[bus.trip];
-  const stops = trip.variant.stops;
+export function busDetails(index: GtfsIndex, state: TripState): BusDetails {
+  const trip = index.trips[state.trip];
   return {
-    line: bus.line,
-    headsign: bus.headsign,
-    waiting: bus.waiting,
-    passed: bus.nextIndex,
-    total: stops.length,
-    ahead: stops.slice(bus.nextIndex).map((pos, k) => ({
+    line: trip.variant.line ?? UNKNOWN_LINE,
+    headsign: trip.variant.headsign,
+    status: state.status,
+    passed: state.nextIndex,
+    total: trip.variant.stops.length,
+    stops: trip.variant.stops.map((pos, i) => ({
+      id: index.stopId(pos),
       name: index.stopName(pos),
-      time: clock(trip.times[bus.nextIndex + k] + bus.dayOffset * 1440)
+      time: clock(trip.times[i] + state.dayOffset * 1440),
+      passed: i < state.nextIndex,
+      next: i === state.nextIndex
     }))
   };
 }

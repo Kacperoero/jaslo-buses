@@ -5,6 +5,7 @@ import { of } from 'rxjs';
 import { StopsService } from '../../../core/services/stops.service';
 import { TimetableService } from '../../../core/services/timetable.service';
 import { Stop } from '../../../shared/models/transit.models';
+import { ScheduledBusesService } from '../../vehicles/scheduled-buses.service';
 import { MapMarkerService } from '../services/map-marker.service';
 import { StopPanelComponent } from './stop-panel.component';
 
@@ -19,7 +20,7 @@ describe('StopPanelComponent', () => {
         { provide: TimetableService, useValue: { getDepartures: () => of({
           timestamp: 0, designator: 0, station_name: '', only_disembarking: false,
           directions: { d1: 'Bierówka' },
-          rows: [{ line_name: '3', direction_id: 'd1', time: '08:10', static_time: '08:10', is_estimated: false, minutes_to_departure: 4 }]
+          rows: [{ line_name: '3', direction_id: 'd1', time: '08:10', static_time: '08:10', is_estimated: false, minutes_to_departure: 4, trip: 7, day_offset: 0 }]
         }) } }
       ]
     });
@@ -41,6 +42,10 @@ describe('StopPanelComponent', () => {
     expect(el.querySelector('.dep-line')?.textContent).toBe('3');
     expect(el.querySelector('.dep-direction')?.textContent).toBe('Bierówka');
     expect(el.querySelector('.dep-time')?.textContent?.trim()).toBe('4 min');
+
+    // Clicking a departure selects its trip (shown in the bus panel)
+    (el.querySelector('.departure-row') as HTMLButtonElement).click();
+    expect(TestBed.inject(ScheduledBusesService).selectedKey()).toBe('7@0');
 
     (el.querySelector('.side-panel-close') as HTMLButtonElement).click();
     fixture.detectChanges();

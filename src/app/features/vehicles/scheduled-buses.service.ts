@@ -3,7 +3,7 @@ import { GtfsIndex, GtfsService } from '../../core/services/gtfs.service';
 import { ShapesService } from '../../core/services/shapes.service';
 import { TravelTimeService } from '../../core/services/travel-time.service';
 import { Stop } from '../../shared/models/transit.models';
-import { BusDetails, ScheduledBus, busDetails, busesAt } from './scheduled-buses';
+import { BusDetails, ScheduledBus, TripState, busDetails, busesAt, parseTripKey, tripState } from './scheduled-buses';
 
 const STORAGE_KEY = 'autobusy.scheduledBuses';
 /** How often positions are recalculated while showing "now" */
@@ -26,15 +26,22 @@ export class ScheduledBusesService {
   /** The moment the positions are for */
   readonly at = signal<Date | null>(null);
 
-  /** The clicked bus (its key) – shown in the side panel with its route */
+  /**
+   * The selected trip (key from tripKey()) – a clicked bus or a departure clicked in the stop
+   * panel. Shown in the side panel with its route, also when the bus layer is off.
+   */
   readonly selectedKey = signal<string | null>(null);
-  /** The clicked bus while it still runs (null once it reached its last stop) */
-  readonly selected = computed(() => this.buses().find(b => b.key === this.selectedKey()) ?? null);
+  /** The selected trip now: not started, on its way (with the bus position) or finished */
+  readonly selectedTrip = signal<TripState | null>(null);
+  /** The selected trip's bus while it runs */
+  readonly selected = computed(() => this.selectedTrip()?.bus ?? null);
+  /** Set by select(…, true): the map should show the whole route of this trip */
+  readonly focusKey = signal<string | null>(null);
   /** Side panel contents: rebuilt only when the bus reaches another stop */
   readonly details = computed<BusDetails | null>(() => {
-    const bus = this.selected();
+    const state = this.selectedTrip();
     const index = this.indexLoaded();
-    return bus && index ? busDetails(index, bus) : null;
+    return state && index ? busDetails(index, state) : null;
   }, { equal: (a, b) => JSON.stringify(a) === JSON.stringify(b) });
 
   private readonly indexLoaded = signal<GtfsIndex | null>(null);
@@ -53,25 +60,24 @@ export class ScheduledBusesService {
     });
     effect(() => {
       const enabled = this.enabled();
+      const selected = this.selectedKey() !== null;
       const chosen = this.travelTime.selected();
       this.shapes.loaded(); // road lines arrived: recompute along roads
       untracked(() => {
         this.paths.clear();
         this.stopTimer();
-        if (!enabled) {
-          this.buses.set([]);
-          this.selectedKey.set(null);
-          return;
-        }
         this.refresh();
-        if (!chosen) this.timer = setInterval(() => this.refresh(), REFRESH_MS);
+        if ((enabled || selected) && !chosen) this.timer = setInterval(() => this.refresh(), REFRESH_MS);
       });
     });
     inject(DestroyRef).onDestroy(() => this.stopTimer());
   }
 
-  select(key: string | null): void {
+  /** Selects a trip (null: none); `focus` asks the map to show its whole route. */
+  select(key: string | null, focus = false): void {
     this.selectedKey.set(key);
+    this.focusKey.set(focus ? key : null);
+    this.refresh();
   }
 
   toggle(): void {
@@ -84,12 +90,26 @@ export class ScheduledBusesService {
   }
 
   private refresh(): void {
-    if (!this.index || !this.enabled()) return;
-    if (typeof document !== 'undefined' && document.hidden && this.buses().length) return; // background tab
-    const at = this.travelTime.referenceTime();
     const index = this.index;
+    if (!index) return;
+    const key = this.selectedKey();
+    if (!this.enabled() && !key) {
+      this.buses.set([]);
+      this.selectedTrip.set(null);
+      return;
+    }
+    const background = typeof document !== 'undefined' && document.hidden;
+    if (background && (this.buses().length || this.selectedTrip())) return;
+    const at = this.travelTime.referenceTime();
+    const path = (a: number, b: number) => this.path(index, a, b);
     this.at.set(at);
-    this.buses.set(busesAt(index, at, (a, b) => this.path(index, a, b)));
+    this.buses.set(this.enabled() ? busesAt(index, at, path) : []);
+    if (key) {
+      const { trip, dayOffset } = parseTripKey(key);
+      this.selectedTrip.set(index.trips[trip] ? tripState(index, at, trip, dayOffset, path) : null);
+    } else {
+      this.selectedTrip.set(null);
+    }
   }
 
   private path(index: GtfsIndex, a: number, b: number): [number, number][] {

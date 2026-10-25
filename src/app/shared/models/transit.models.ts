@@ -49,6 +49,10 @@ export interface Departure {
   trip_index?: number;
   /** The trip was cancelled (live departures) */
   canceled?: boolean;
+  /** GTFS index trip number (GtfsIndex.trips) */
+  trip?: number;
+  /** Service day of the trip relative to the requested moment's day: -1 yesterday, 0 today, 1 tomorrow */
+  day_offset?: number;
   /** Bus is standing at the stop right now (live departures) */
   at_stop?: boolean;
 }

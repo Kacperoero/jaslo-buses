@@ -1,19 +1,19 @@
 import { Component, OnDestroy, OnInit, effect, inject, untracked } from '@angular/core';
 import * as L from 'leaflet';
 import { GeolocationService } from '../core/services/geolocation.service';
-import { GtfsService } from '../core/services/gtfs.service';
+import { GtfsIndex, GtfsService } from '../core/services/gtfs.service';
 import { ShapesService } from '../core/services/shapes.service';
 import { StopsService } from '../core/services/stops.service';
 import { MapMarkerService } from '../features/map/services/map-marker.service';
 import { RouteLayerService } from '../features/map/services/route-layer.service';
-import { StopPanelComponent } from '../features/map/stop-panel/stop-panel.component';
+import { SidePanelsComponent } from '../features/map/side-panels/side-panels.component';
 import { PlannerPanelComponent } from '../features/route-planner/planner-panel/planner-panel.component';
 import { PlannerStateService } from '../features/route-planner/planner-state.service';
 import { StopEditorLayerService } from '../features/stop-editor/stop-editor-layer.service';
 import { StopEditorComponent } from '../features/stop-editor/stop-editor.component';
 import { stopEditorEnabled } from '../features/stop-editor/stop-editor.service';
 import { StopSearchComponent } from '../features/stop-search/stop-search.component';
-import { BusPanelComponent } from '../features/vehicles/bus-panel/bus-panel.component';
+import { parseTripKey } from '../features/vehicles/scheduled-buses';
 import { ScheduledBusesService } from '../features/vehicles/scheduled-buses.service';
 import { VehicleLayerService } from '../features/vehicles/vehicle-layer.service';
 import { Stop } from '../shared/models/transit.models';
@@ -29,7 +29,7 @@ const BUS_PANEL_WIDTH_PX = 320;
 @Component({
   selector: 'app-main-map',
   standalone: true,
-  imports: [StopSearchComponent, PlannerPanelComponent, StopEditorComponent, BusPanelComponent, StopPanelComponent],
+  imports: [StopSearchComponent, PlannerPanelComponent, StopEditorComponent, SidePanelsComponent],
   templateUrl: './main-map.component.html',
   styleUrl: './main-map.component.scss'
 })
@@ -49,10 +49,14 @@ export class MainMapComponent implements OnInit, OnDestroy {
   readonly editing = stopEditorEnabled();
 
   private map!: L.Map;
+  private gtfsIndex: GtfsIndex | null = null;
 
   constructor() {
     // Start loading the timetable right away, so the first popup / search doesn't wait
-    this.gtfs.index().subscribe({ error: err => console.error('Failed to load the timetable', err) });
+    this.gtfs.index().subscribe({
+      next: index => (this.gtfsIndex = index),
+      error: err => console.error('Failed to load the timetable', err)
+    });
     this.shapes.load();
 
     // Draw the planner's points A/B and the selected connection
@@ -66,19 +70,16 @@ export class MainMapComponent implements OnInit, OnDestroy {
       this.shapes.loaded(); // redraw along roads once the road lines arrive
       untracked(() => (conn ? this.routeLayer.drawConnection(conn) : this.routeLayer.clearRoute()));
     });
-    // One side panel at a time: a stop or a bus
-    effect(() => {
-      if (this.markers.selectedStopId()) untracked(() => this.buses.select(null));
-    });
-    effect(() => {
-      if (this.buses.selectedKey()) untracked(() => this.markers.selectStop(null));
-    });
-
     // Buses where the timetable says they are
     effect(() => {
       const buses = this.buses.buses();
-      const selected = this.buses.selectedKey();
+      const selected = this.buses.selectedTrip();
       untracked(() => this.vehicleLayer.update(buses, selected));
+    });
+    // A departure clicked in the stop panel: show the trip's whole route
+    effect(() => {
+      const key = this.buses.focusKey();
+      if (key) untracked(() => this.showTripRoute(key));
     });
   }
 
@@ -116,6 +117,20 @@ export class MainMapComponent implements OnInit, OnDestroy {
     const x = this.map.latLngToContainerPoint([bus.lat, bus.lng]).x;
     const panelLeft = size.x - BUS_PANEL_WIDTH_PX - 32;
     if (x > panelLeft - 40) this.map.panBy([x - (panelLeft - 40) + 80, 0]);
+  }
+
+  private showTripRoute(key: string): void {
+    this.buses.focusKey.set(null);
+    const index = this.gtfsIndex;
+    const trip = index?.trips[parseTripKey(key).trip];
+    if (!index || !trip || !this.map) return;
+    const bounds = L.latLngBounds(trip.variant.stops.map(pos => [index.stops[pos][2], index.stops[pos][3]] as L.LatLngTuple));
+    const wide = this.map.getSize().x >= 768;
+    this.map.fitBounds(bounds, {
+      paddingTopLeft: [40, 90],
+      paddingBottomRight: wide ? [BUS_PANEL_WIDTH_PX + 60, 40] : [40, this.map.getSize().y * 0.55 + 20],
+      maxZoom: 16
+    });
   }
 
   /** Flies to a stop picked in the search box and opens its departures. */

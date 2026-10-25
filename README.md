@@ -7,12 +7,12 @@ Dane pochodzą z **oficjalnego rozkładu jazdy MKS Jasło w formacie GTFS** ([mk
 ## Funkcje
 
 - **Mapa przystanków** – Leaflet + kafelki OpenStreetMap, wyśrodkowana na Jaśle; 554 przystanki z GTFS.
-- **Odjazdy z przystanku** – kliknięcie przystanku otwiera panel po prawej (na telefonie u dołu) z najbliższymi odjazdami w ciągu 3 godzin (linia, kierunek, za ile minut / godzina; „za ile minut” odświeża się co 30 s). Panel przystanku i panel autobusu zajmują to samo miejsce – otwarcie jednego zamyka drugi; × albo Esc zamyka.
+- **Odjazdy z przystanku** – kliknięcie przystanku otwiera panel po prawej (na telefonie u dołu) z najbliższymi odjazdami w ciągu 3 godzin (linia, kierunek, za ile minut / godzina; „za ile minut” odświeża się co 30 s). Kliknięcie odjazdu pokazuje ten kurs: trasę na mapie (mapa obejmuje całą trasę), gdzie jest autobus – także przy wyłączonej warstwie autobusów – albo że jeszcze nie wyjechał / skończył kurs. Panele przystanku i kursu mogą być otwarte razem: ostatnio wybrany jest rozwinięty, drugi zwija się do nagłówka (kliknięcie nagłówka przełącza). × zamyka panel, Esc zamyka rozwinięty.
 - **Wyszukiwarka przystanków** – pole w lewym górnym rogu, po wybraniu mapa przelatuje do przystanku.
 - **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Inny termin” przełącza okienka i planer na wybrany dzień i godzinę (do końca ważności rozkładu).
 - **Ulubione i ostatnie** – gwiazdka ☆ w okienku przystanku (ulubione mają na mapie żółtą kropkę). Po kliknięciu w puste pole wyszukiwarki widać ulubione i ostatnio oglądane przystanki. W planerze puste pola A/B podpowiadają ulubione, a pod formularzem jest lista ostatnich tras. Dane są w przeglądarce (`localStorage`); tras z „Moja lokalizacja” nie zapisujemy.
 - **Planer trasy A → B** – punkt startu/celu z listy przystanków, kliknięty na mapie albo z lokalizacji; „Wyjazd o” albo „Na miejscu o”. Do 3 przesiadek, także z przejściem pieszo na inny przystanek. Wybrana trasa jest rysowana na mapie, każdy autobus innym kolorem. Wyszukiwanie trwa kilka–kilkadziesiąt milisekund.
-- **Autobusy wg rozkładu** – przycisk 🚌 w prawym dolnym rogu pokazuje, gdzie autobusy powinny być według rozkładu: teraz (odświeżane co 5 s, płynny ruch) albo o godzinie wybranej w „Teraz / Inny termin”. Plakietka z numerem linii i strzałką kierunku, szara = czeka na odjazd z pierwszego przystanku (do 3 min przed). Kliknięcie autobusu rysuje jego trasę (przejechana część szara, reszta zielona, kropki na przystankach z godziną w podpowiedzi), a w panelu po prawej (na telefonie u dołu) pokazuje przystanki, które jeszcze odwiedzi, z godzinami. Panel zamyka × albo Esc. To nie jest GPS – opóźnień nie widać.
+- **Autobusy wg rozkładu** – przycisk 🚌 w prawym dolnym rogu pokazuje, gdzie autobusy powinny być według rozkładu: teraz (odświeżane co 5 s, płynny ruch) albo o godzinie wybranej w „Teraz / Inny termin”. Plakietka z numerem linii i strzałką kierunku, szara = czeka na odjazd z pierwszego przystanku (do 3 min przed). Kliknięcie autobusu rysuje jego trasę (przejechana część szara, reszta zielona, kropki na przystankach z godziną w podpowiedzi), a w panelu po prawej (na telefonie u dołu) pokazuje wszystkie przystanki kursu z godzinami (minięte wyszarzone, przystanek otwarty w panelu przystanku wyróżniony). Kliknięcie przystanku na liście otwiera jego odjazdy. To nie jest GPS – opóźnień nie widać.
 - **Edytor przystanków** (tryb deweloperski, `?dev`) – przechodzenie po przystankach, kierunki, przesuwanie przystanku i punktów zatrzymania na drodze (patrz „Edytor przystanków”).
 
 ## Wymagania
@@ -113,6 +113,7 @@ src/app/
 │   ├── map/services/
 │   │   ├── map-marker.service.ts        # Znaczniki przystanków, wybrany przystanek
 │   │   ├── stop-panel/                  # Panel wybranego przystanku z odjazdami
+│   │   ├── side-panels/                 # Panele przystanku i kursu po prawej (jeden rozwinięty)
 │   │   └── route-layer.service.ts       # Rysowanie punktów A/B i wybranego połączenia
 │   └── route-planner/
 │       ├── raptor.ts                    # Algorytm RAPTOR (sieć, rundy, odtwarzanie trasy)

@@ -18,3 +18,25 @@
 .badge-warn {
   align-self: flex-start;
 }
+
+button.departure-row {
+  width: 100%;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  &.selected {
+    background: #ecfdf5;
+    box-shadow: inset 3px 0 0 #10b981;
+  }
+
+  &:disabled { cursor: default; }
+}
+
+.hint {
+  margin: 0;
+  font-size: 11px;
+  color: #94a3b8;
+}

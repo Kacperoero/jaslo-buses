@@ -62,7 +62,7 @@ export function departures(index: GtfsIndex, stopId: string, at: Date, lines?: I
 
   const wanted = lines ? new Set(lines) : null;
   const nowMin = at.getHours() * 60 + at.getMinutes();
-  const found: { rel: number; trip: number; pos: number; minute: number }[] = [];
+  const found: { rel: number; trip: number; pos: number; minute: number; dayOffset: number }[] = [];
 
   // Trips of yesterday (running past midnight), today and tomorrow (when the window passes midnight)
   for (const dayOffset of [-1, 0, 1]) {
@@ -74,7 +74,7 @@ export function departures(index: GtfsIndex, stopId: string, at: Date, lines?: I
       if (call.pos === trip.times.length - 1) continue; // last stop – the bus only arrives here
       if (wanted && !wanted.has(lineOf(trip.variant.line))) continue;
       if (!index.runsOn(trip.service, day)) continue;
-      found.push({ rel, trip: call.trip, pos: call.pos, minute: call.minute });
+      found.push({ rel, trip: call.trip, pos: call.pos, minute: call.minute, dayOffset });
     }
   }
   found.sort((a, b) => a.rel - b.rel);
@@ -90,7 +90,9 @@ export function departures(index: GtfsIndex, stopId: string, at: Date, lines?: I
       direction: variant.headsign,
       is_estimated: false,
       trip_execution_id: `${TRIP_PREFIX}${f.trip}:${f.pos}`,
-      trip_index: f.pos
+      trip_index: f.pos,
+      trip: f.trip,
+      day_offset: f.dayOffset
     };
   });
 

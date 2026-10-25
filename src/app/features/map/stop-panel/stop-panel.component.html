@@ -1,18 +1,21 @@
 @if (stop(); as stop) {
-  <aside class="side-panel stop-panel" aria-label="Wybrany przystanek">
-    <header class="side-panel-header">
+  <aside class="side-panel stop-panel" [class.collapsed]="collapsed()" aria-label="Wybrany przystanek">
+    <header class="side-panel-header" (click)="onHeaderClick()" [attr.role]="collapsed() ? 'button' : null"
+            [attr.title]="collapsed() ? 'Rozwiń' : null">
       <span class="stop-icon" aria-hidden="true">🚏</span>
       <div class="title">
         <strong>{{ stop.name }}</strong>
         @if (direction()) { <span>{{ direction() }}</span> }
         @if (stop.onlyDisembarking) { <span class="badge-warn">Tylko wysiadanie</span> }
       </div>
-      <button type="button" class="popup-fav" [class.active]="favorite()" (click)="toggleFavorite()"
+      <button type="button" class="popup-fav" [class.active]="favorite()" (click)="toggleFavoriteClick($event)"
               [attr.aria-pressed]="favorite()" [title]="favorite() ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'">
         {{ favorite() ? '★' : '☆' }}
       </button>
-      <button type="button" class="side-panel-close" (click)="close()" aria-label="Zamknij">×</button>
+      <button type="button" class="side-panel-close" (click)="close($event)" aria-label="Zamknij">×</button>
     </header>
+
+    @if (!collapsed()) {
 
     <div class="popup-schedule-note">🕒
       @if (travelTime.isScheduled()) { Rozkład: {{ travelTime.label() }} } @else { Według rozkładu jazdy (bez opóźnień) }
@@ -30,16 +33,22 @@
       } @else {
         <div class="departures">
           @for (row of rows(); track $index) {
-            <div class="departure-row" [class.canceled]="row.canceled">
+            <button type="button" class="departure-row" [class.canceled]="row.canceled"
+                    [class.selected]="row.key && row.key === buses.selectedKey()" [disabled]="!row.key"
+                    (click)="showTrip(row)" title="Pokaż trasę i gdzie jest autobus">
               <span class="dep-line">{{ row.line }}</span>
               <span class="dep-direction">{{ row.direction }}</span>
               <span class="dep-time">{{ row.time }}@if (row.canceled) {<span class="badge-canceled">ODWOŁANY</span>}</span>
-            </div>
+            </button>
           }
         </div>
       }
     } @else {
       <div class="popup-loading"><div class="loading-spinner"></div><span>Ładowanie odjazdów…</span></div>
+    }
+    @if (state() === 'ready' && rows().length) {
+      <p class="hint">Kliknij odjazd, żeby zobaczyć trasę i gdzie jest autobus.</p>
+    }
     }
   </aside>
 }

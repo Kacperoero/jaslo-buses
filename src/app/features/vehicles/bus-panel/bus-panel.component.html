@@ -1,28 +1,35 @@
 @if (buses.details(); as bus) {
-  <aside class="side-panel" aria-label="Wybrany autobus">
-    <header class="side-panel-header">
-      <span class="badge" [class.waiting]="bus.waiting">{{ bus.line }}</span>
+  <aside class="side-panel" [class.collapsed]="collapsed()" aria-label="Wybrany kurs">
+    <header class="side-panel-header" (click)="onHeaderClick()" [attr.role]="collapsed() ? 'button' : null"
+            [attr.title]="collapsed() ? 'Rozwiń' : null">
+      <span class="badge" [class.waiting]="bus.status !== 'running'">{{ bus.line }}</span>
       <div class="title">
         <strong>Linia {{ bus.line }}</strong>
         <span>→ {{ bus.headsign }}</span>
       </div>
-      <button type="button" class="side-panel-close" (click)="close()" aria-label="Zamknij">×</button>
+      <button type="button" class="side-panel-close" (click)="close($event)" aria-label="Zamknij">×</button>
     </header>
 
-    <p class="status">
-      {{ bus.waiting ? 'Czeka na odjazd' : 'Następne przystanki' }}
-      @if (bus.passed > 0) { <span class="passed">· minął {{ bus.passed }} z {{ bus.total }}</span> }
-    </p>
+    @if (!collapsed()) {
+      <p class="status">
+        @switch (bus.status) {
+          @case ('before') { Jeszcze nie wyjechał – odjazd z {{ bus.stops[0].name }} o {{ bus.stops[0].time }} }
+          @case ('waiting') { Czeka na odjazd o {{ bus.stops[0].time }} }
+          @case ('running') { W drodze <span class="passed">· minął {{ bus.passed }} z {{ bus.total }} przystanków</span> }
+          @case ('after') { Kurs zakończony }
+        }
+      </p>
 
-    <ol class="stops">
-      @for (stop of bus.ahead; track $index; let first = $first) {
-        <li [class.next]="first">
-          <span class="time">{{ stop.time }}</span>
-          <span class="name">{{ stop.name }}</span>
-        </li>
-      }
-    </ol>
+      <ol class="stops">
+        @for (stop of bus.stops; track $index) {
+          <li [class.passed]="stop.passed" [class.next]="stop.next" [class.here]="stop.id === hereId()">
+            <span class="time">{{ stop.time }}</span>
+            <button type="button" class="name" (click)="showStop(stop.id, $event)" title="Pokaż odjazdy z tego przystanku">{{ stop.name }}</button>
+          </li>
+        }
+      </ol>
 
-    <p class="note">Położenie według rozkładu jazdy, nie GPS – autobus może być opóźniony.</p>
+      <p class="note">Położenie według rozkładu jazdy, nie GPS – autobus może być opóźniony.</p>
+    }
   </aside>
 }

@@ -4,7 +4,7 @@ import { GtfsIndex, GtfsService } from '../../core/services/gtfs.service';
 import { ShapesService } from '../../core/services/shapes.service';
 import { Stop } from '../../shared/models/transit.models';
 import { escapeHtml } from '../../shared/utils/text.utils';
-import { ScheduledBus, clock } from './scheduled-buses';
+import { ScheduledBus, TripState, clock } from './scheduled-buses';
 
 const AHEAD_COLOR = '#10b981';
 const PASSED_COLOR = '#94a3b8';
@@ -52,13 +52,16 @@ export class VehicleLayerService {
   /** Called with the key of a clicked bus */
   onSelect: (key: string) => void = () => {};
 
-  /** Moves the buses; draws the route of the selected one (`selectedKey`). */
-  update(buses: ScheduledBus[], selectedKey: string | null): void {
+  /**
+   * Moves the buses and draws the selected trip's route. The selected trip's bus is shown also
+   * when it isn't among `buses` (the layer is off).
+   */
+  update(buses: ScheduledBus[], selectedTrip: TripState | null): void {
     const seen = new Set<string>();
-    let selected: ScheduledBus | null = null;
-    for (const bus of buses) {
+    const selectedKey = selectedTrip?.key ?? null;
+    const all = selectedTrip?.bus && !buses.some(b => b.key === selectedKey) ? [...buses, selectedTrip.bus] : buses;
+    for (const bus of all) {
       seen.add(bus.key);
-      if (bus.key === selectedKey) selected = bus;
       let marker = this.markers.get(bus.key);
       if (!marker) {
         marker = L.marker([bus.lat, bus.lng], { zIndexOffset: 2000, keyboard: false })
@@ -87,12 +90,12 @@ export class VehicleLayerService {
       this.looks.delete(key);
     }
 
-    if (!selected) this.clearRoute();
-    else if (this.selected?.key !== selected.key || this.selected.nextIndex !== selected.nextIndex) this.drawRoute(selected);
+    if (!selectedTrip) this.clearRoute();
+    else if (this.selected?.key !== selectedTrip.key || this.selected.nextIndex !== selectedTrip.nextIndex) this.drawRoute(selectedTrip);
   }
 
-  /** The bus's whole route: the part already driven in grey, the rest in green, with its stops. */
-  private drawRoute(bus: ScheduledBus): void {
+  /** The trip's whole route: the part already driven in grey, the rest in green, with its stops. */
+  private drawRoute(bus: TripState): void {
     this.routeLayer.clearLayers();
     this.selected = { key: bus.key, nextIndex: bus.nextIndex };
     const index = this.index;
