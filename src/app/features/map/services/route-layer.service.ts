@@ -1,22 +1,27 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import * as L from 'leaflet';
+import { ShapesService } from '../../../core/services/shapes.service';
 import { Stop } from '../../../shared/models/transit.models';
 import { escapeHtml } from '../../../shared/utils/text.utils';
 import { Connection, ConnectionPoint, rides } from '../../route-planner/route-planner.models';
 
 const WALK_STYLE: L.PolylineOptions = { color: '#f43f5e', weight: 5, dashArray: '5, 10', opacity: 0.85 };
+/** Width of the planner panel on wide screens (.planner-sidebar max-width) */
+const PANEL_WIDTH_PX = 440;
 /** Colours of the 1st, 2nd, 3rd… ride */
 const LEG_COLORS = ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b'];
 
 /**
  * Draws the planner on the map: points A/B and the selected connection – walks as dashed
- * straight lines, bus rides through the stops they pass (each ride in its own colour), dots
- * at intermediate stops and markers where to change. No external routing service is used.
+ * straight lines, bus rides along the roads between the stops they pass (precomputed in
+ * shapes.json, each ride in its own colour), dots at intermediate stops and markers where to
+ * change. No external routing service is used.
  */
 @Injectable({
   providedIn: 'root'
 })
 export class RouteLayerService {
+  private shapes = inject(ShapesService);
   private map: L.Map | null = null;
   private readonly pointsLayer = L.layerGroup();
   private readonly routeLayer = L.layerGroup();
@@ -59,7 +64,7 @@ export class RouteLayerService {
         continue;
       }
       const color = LEG_COLORS[rideNo++ % LEG_COLORS.length];
-      const path = leg.stops.map(st => [st.lat, st.lng] as L.LatLngTuple);
+      const path = this.shapes.path(leg.stops) as L.LatLngTuple[]; // along roads where known
       L.polyline(path, { color, weight: 7, opacity: 0.95 })
         .bindPopup(`🚌 Linia ${escapeHtml(leg.line)}: ${leg.departure} ${escapeHtml(leg.from.name)} → ${leg.arrival} ${escapeHtml(leg.to.name)}`)
         .addTo(this.routeLayer);
@@ -80,7 +85,11 @@ export class RouteLayerService {
       else if (rideLegs[i + 1].from.id !== ride.to.id) this.stopMarker(ride.to, 'planned-transfer', 'Przesiadka').addTo(this.routeLayer);
     });
 
-    if (all.length) this.map.fitBounds(L.latLngBounds(all), { padding: [40, 40] });
+    if (all.length) {
+      // On wide screens the planner panel covers the left 440 px of the map – keep the route clear of it
+      const left = window.innerWidth >= 768 ? PANEL_WIDTH_PX + 40 : 40;
+      this.map.fitBounds(L.latLngBounds(all), { paddingTopLeft: [left, 40], paddingBottomRight: [40, 40] });
+    }
   }
 
   private stopMarker(stop: Stop, cssClass: string, label: string): L.Marker {

@@ -40,6 +40,7 @@ Aplikacja wystartuje pod `http://localhost:4200/` i przeładuje się sama po ka�
 | `npm test` | Testy jednostkowe (Vitest) |
 | `npm run gtfs:build -- --download` | Pobiera aktualny GTFS ze strony MKS i przebudowuje dane aplikacji |
 | `npm run gtfs:build -- --zip plik.zip` | To samo z lokalnego pliku GTFS |
+| `npm run gtfs:shapes` | Przelicza przebiegi autobusów po drogach (z zapisanej sieci dróg OSM; `-- --refresh` pobiera ją od nowa) |
 
 ## Wdrożenie produkcyjne
 
@@ -56,8 +57,22 @@ MKS publikuje plik GTFS z rozkładem (obecnie `GTFS_1389_20260312125003.zip`, wa
 | `gtfs.json` (~86 KB, ~17 KB po kompresji) | przystanki, warianty tras z numerami linii, kursy (godziny), kalendarz kursowania |
 | `stops-base.json` | przystanki dla mapy |
 | `legacy-stop-ids.json` | stare identyfikatory przystanków (kiedyprzyjedzie) → nowe, do przeniesienia zapisanych ulubionych |
+| `shapes.json` (~52 KB) | przebiegi po drogach między kolejnymi przystankami (patrz „Przebiegi po drogach”) |
 
 Pliki są w repozytorium, więc aplikacja działa bez uruchamiania skryptu. Po nowym rozkładzie MKS: `npm run gtfs:build -- --download`, a potem sprawdzić numery linii (niżej).
+
+### Przebiegi po drogach
+
+GTFS od MKS nie ma pliku `shapes.txt`, więc przebieg autobusu po ulicach liczy skrypt `scripts/gtfs/build-shapes.mjs`, raz przy budowaniu danych – aplikacja nie pyta żadnego serwera o trasy:
+
+1. Sieć dróg z OpenStreetMap – jedno zapytanie do Overpass API o drogi przejezdne dla autobusu w obszarze przystanków (+1 km). Wynik (~16 MB) ląduje w `scripts/gtfs/.cache/` (poza gitem) i jest używany przy kolejnych uruchomieniach.
+2. Każdy przystanek jest dopasowany do najbliższego punktu na drodze (do 150 m; większe drogi mają lekką przewagę).
+3. Dla każdej pary kolejnych przystanków, między którymi jeździ autobus (848 par), liczona jest najkrótsza droga (A*, z jednokierunkowymi ulicami; drogi serwisowe tylko gdy trzeba). Gdy wychodzi podejrzanie długa (> 3× linia prosta i > 1 km dłużej), zostaje odcinek prosty.
+4. Linie są upraszczane (tolerancja 4 m) i zapisywane jako zakodowane polilinie.
+
+Obecnie po drogach idzie 844 z 848 par. Raport (`scripts/gtfs/shapes-report.json`) wymienia pary z odcinkiem prostym i przystanki daleko od drogi – przydatne przy poprawianiu położenia przystanków. Po zmianie rozkładu albo poprawkach przystanków: `npm run gtfs:shapes`.
+
+**Licencja:** dane drogowe © współtwórcy OpenStreetMap, licencja [ODbL](https://opendatacommons.org/licenses/odbl/). `shapes.json` jest z nich wyprowadzony – przy publikacji aplikacja musi pokazywać atrybucję OSM (mapa już ją ma) i udostępniać ten plik na tej samej licencji.
 
 ### Numery linii
 
@@ -112,6 +127,7 @@ Stan planera trzyma `PlannerStateService`; komponenty panelu tylko go wyświetla
 ```
 scripts/gtfs/
 ├── build-gtfs.mjs                       # GTFS → public/assets/data (Node, bez zależności)
+├── build-shapes.mjs                     # Przebiegi po drogach z OSM → shapes.json
 ├── assign_lines.py                      # Numery linii z PDF → line-assignments.json
 ├── line-rules.json                      # Kierunki i trasy linii (z PDF)
 ├── line-assignments.json                # Wynik assign_lines.py
@@ -132,7 +148,7 @@ Planer używa algorytmu **RAPTOR** (Round-bAsed Public Transit Optimized Router,
 
 Dojście liczone jest jako 80 m/min w linii prostej. Kursy po północy są uwzględniane (rozkład z poprzedniego i następnego dnia). Jedno wyszukiwanie trwa zwykle kilka–kilkadziesiąt milisekund.
 
-**Rysowanie trasy na mapie** nie korzysta z żadnego zewnętrznego serwera: przejazd autobusu to linia przez kolejne przystanki kursu z rozkładu (z kropkami na przystankach pośrednich), a dojście pieszo – przerywana linia prosta. Między przystankami odcinki są proste, więc w centrum linia czasem przecina kwartały zamiast iść ulicą.
+**Rysowanie trasy na mapie** nie korzysta z żadnego zewnętrznego serwera: przejazd autobusu idzie po drogach między kolejnymi przystankami kursu (z `shapes.json`, kropki na przystankach pośrednich, każdy autobus innym kolorem), a dojście pieszo to przerywana linia prosta.
 
 ## Poprawianie pozycji przystanków
 
@@ -148,7 +164,7 @@ Uwaga: `npm run gtfs:build` nadpisuje `stops-base.json` i `gtfs.json`, więc pop
 - Brak danych na żywo (opóźnień, pozycji autobusów) – MKS udostępnia je tylko przez płatny system kiedyprzyjedzie, bez publicznego API dla innych. Warstwa „Autobusy na żywo” była zrobiona na tym API i została usunięta; jej kod jest w historii git (commit `b790d54`), gdyby pojawiło się legalne źródło.
 - Numery linii są przypisane heurystycznie (patrz „Numery linii”).
 - Jedyne zewnętrzne zasoby to kafelki mapy OpenStreetMap i czcionka Google Fonts. Kafelki OSM mają [zasady użycia](https://operations.osmfoundation.org/policies/tiles/) – przy publikacji z większym ruchem warto przejść na własnego lub płatnego dostawcę kafelków.
-- Trasa autobusu jest rysowana prostymi odcinkami między przystankami, nie po ulicach. Dokładny kształt dałby plik `shapes.txt` w GTFS (MKS go nie publikuje) albo własny serwer wyznaczania tras.
+- Przebieg po drogach to najkrótsza droga między przystankami według OSM – tam, gdzie autobus jedzie dłuższą trasą (np. objazd, zakaz skrętu, którego nie ma w OSM), linia na mapie może się różnić od prawdziwej. Dojście pieszo nadal liczone jest w linii prostej.
 
 ## Do zrobienia
 

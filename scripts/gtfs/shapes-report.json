@@ -1,0 +1,21 @@
+{
+ "farFromRoad": [
+  {
+   "id": "13890062",
+   "name": "OSOBNICA 4 IMIELNA"
+  }
+ ],
+ "straightPairs": [
+  {
+   "from": "JASŁO,ul.TOWAROWA III",
+   "to": "JASŁO,ul.FLORIAŃSKA skrz. Żniw",
+   "reason": "detour 2234 m vs 601 m"
+  },
+  {
+   "from": "JASŁO,ul.FLORIAŃSKA skrz. Żniw",
+   "to": "JASŁO,ul.TOWAROWA III",
+   "reason": "detour 2279 m vs 616 m"
+  }
+ ],
+ "snappedFarStops": []
+}

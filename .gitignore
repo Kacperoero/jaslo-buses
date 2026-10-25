@@ -43,3 +43,6 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 todo.txt
+
+# Downloaded OpenStreetMap road data (scripts/gtfs/build-shapes.mjs)
+/scripts/gtfs/.cache/

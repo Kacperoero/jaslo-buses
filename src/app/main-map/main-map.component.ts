@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, effect, inject, untracked } from '@angula
 import * as L from 'leaflet';
 import { GeolocationService } from '../core/services/geolocation.service';
 import { GtfsService } from '../core/services/gtfs.service';
+import { ShapesService } from '../core/services/shapes.service';
 import { StopsService } from '../core/services/stops.service';
 import { MapMarkerService } from '../features/map/services/map-marker.service';
 import { RouteLayerService } from '../features/map/services/route-layer.service';
@@ -30,12 +31,14 @@ export class MainMapComponent implements OnInit, OnDestroy {
   private routeLayer = inject(RouteLayerService);
   private geolocation = inject(GeolocationService);
   private gtfs = inject(GtfsService);
+  private shapes = inject(ShapesService);
 
   private map!: L.Map;
 
   constructor() {
     // Start loading the timetable right away, so the first popup / search doesn't wait
     this.gtfs.index().subscribe({ error: err => console.error('Failed to load the timetable', err) });
+    this.shapes.load();
 
     // Draw the planner's points A/B and the selected connection
     effect(() => {
@@ -45,6 +48,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
     });
     effect(() => {
       const conn = this.planner.selected();
+      this.shapes.loaded(); // redraw along roads once the road lines arrive
       untracked(() => (conn ? this.routeLayer.drawConnection(conn) : this.routeLayer.clearRoute()));
     });
   }
