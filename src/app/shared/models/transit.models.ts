@@ -16,6 +16,8 @@ export interface Stop {
   directions?: 1 | 2;
   /** One-direction stops: the next stop buses usually go to from here */
   towards?: string;
+  /** Only when a manual correction (scripts/gtfs/stop-overrides.json) changed `directions`: what the timetable says */
+  timetableDirections?: 1 | 2;
 }
 
 /**

@@ -1,9 +1,12 @@
-@if (planner.open()) {
+@if (editing) {
+  <app-stop-editor />
+} @else if (planner.open()) {
   <app-planner-panel />
 } @else {
   <app-stop-search (stopSelected)="showStop($event)" />
 }
 
+@if (!editing) {
 <button type="button" class="route-planner-toggle" (click)="planner.toggle()" [class.active]="planner.open()"
         [attr.aria-pressed]="planner.open()" aria-label="Planer trasy" id="planner-toggle-btn">
   @if (planner.open()) {
@@ -19,6 +22,7 @@
     <span>Planer Trasy A → B</span>
   }
 </button>
+}
 
 <button type="button" class="locate-btn" (click)="locateUser()" aria-label="Pokaż moją lokalizację" id="locate-me-btn">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" aria-hidden="true">

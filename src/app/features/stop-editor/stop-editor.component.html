@@ -1,0 +1,68 @@
+<div class="editor-overlay">
+  <section class="editor-panel" aria-label="Edytor przystanków">
+    <header>
+      <strong>Edytor przystanków</strong>
+      <span class="progress">sprawdzone {{ editor.checkedCount() }} / {{ editor.ordered().length }}</span>
+    </header>
+
+    <div class="filters" role="group" aria-label="Które przystanki">
+      @for (f of filters; track f.value) {
+        <button type="button" [class.active]="editor.filter() === f.value" (click)="editor.setFilter(f.value)">{{ f.label }}</button>
+      }
+    </div>
+
+    @if (editor.current(); as stop) {
+      <div class="nav">
+        <button type="button" (click)="editor.prev()" aria-label="Poprzedni przystanek" title="Poprzedni (←)">‹</button>
+        <span>{{ editor.position() + 1 }} / {{ editor.list().length }}</span>
+        <button type="button" (click)="editor.next()" aria-label="Następny przystanek" title="Następny (→)">›</button>
+      </div>
+
+      <h2>{{ stop.name }}</h2>
+      <p class="meta">
+        {{ stop.id }} · z rozkładu:
+        {{ timetableDirections(stop) === 2 ? 'oba kierunki' : 'jeden kierunek' }}
+        @if (stop.towards && timetableDirections(stop) === 1) { (→ {{ short(stop.towards) }}) }
+        @if (editor.entries()[stop.id]) { · <span class="checked">✓ sprawdzony</span> }
+      </p>
+
+      <div class="choice" role="group" aria-label="Kierunki">
+        <button type="button" [class.active]="editor.currentDirections() === 1" (click)="editor.setDirections(1)" title="Klawisz 1">
+          → jeden kierunek
+          <small>staje po jednej stronie drogi</small>
+        </button>
+        <button type="button" [class.active]="editor.currentDirections() === 2" (click)="editor.setDirections(2)" title="Klawisz 2">
+          ↔ oba kierunki
+          <small>staje po obu stronach</small>
+        </button>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="primary" (click)="editor.confirmAndNext()">Zatwierdź i dalej <kbd>Enter</kbd></button>
+        @if (editor.local()[stop.id]) {
+          <button type="button" class="link" (click)="editor.undoCurrent()">cofnij</button>
+        }
+      </div>
+
+      <p class="legend">
+        <span class="arrow">▲</span> czerwony punkt zatrzymania na drodze (kierunek jazdy) ·
+        <span class="line arriving"></span> dojazd · <span class="line leaving"></span> odjazd
+        <br>Mapa pokazuje stan z ostatniego <code>npm run gtfs:stops</code>.
+      </p>
+    } @else {
+      <p class="meta">Brak przystanków dla tego filtra.</p>
+    }
+
+    <footer>
+      @if (editor.pendingCount()) {
+        <p><strong>{{ editor.pendingCount() }}</strong> zmian do zapisania.</p>
+      }
+      <div class="actions">
+        <button type="button" (click)="download()">Pobierz stop-overrides.json</button>
+        <button type="button" (click)="copy()">{{ copied() ? 'Skopiowano' : 'Kopiuj JSON' }}</button>
+      </div>
+      <p class="hint">Potem: <code>npm run gtfs:stops -- --import ~/Pobrane/stop-overrides.json</code></p>
+      <p class="hint">Klawisze: ← → poprzedni / następny · 1 / 2 kierunki · Enter zatwierdź i dalej. Kliknięcie przystanku na mapie też go wybiera.</p>
+    </footer>
+  </section>
+</div>

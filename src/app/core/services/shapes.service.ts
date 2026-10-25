@@ -30,6 +30,7 @@ export class ShapesService {
   private http = inject(HttpClient);
   private encoded: Record<string, string> = {};
   private decoded = new Map<string, [number, number][]>();
+  private points: NonNullable<ShapesFile['roadPoints']> = {};
 
   /** Becomes true once the lines are loaded – drawings can then be redone along roads */
   readonly loaded = signal(false);
@@ -38,6 +39,7 @@ export class ShapesService {
     this.http.get<ShapesFile>('assets/data/shapes.json').subscribe({
       next: file => {
         this.encoded = file.shapes ?? {};
+        this.points = file.roadPoints ?? {};
         this.decoded.clear();
         this.loaded.set(true);
       },
@@ -74,6 +76,20 @@ export class ShapesService {
     const parts = this.parts(stops);
     if (parts.length === 0) return [[stops[0].lat, stops[0].lng]];
     return [parts[0].points[0], ...parts.flatMap(p => p.points.slice(1))];
+  }
+
+  /** Where buses stop on the road at a stop: one point per direction, with the travel bearing. */
+  roadPoints(stopId: string): { lat: number; lng: number; bearing: number | null }[] {
+    return (this.points[stopId] ?? []).map(([lat, lng, bearing]) => ({ lat, lng, bearing }));
+  }
+
+  /** Road lines arriving at (`to` = the stop) and leaving (`from` = the stop) a stop. */
+  linesAt(stopId: string): { from: string; to: string; points: [number, number][] }[] {
+    return Object.keys(this.encoded).flatMap(key => {
+      const [from, to] = key.split('>');
+      if (from !== stopId && to !== stopId) return [];
+      return [{ from, to, points: this.between(from, to)! }];
+    });
   }
 
   private between(from: string, to: string): [number, number][] | null {

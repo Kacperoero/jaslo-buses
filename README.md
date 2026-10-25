@@ -40,6 +40,7 @@ Aplikacja wystartuje pod `http://localhost:4200/` i przeładuje się sama po ka�
 | `npm test` | Testy jednostkowe (Vitest) |
 | `npm run gtfs:build -- --download` | Pobiera aktualny GTFS ze strony MKS i przebudowuje dane aplikacji |
 | `npm run gtfs:build -- --zip plik.zip` | To samo z lokalnego pliku GTFS |
+| `npm run gtfs:stops` | Nakłada ręczne poprawki przystanków (`scripts/gtfs/stop-overrides.json`) na `stops-base.json` i przelicza przebiegi; `-- --import <plik>` najpierw kopiuje plik wyeksportowany z edytora |
 | `npm run gtfs:shapes` | Przelicza przebiegi autobusów po drogach (z zapisanej sieci dróg OSM; `-- --refresh` pobiera ją od nowa) |
 
 ## Wdrożenie produkcyjne
@@ -128,6 +129,8 @@ Stan planera trzyma `PlannerStateService`; komponenty panelu tylko go wyświetla
 ```
 scripts/gtfs/
 ├── build-gtfs.mjs                       # GTFS → public/assets/data (Node, bez zależności)
+├── build-stops.mjs                      # stops-base.json (kierunki przystanków + ręczne poprawki)
+├── stop-overrides.json / .mjs           # Ręczne poprawki przystanków z edytora (?dev)
 ├── build-shapes.mjs                     # Przebiegi po drogach z OSM → shapes.json
 ├── assign_lines.py                      # Numery linii z PDF → line-assignments.json
 ├── line-rules.json                      # Kierunki i trasy linii (z PDF)
@@ -151,14 +154,24 @@ Dojście liczone jest jako 80 m/min w linii prostej. Kursy po północy są uwzg
 
 **Rysowanie trasy na mapie** nie korzysta z żadnego zewnętrznego serwera: przejazd autobusu idzie po drogach między kolejnymi przystankami kursu (z `shapes.json`, kropki na przystankach pośrednich, każdy autobus innym kolorem), a dojście pieszo to przerywana linia prosta.
 
-## Poprawianie pozycji przystanków
+## Edytor przystanków (tryb deweloperski)
 
-1. W `map-marker.service.ts` ustaw `devMode = true`.
-2. Przeciągnij znacznik w miejsce, gdzie faktycznie stoi wiata.
-3. Skopiuj obiekt JSON z konsoli przeglądarki.
-4. Przywróć `devMode = false`.
+Otwórz aplikację z `?dev` (np. `http://localhost:4200/?dev`). Zamiast wyszukiwarki pojawia się panel, w którym przechodzi się po kolejnych przystankach (alfabetycznie, słupki o tej samej nazwie obok siebie) i zaznacza, czy autobusy stają tam **w jednym kierunku** (po jednej stronie drogi) czy **w obu**. Na mapie widać:
 
-Uwaga: `npm run gtfs:build` nadpisuje `stops-base.json` i `gtfs.json`, więc poprawek nie wpisuj na razie bezpośrednio do tych plików – patrz „Do zrobienia → 2”.
+- czerwone punkty ze strzałką – gdzie autobus staje na drodze i w którą stronę jedzie (jeden punkt na kierunek),
+- linie dojazdu (pomarańczowe) i odjazdu (zielone) z sąsiednich przystanków.
+
+Klawisze: ← → poprzedni / następny, 1 / 2 – liczba kierunków, Enter – zatwierdź i dalej. Kliknięcie przystanku na mapie też go wybiera. Filtry: niesprawdzone / zmienione względem rozkładu / wszystkie.
+
+Postęp zapisuje się w przeglądarce. Żeby trafił do danych:
+
+1. „Pobierz stop-overrides.json” w panelu.
+2. `npm run gtfs:stops -- --import ~/Pobrane/stop-overrides.json` – kopiuje plik do `scripts/gtfs/`, przelicza `stops-base.json` i przebiegi po drogach.
+3. Commit `scripts/gtfs/stop-overrides.json` razem z danymi.
+
+`stop-overrides.json` zawiera każdy sprawdzony przystanek (`{ "name", "directions" }`), więc jest też zapisem postępu. Przystanek oznaczony jako jednokierunkowy dostaje jeden punkt na drodze dla wszystkich autobusów. Wpisy są dopasowywane po id i nazwie, a gdy nowy GTFS zmieni numerację, po nazwie i położeniu. Poprawki przetrwają `npm run gtfs:build`. Plik jest serwowany tylko przez serwer deweloperski (`assets/dev/`).
+
+Przesuwanie samego położenia przystanku nie jest jeszcze w edytorze (stary sposób: `devMode = true` w `MapMarkerService`, przeciąganie znacznika, JSON w konsoli).
 
 ## Znane ograniczenia
 
@@ -183,7 +196,7 @@ Na przystankach pośrednich (3 Maja 01) ok. 20% godzin różniło się od danych
 Część przystanków ma współrzędne nie tam, gdzie faktycznie stoi wiata (np. po złej stronie drogi albo kilkadziesiąt metrów obok), przez co planer czasem pokazuje złe miejsce wsiadania lub wysiadania. To współrzędne z GTFS (MKS), więc nowe wersje pliku tego same nie naprawią.
 
 - Poprawki trzymać w osobnym pliku (np. `scripts/gtfs/stop-overrides.json`), który `build-gtfs.mjs` nakłada na dane – żeby aktualizacja GTFS ich nie nadpisywała. Klucz: nazwa przystanku + przybliżone położenie (identyfikatory mogą się zmieniać między wersjami GTFS).
-- Narzędziem jest tryb przeciągania znaczników (`devMode` w `MapMarkerService`) – do rozbudowy o zapis poprawek do pliku zamiast do konsoli.
+- Kierunki przystanków poprawia się już w edytorze (`?dev`, patrz „Edytor przystanków”) do `scripts/gtfs/stop-overrides.json`. Do zrobienia: przesuwanie położenia przystanku i punktów na drodze w tym samym edytorze, zapisywane do tego pliku.
 - Weryfikacja: porównanie z mapą OSM (wiaty / `highway=bus_stop`) lub objazd w terenie.
 
 ### 3. Pozostałe

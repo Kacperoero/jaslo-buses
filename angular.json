@@ -52,7 +52,18 @@
             "development": {
               "optimization": false,
               "extractLicenses": false,
-              "sourceMap": true
+              "sourceMap": true,
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "public"
+                },
+                {
+                  "glob": "stop-overrides.json",
+                  "input": "scripts/gtfs",
+                  "output": "assets/dev"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"

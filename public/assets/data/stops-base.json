@@ -2406,7 +2406,8 @@
     "lat": 49.779827,
     "lng": 21.597783,
     "onlyDisembarking": false,
-    "directions": 1
+    "directions": 1,
+    "towards": "NIEPLA Podlas 1"
   },
   {
     "id": "13890151",
@@ -3091,7 +3092,8 @@
     "lat": 49.668788,
     "lng": 21.584354,
     "onlyDisembarking": false,
-    "directions": 1
+    "directions": 1,
+    "towards": "ŁUBNO OPACE Cmentarz"
   },
   {
     "id": "13890168",
@@ -3178,7 +3180,8 @@
     "lat": 49.773337,
     "lng": 21.581992,
     "onlyDisembarking": false,
-    "directions": 1
+    "directions": 1,
+    "towards": "BIERÓWKA II Podlas"
   },
   {
     "id": "13890071",

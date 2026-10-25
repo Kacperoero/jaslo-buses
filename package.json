@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "gtfs:build": "node scripts/gtfs/build-gtfs.mjs",
-    "gtfs:shapes": "node scripts/gtfs/build-shapes.mjs"
+    "gtfs:shapes": "node scripts/gtfs/build-shapes.mjs",
+    "gtfs:stops": "node scripts/gtfs/build-stops.mjs"
   },
   "private": true,
   "packageManager": "npm@11.11.0",

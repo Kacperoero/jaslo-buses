@@ -23,6 +23,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { angleDiff, bearing, nearestGroup, stopDirections } from './stop-directions.mjs';
+import { stopOverrides, withOverride } from './stop-overrides.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..', '..');
@@ -142,7 +143,9 @@ segments.forEach((s, i) => {
   }
 });
 
-const groups = stopDirections(gtfs.stops, gtfs.variants); // direction groups per stop
+// Direction groups per stop (with manual corrections: a one-direction stop gets one road point)
+const overrides = stopOverrides(gtfs.stops);
+const groups = stopDirections(gtfs.stops, gtfs.variants).map((g, i) => withOverride(g, overrides[i]));
 const roadNodes = stops.map(() => []);  // stop position -> graph node per direction group
 const bySegment = new Map();            // segment -> [{ t, node }]
 const report = { farFromRoad: [], directionFallback: [], straightPairs: [] };

@@ -8,6 +8,9 @@ import { MapMarkerService } from '../features/map/services/map-marker.service';
 import { RouteLayerService } from '../features/map/services/route-layer.service';
 import { PlannerPanelComponent } from '../features/route-planner/planner-panel/planner-panel.component';
 import { PlannerStateService } from '../features/route-planner/planner-state.service';
+import { StopEditorLayerService } from '../features/stop-editor/stop-editor-layer.service';
+import { StopEditorComponent } from '../features/stop-editor/stop-editor.component';
+import { stopEditorEnabled } from '../features/stop-editor/stop-editor.service';
 import { StopSearchComponent } from '../features/stop-search/stop-search.component';
 import { Stop } from '../shared/models/transit.models';
 
@@ -20,7 +23,7 @@ const JASLO_CENTRE: L.LatLngTuple = [49.745, 21.472];
 @Component({
   selector: 'app-main-map',
   standalone: true,
-  imports: [StopSearchComponent, PlannerPanelComponent],
+  imports: [StopSearchComponent, PlannerPanelComponent, StopEditorComponent],
   templateUrl: './main-map.component.html',
   styleUrl: './main-map.component.scss'
 })
@@ -32,6 +35,10 @@ export class MainMapComponent implements OnInit, OnDestroy {
   private geolocation = inject(GeolocationService);
   private gtfs = inject(GtfsService);
   private shapes = inject(ShapesService);
+  private editorLayer = inject(StopEditorLayerService);
+
+  /** Developer stop editor instead of the search and planner (app opened with ?dev) */
+  readonly editing = stopEditorEnabled();
 
   private map!: L.Map;
 
@@ -62,12 +69,14 @@ export class MainMapComponent implements OnInit, OnDestroy {
     }).addTo(this.map);
 
     this.routeLayer.attach(this.map);
+    if (this.editing) this.editorLayer.attach(this.map);
     this.map.on('click', (e: L.LeafletMouseEvent) => this.planner.setPointFromMap(e.latlng.lat, e.latlng.lng));
     this.stops.load().subscribe(stops => this.markers.renderStops(this.map, stops));
   }
 
   ngOnDestroy(): void {
     this.routeLayer.detach();
+    this.editorLayer.detach();
     this.map?.remove();
   }
 

@@ -97,3 +97,20 @@ function encode(points: [number, number][]): string {
   }
   return out;
 }
+
+describe('ShapesService road points', () => {
+  it('gives the road points of a stop and the road lines touching it', () => {
+    TestBed.configureTestingModule({ providers: [provideHttpClient(), provideHttpClientTesting()] });
+    const service = TestBed.inject(ShapesService);
+    service.load();
+    TestBed.inject(HttpTestingController).expectOne('assets/data/shapes.json').flush({
+      source: '', builtAt: '',
+      shapes: { 'a>b': encode([[1, 1], [2, 2]]), 'b>c': encode([[2, 2], [3, 3]]), 'c>d': encode([[3, 3], [4, 4]]) },
+      roadPoints: { b: [[2, 2, 45], [2.0001, 2.0001, 225]] }
+    });
+
+    expect(service.roadPoints('b')).toEqual([{ lat: 2, lng: 2, bearing: 45 }, { lat: 2.0001, lng: 2.0001, bearing: 225 }]);
+    expect(service.roadPoints('x')).toEqual([]);
+    expect(service.linesAt('b').map(l => `${l.from}>${l.to}`)).toEqual(['a>b', 'b>c']);
+  });
+});

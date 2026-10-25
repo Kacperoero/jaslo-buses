@@ -1,4 +1,4 @@
-import { Injectable, effect } from '@angular/core';
+import { Injectable, effect, signal } from '@angular/core';
 import * as L from 'leaflet';
 import { Stop } from '../../../shared/models/transit.models';
 import { TimetableService } from '../../../core/services/timetable.service';
@@ -26,6 +26,9 @@ export class MapMarkerService {
     iconSize: [16, 16],
     iconAnchor: [8, 8]
   });
+
+  /** Last stop whose marker was clicked (the stop editor follows it) */
+  readonly clickedStopId = signal<string | null>(null);
 
   /** Whether markers are draggable (dev mode for position correction) */
   devMode = false;
@@ -95,6 +98,7 @@ export class MapMarkerService {
 
   private onStopClick(map: L.Map, marker: L.Marker, stop: Stop): void {
     this.favorites.addRecentStop(stop.id);
+    this.clickedStopId.set(stop.id);
 
     // Create a loading popup
     const popup = L.popup({
