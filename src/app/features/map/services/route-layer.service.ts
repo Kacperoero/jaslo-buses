@@ -64,16 +64,23 @@ export class RouteLayerService {
         continue;
       }
       const color = LEG_COLORS[rideNo++ % LEG_COLORS.length];
-      const path = this.shapes.path(leg.stops) as L.LatLngTuple[]; // along roads where known
-      L.polyline(path, { color, weight: 7, opacity: 0.95 })
-        .bindPopup(`🚌 Linia ${escapeHtml(leg.line)}: ${leg.departure} ${escapeHtml(leg.from.name)} → ${leg.arrival} ${escapeHtml(leg.to.name)}`)
-        .addTo(this.routeLayer);
+      const ridePopup = `🚌 Linia ${escapeHtml(leg.line)}: ${leg.departure} ${escapeHtml(leg.from.name)} → ${leg.arrival} ${escapeHtml(leg.to.name)}`;
+      for (const part of this.shapes.parts(leg.stops)) {
+        if (part.known) {
+          L.polyline(part.points, { color, weight: 7, opacity: 0.95 }).bindPopup(ridePopup).addTo(this.routeLayer);
+        } else {
+          // No road line between these stops: dotted, so it isn't mistaken for the real route
+          L.polyline(part.points, { color, weight: 6, opacity: 0.9, dashArray: '2, 12', lineCap: 'round' })
+            .bindPopup(`${ridePopup}<br><i>Przebieg między tymi przystankami nieznany – linia prosta.</i>`)
+            .addTo(this.routeLayer);
+        }
+        all.push(...part.points.map(p => L.latLng(p)));
+      }
       for (const stop of leg.stops.slice(1, -1)) {
         L.circleMarker([stop.lat, stop.lng], { radius: 3.5, color: '#fff', weight: 1.5, fillColor: color, fillOpacity: 1 })
           .bindTooltip(escapeHtml(stop.name))
           .addTo(this.routeLayer);
       }
-      all.push(...path.map(p => L.latLng(p)));
     }
 
     // First / last stop and every change on top

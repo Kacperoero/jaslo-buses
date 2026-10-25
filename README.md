@@ -70,7 +70,7 @@ GTFS od MKS nie ma pliku `shapes.txt`, więc przebieg autobusu po ulicach liczy 
 3. Dla każdej pary kolejnych przystanków, między którymi jeździ autobus (848 par), liczona jest najkrótsza droga (A*, z jednokierunkowymi ulicami; drogi serwisowe tylko gdy trzeba). Gdy wychodzi podejrzanie długa (> 3× linia prosta i > 1 km dłużej), zostaje odcinek prosty.
 4. Linie są upraszczane (tolerancja 4 m) i zapisywane jako zakodowane polilinie.
 
-Obecnie po drogach idzie 844 z 848 par. Raport (`scripts/gtfs/shapes-report.json`) wymienia pary z odcinkiem prostym i przystanki daleko od drogi – przydatne przy poprawianiu położenia przystanków. Po zmianie rozkładu albo poprawkach przystanków: `npm run gtfs:shapes`.
+Obecnie po drogach idzie 844 z 848 par. Pozostałe są na mapie rysowane **kropkowaną linią prostą** w kolorze autobusu, z dopiskiem „przebieg nieznany” po kliknięciu – żeby nie udawały prawdziwej trasy. Dotyczy to Towarowa III ↔ Floriańska skrz. Żniw (w OSM ul. Żniwna nie łączy się z Towarową; w 2026 r. trwa tam remont, objazd nieznany) oraz Osobnica 4 Imielna ↔ Osobnica Skała 3 (przystanek ponad 150 m od drogi – do sprawdzenia przy poprawianiu położenia przystanków). Raport (`scripts/gtfs/shapes-report.json`) wymienia pary z odcinkiem prostym i przystanki daleko od drogi – przydatne przy poprawianiu położenia przystanków. Po zmianie rozkładu albo poprawkach przystanków: `npm run gtfs:shapes`.
 
 **Licencja:** dane drogowe © współtwórcy OpenStreetMap, licencja [ODbL](https://opendatacommons.org/licenses/odbl/). `shapes.json` jest z nich wyprowadzony – przy publikacji aplikacja musi pokazywać atrybucję OSM (mapa już ją ma) i udostępniać ten plik na tej samej licencji.
 

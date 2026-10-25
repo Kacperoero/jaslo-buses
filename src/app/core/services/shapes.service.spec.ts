@@ -42,6 +42,20 @@ describe('ShapesService', () => {
     ]);
   });
 
+  it('splits a ride into parts along roads and straight parts where the route is unknown', () => {
+    service.load();
+    http.expectOne('assets/data/shapes.json').flush({ source: '', builtAt: '', shapes: { 'a>b': '_p~iF~ps|U_ulLnnqC_mqNvxq`@' } });
+
+    expect(service.parts([A, B, C])).toEqual([
+      { known: true, points: [[38.5, -120.2], [40.7, -120.95], [43.252, -126.453]] },
+      { known: false, points: [[43.252, -126.453], [44, -127]] }
+    ]);
+  });
+
+  it('treats everything as known until the road lines are loaded', () => {
+    expect(service.parts([A, B, C]).map(p => p.known)).toEqual([true]);
+  });
+
   it('keeps drawing straight lines when the file is missing', () => {
     service.load();
     http.expectOne('assets/data/shapes.json').flush('', { status: 404, statusText: 'Not Found' });
