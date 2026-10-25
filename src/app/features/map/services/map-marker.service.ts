@@ -30,9 +30,6 @@ export class MapMarkerService {
   /** Last stop whose marker was clicked (the stop editor follows it) */
   readonly clickedStopId = signal<string | null>(null);
 
-  /** Whether markers are draggable (dev mode for position correction) */
-  devMode = false;
-
   constructor(
     private timetableService: TimetableService,
     private travelTime: TravelTimeService,
@@ -64,19 +61,10 @@ export class MapMarkerService {
         icon: this.iconFor(stop.id),
         // Favourites drawn above other stops
         zIndexOffset: this.favorites.isFavorite(stop.id) ? 500 : 0,
-        draggable: this.devMode,
         title: stop.name
       });
 
       marker.on('click', () => this.onStopClick(map, marker, stop));
-
-      if (this.devMode) {
-        marker.on('dragend', (e: L.LeafletEvent) => {
-          const pos = (e.target as L.Marker).getLatLng();
-          console.log(`[DEV] Stop "${stop.name}" (${stop.id}) moved to:`,
-            JSON.stringify({ ...stop, lat: pos.lat, lng: pos.lng }, null, 2));
-        });
-      }
 
       marker.addTo(map);
       this.markers.push(marker);

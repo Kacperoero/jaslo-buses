@@ -12,7 +12,7 @@ Dane pochodzą z **oficjalnego rozkładu jazdy MKS Jasło w formacie GTFS** ([mk
 - **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Inny termin” przełącza okienka i planer na wybrany dzień i godzinę (do końca ważności rozkładu).
 - **Ulubione i ostatnie** – gwiazdka ☆ w okienku przystanku (ulubione mają na mapie żółtą kropkę). Po kliknięciu w puste pole wyszukiwarki widać ulubione i ostatnio oglądane przystanki. W planerze puste pola A/B podpowiadają ulubione, a pod formularzem jest lista ostatnich tras. Dane są w przeglądarce (`localStorage`); tras z „Moja lokalizacja” nie zapisujemy.
 - **Planer trasy A → B** – punkt startu/celu z listy przystanków, kliknięty na mapie albo z lokalizacji; „Wyjazd o” albo „Na miejscu o”. Do 3 przesiadek, także z przejściem pieszo na inny przystanek. Wybrana trasa jest rysowana na mapie, każdy autobus innym kolorem. Wyszukiwanie trwa kilka–kilkadziesiąt milisekund.
-- **Tryb korekty pozycji** – po ustawieniu `devMode = true` w `MapMarkerService` znaczniki można przeciągać, a nowe współrzędne lądują w konsoli.
+- **Edytor przystanków** (tryb deweloperski, `?dev`) – przechodzenie po przystankach, kierunki, przesuwanie przystanku i punktów zatrzymania na drodze (patrz „Edytor przystanków”).
 
 ## Wymagania
 
