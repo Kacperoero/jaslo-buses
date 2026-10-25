@@ -4,21 +4,26 @@ import { StopsService } from '../../core/services/stops.service';
 import { TravelTimeService } from '../../core/services/travel-time.service';
 import { Stop } from '../../shared/models/transit.models';
 import { PlannerStateService } from './planner-state.service';
-import { Connection, ConnectionPoint } from './route-planner.models';
-import { RoutePlannerService } from './route-planner.service';
+import { Connection, ConnectionPoint, rides } from './route-planner.models';
+import { PlanOptions, RoutePlannerService } from './route-planner.service';
 
 const A: Stop = { id: 'a', name: 'PIERWSZY', lat: 49.70, lng: 21.40, designator: 0, onlyDisembarking: false };
 const B: Stop = { id: 'b', name: 'DRUGI', lat: 49.72, lng: 21.42, designator: 0, onlyDisembarking: false };
 
 const conn = (line: string): Connection => ({
-  startStop: A, endStop: B, line, nextDeparture: null,
-  walkTimeStart: 0, walkTimeEnd: 0, busTime: 5, totalTime: 5
+  legs: [{
+    kind: 'ride', line, headsign: 'B', from: A, to: B, departure: '08:00', arrival: '08:05',
+    departureMin: 480, arrivalMin: 485, minutes: 5, stops: [A, B], tripId: 'trip:0:0'
+  }],
+  leaveAt: '08:00', arriveAt: '08:05', totalMinutes: 5, waitMinutes: 0, transfers: 0, leaveMin: 480, arriveMin: 485
 });
+
+const lineOf = (c: Connection) => rides(c)[0].line;
 
 describe('PlannerStateService', () => {
   let state: PlannerStateService;
   let favorites: FavoritesService;
-  let calls: { start: ConnectionPoint; end: ConnectionPoint }[];
+  let calls: { start: ConnectionPoint; end: ConnectionPoint; options: PlanOptions }[];
   let answer: () => Promise<Connection[]>;
 
   beforeEach(() => {
@@ -28,7 +33,12 @@ describe('PlannerStateService', () => {
     TestBed.configureTestingModule({
       providers: [{
         provide: RoutePlannerService,
-        useValue: { findConnections: (start: ConnectionPoint, end: ConnectionPoint) => { calls.push({ start, end }); return answer(); } }
+        useValue: {
+          findConnections: (start: ConnectionPoint, end: ConnectionPoint, options: PlanOptions) => {
+            calls.push({ start, end, options });
+            return answer();
+          }
+        }
       }]
     });
     TestBed.inject(StopsService).stops.set([A, B]);
@@ -48,8 +58,8 @@ describe('PlannerStateService', () => {
     state.setStop('end', B);
     await state.search();
 
-    expect(state.connections().map(c => c.line)).toEqual(['10', '22']);
-    expect(state.selected()?.line).toBe('10');
+    expect(state.connections().map(lineOf)).toEqual(['10', '22']);
+    expect(lineOf(state.selected()!)).toBe('10');
     expect(state.searchDone()).toBe(true);
     expect(favorites.recentRoutes().length).toBe(1);
   });
@@ -107,6 +117,28 @@ describe('PlannerStateService', () => {
     state.startPicking('start');
     state.setPointFromMap(49.8, 21.6);
     expect(state.start()?.name).toBe('Punkt na mapie (49.8000, 21.6000)');
+  });
+
+  it('passes the time and mode to the planner', async () => {
+    TestBed.inject(TravelTimeService).setTime(new Date(2026, 9, 26, 7, 30));
+    TestBed.tick();
+    state.setStop('start', A);
+    state.setStop('end', B);
+    await state.search();
+    expect(calls[0].options.mode).toBe('depart');
+    expect(calls[0].options.time.getHours()).toBe(7);
+  });
+
+  it('switching to "arrive by" picks a time when it was "now", and back', () => {
+    const travel = TestBed.inject(TravelTimeService);
+    state.setTimeMode('arrive');
+    expect(state.timeMode()).toBe('arrive');
+    expect(travel.isScheduled()).toBe(true);
+    expect(travel.selected()!.getTime()).toBeGreaterThan(Date.now() + 50 * 60_000);
+
+    travel.resetToNow();
+    TestBed.tick();
+    expect(state.timeMode()).toBe('depart'); // "arrive by now" makes no sense
   });
 
   it('closing the panel clears everything', async () => {

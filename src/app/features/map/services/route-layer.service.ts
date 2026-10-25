@@ -1,33 +1,25 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as L from 'leaflet';
-import { firstValueFrom } from 'rxjs';
-import { StopsService } from '../../../core/services/stops.service';
-import { TimetableService } from '../../../core/services/timetable.service';
-import { Departure, Stop } from '../../../shared/models/transit.models';
+import { Stop } from '../../../shared/models/transit.models';
 import { escapeHtml } from '../../../shared/utils/text.utils';
-import { Connection, ConnectionPoint } from '../../route-planner/route-planner.models';
-import { stopsBetween } from '../../route-planner/ride-path';
+import { Connection, ConnectionPoint, rides } from '../../route-planner/route-planner.models';
 
 const WALK_STYLE: L.PolylineOptions = { color: '#f43f5e', weight: 5, dashArray: '5, 10', opacity: 0.85 };
-const LEG_COLORS = ['#10b981', '#06b6d4'];
+/** Colours of the 1st, 2nd, 3rd… ride */
+const LEG_COLORS = ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b'];
 
 /**
  * Draws the planner on the map: points A/B and the selected connection – walks as dashed
- * straight lines, bus rides along the stops the bus actually passes (from the timetable),
- * with small dots at intermediate stops. No external routing service is used.
+ * straight lines, bus rides through the stops they pass (each ride in its own colour), dots
+ * at intermediate stops and markers where to change. No external routing service is used.
  */
 @Injectable({
   providedIn: 'root'
 })
 export class RouteLayerService {
-  private timetable = inject(TimetableService);
-  private stops = inject(StopsService);
-
   private map: L.Map | null = null;
   private readonly pointsLayer = L.layerGroup();
   private readonly routeLayer = L.layerGroup();
-  /** Incremented per drawn route, so a slower earlier draw can't overwrite a newer one */
-  private drawCounter = 0;
 
   attach(map: L.Map): void {
     this.map = map;
@@ -48,72 +40,47 @@ export class RouteLayerService {
   }
 
   clearRoute(): void {
-    this.drawCounter++;
     this.routeLayer.clearLayers();
   }
 
-  async drawConnection(conn: Connection, start: ConnectionPoint, end: ConnectionPoint): Promise<void> {
+  drawConnection(conn: Connection): void {
     this.routeLayer.clearLayers();
-    const drawId = ++this.drawCounter;
-
-    const rides: { dep: Departure | null; from: Stop; to: Stop; line: string; label: string }[] =
-      conn.isTransfer && conn.legs?.length === 2 && conn.transferStop
-        ? [
-            { dep: conn.legs[0].nextDeparture, from: conn.startStop, to: conn.transferStop, line: conn.legs[0].line, label: ' (etap 1)' },
-            { dep: conn.legs[1].nextDeparture, from: conn.transferStop, to: conn.endStop, line: conn.legs[1].line, label: ' (etap 2)' }
-          ]
-        : [{ dep: conn.nextDeparture, from: conn.startStop, to: conn.endStop, line: conn.line, label: '' }];
-
-    const paths = await Promise.all(rides.map(r => this.ridePath(r.dep, r.from, r.to)));
-    if (drawId !== this.drawCounter || !this.map) return; // another route was drawn meanwhile
+    if (!this.map) return;
 
     const all: L.LatLng[] = [];
-    const walk = (a: L.LatLngTuple, b: L.LatLngTuple, label: string) => {
-      L.polyline([a, b], WALK_STYLE).bindPopup(`🚶‍♂️ ${label}`).addTo(this.routeLayer);
-      all.push(L.latLng(a), L.latLng(b));
-    };
-
-    walk([start.lat, start.lng], [conn.startStop.lat, conn.startStop.lng], 'Dojście do przystanku');
-    rides.forEach((ride, i) => {
-      const color = LEG_COLORS[i];
-      const path = paths[i];
-      L.polyline(path.map(s => [s.lat, s.lng] as L.LatLngTuple), { color, weight: 7, opacity: 0.95 })
-        .bindPopup(`🚌 Linia ${escapeHtml(ride.line)}${ride.label}`)
+    let rideNo = 0;
+    for (const leg of conn.legs) {
+      if (leg.kind === 'walk') {
+        const line: L.LatLngTuple[] = [[leg.from.lat, leg.from.lng], [leg.to.lat, leg.to.lng]];
+        L.polyline(line, WALK_STYLE)
+          .bindPopup(`🚶‍♂️ ${escapeHtml(leg.to.stop ? `Dojście do: ${leg.to.name}` : 'Dojście do celu')} (${leg.minutes} min)`)
+          .addTo(this.routeLayer);
+        all.push(...line.map(p => L.latLng(p)));
+        continue;
+      }
+      const color = LEG_COLORS[rideNo++ % LEG_COLORS.length];
+      const path = leg.stops.map(st => [st.lat, st.lng] as L.LatLngTuple);
+      L.polyline(path, { color, weight: 7, opacity: 0.95 })
+        .bindPopup(`🚌 Linia ${escapeHtml(leg.line)}: ${leg.departure} ${escapeHtml(leg.from.name)} → ${leg.arrival} ${escapeHtml(leg.to.name)}`)
         .addTo(this.routeLayer);
-      for (const stop of path.slice(1, -1)) {
+      for (const stop of leg.stops.slice(1, -1)) {
         L.circleMarker([stop.lat, stop.lng], { radius: 3.5, color: '#fff', weight: 1.5, fillColor: color, fillOpacity: 1 })
           .bindTooltip(escapeHtml(stop.name))
           .addTo(this.routeLayer);
       }
-      all.push(...path.map(s => L.latLng(s.lat, s.lng)));
+      all.push(...path.map(p => L.latLng(p)));
+    }
+
+    // First / last stop and every change on top
+    const rideLegs = rides(conn);
+    rideLegs.forEach((ride, i) => {
+      if (i === 0) this.stopMarker(ride.from, 'planned-start', 'Przystanek początkowy').addTo(this.routeLayer);
+      else this.stopMarker(ride.from, 'planned-transfer', 'Przesiadka').addTo(this.routeLayer);
+      if (i === rideLegs.length - 1) this.stopMarker(ride.to, 'planned-end', 'Przystanek końcowy').addTo(this.routeLayer);
+      else if (rideLegs[i + 1].from.id !== ride.to.id) this.stopMarker(ride.to, 'planned-transfer', 'Przesiadka').addTo(this.routeLayer);
     });
-    walk([conn.endStop.lat, conn.endStop.lng], [end.lat, end.lng], 'Dojście do celu');
 
-    // Start, transfer and end stop markers on top
-    this.stopMarker(conn.startStop, 'planned-start', 'Przystanek początkowy').addTo(this.routeLayer);
-    if (conn.isTransfer && conn.transferStop) {
-      this.stopMarker(conn.transferStop, 'planned-transfer', 'Punkt przesiadkowy').addTo(this.routeLayer);
-    }
-    this.stopMarker(conn.endStop, 'planned-end', 'Przystanek końcowy').addTo(this.routeLayer);
-
-    this.map.fitBounds(L.latLngBounds(all), { padding: [40, 40] });
-  }
-
-  /** Stops the bus passes from `from` to `to` on this departure's trip (straight line if unknown). */
-  private async ridePath(dep: Departure | null, from: Stop, to: Stop): Promise<Stop[]> {
-    if (dep?.trip_execution_id) {
-      try {
-        const exec = await firstValueFrom(this.timetable.getTripExecution(dep.trip_execution_id));
-        const byId = this.stops.byId();
-        const stops = stopsBetween(exec.trip.times, dep.trip_index ?? 0, from.id, to.id)
-          .map(id => byId.get(id))
-          .filter((s): s is Stop => !!s);
-        if (stops.length >= 2) return stops;
-      } catch {
-        // fall through to a straight line
-      }
-    }
-    return [from, to];
+    if (all.length) this.map.fitBounds(L.latLngBounds(all), { padding: [40, 40] });
   }
 
   private stopMarker(stop: Stop, cssClass: string, label: string): L.Marker {

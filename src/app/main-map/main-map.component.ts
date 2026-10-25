@@ -45,12 +45,7 @@ export class MainMapComponent implements OnInit, OnDestroy {
     });
     effect(() => {
       const conn = this.planner.selected();
-      const start = this.planner.start();
-      const end = this.planner.end();
-      untracked(() => {
-        if (conn && start && end) void this.routeLayer.drawConnection(conn, start, end);
-        else this.routeLayer.clearRoute();
-      });
+      untracked(() => (conn ? this.routeLayer.drawConnection(conn) : this.routeLayer.clearRoute()));
     });
   }
 

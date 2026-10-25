@@ -1,7 +1,8 @@
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { Connection } from '../route-planner.models';
+import { connectionSteps, lineBadges, transfersLabel } from './connection-steps';
 
-/** One suggested connection in the planner results: line(s), times and the steps to take. */
+/** One suggested connection in the planner results: lines, times and the steps to take. */
 @Component({
   selector: 'app-connection-card',
   standalone: true,
@@ -21,4 +22,8 @@ export class ConnectionCardComponent {
   readonly selected = input(false);
   /** The card was clicked / activated with the keyboard */
   readonly chosen = output<void>();
+
+  readonly steps = computed(() => connectionSteps(this.conn()));
+  readonly lines = computed(() => lineBadges(this.conn()));
+  readonly transfers = computed(() => (this.conn().transfers > 0 ? transfersLabel(this.conn().transfers) : ''));
 }

@@ -24,6 +24,12 @@
 
     <div class="input-group">
       <span class="group-label">Kiedy</span>
+      <div class="time-mode" role="radiogroup" aria-label="Godzina odjazdu czy przyjazdu">
+        <button type="button" role="radio" [attr.aria-checked]="planner.timeMode() === 'depart'"
+                [class.active]="planner.timeMode() === 'depart'" (click)="planner.setTimeMode('depart')">Wyjazd o</button>
+        <button type="button" role="radio" [attr.aria-checked]="planner.timeMode() === 'arrive'"
+                [class.active]="planner.timeMode() === 'arrive'" (click)="planner.setTimeMode('arrive')">Na miejscu o</button>
+      </div>
       <app-time-picker variant="inline"></app-time-picker>
     </div>
 

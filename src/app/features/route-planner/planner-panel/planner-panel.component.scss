@@ -222,3 +222,35 @@
   opacity: 0.6;
   cursor: progress;
 }
+
+// "Wyjazd o" / "Na miejscu o"
+.time-mode {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+
+  button {
+    flex: 1;
+    min-height: 30px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: #475569;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &.active {
+      background: #10b981;
+      color: #fff;
+    }
+
+    &:hover:not(.active) {
+      color: #1e293b;
+    }
+  }
+}

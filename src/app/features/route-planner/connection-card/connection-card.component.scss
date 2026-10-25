@@ -73,6 +73,10 @@
   &.second {
     background: #0891b2;
   }
+
+  &.walk {
+    background: #f43f5e;
+  }
 }
 
 .time-summary {
@@ -128,7 +132,7 @@
   color: #059669;
 }
 
-.wait-time-info {
+.leave-info {
   font-size: 11px;
   display: flex;
   align-items: center;
@@ -143,14 +147,23 @@
   margin: 4px 0 4px 8px;
 }
 
-.wait-transfer {
-  font-size: 0.8rem;
+.line-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 3px;
 }
 
-.transfer-badges {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.transfers {
+  font-size: 10px;
+  font-weight: 600;
+  color: #b45309;
+  text-align: center;
+}
+
+.arrive-info {
+  font-weight: 600;
 }
 
 .transfer-arrow {

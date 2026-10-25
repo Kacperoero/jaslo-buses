@@ -11,7 +11,7 @@ Dane pochodzą z **oficjalnego rozkładu jazdy MKS Jasło w formacie GTFS** ([mk
 - **Wyszukiwarka przystanków** – pole w lewym górnym rogu, po wybraniu mapa przelatuje do przystanku.
 - **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Inny termin” przełącza okienka i planer na wybrany dzień i godzinę (do końca ważności rozkładu).
 - **Ulubione i ostatnie** – gwiazdka ☆ w okienku przystanku (ulubione mają na mapie żółtą kropkę). Po kliknięciu w puste pole wyszukiwarki widać ulubione i ostatnio oglądane przystanki. W planerze puste pola A/B podpowiadają ulubione, a pod formularzem jest lista ostatnich tras. Dane są w przeglądarce (`localStorage`); tras z „Moja lokalizacja” nie zapisujemy.
-- **Planer trasy A → B** – punkt startu/celu z listy przystanków, kliknięty na mapie albo z lokalizacji. Wyniki posortowane po łącznym czasie podróży; wybrana trasa jest rysowana na mapie. Wyszukiwanie trwa kilka–kilkadziesiąt milisekund.
+- **Planer trasy A → B** – punkt startu/celu z listy przystanków, kliknięty na mapie albo z lokalizacji; „Wyjazd o” albo „Na miejscu o”. Do 3 przesiadek, także z przejściem pieszo na inny przystanek. Wybrana trasa jest rysowana na mapie, każdy autobus innym kolorem. Wyszukiwanie trwa kilka–kilkadziesiąt milisekund.
 - **Tryb korekty pozycji** – po ustawieniu `devMode = true` w `MapMarkerService` znaczniki można przeciągać, a nowe współrzędne lądują w konsoli.
 
 ## Wymagania
@@ -94,13 +94,13 @@ src/app/
 │   │   ├── map-marker.service.ts        # Znaczniki przystanków i okienka z odjazdami
 │   │   └── route-layer.service.ts       # Rysowanie punktów A/B i wybranego połączenia
 │   └── route-planner/
-│       ├── route-planner.service.ts     # Algorytm wyszukiwania połączeń
+│       ├── raptor.ts                    # Algorytm RAPTOR (sieć, rundy, odtwarzanie trasy)
+│       ├── route-planner.service.ts     # Wyszukiwanie: dojście do przystanków, tryby, wynik
 │       ├── planner-state.service.ts     # Stan planera: punkty, wyszukiwanie, wyniki
 │       ├── planner-panel/               # Panel boczny planera
 │       ├── stop-input/                  # Pole przystanku z podpowiedziami (A / B)
 │       ├── connection-card/             # Karta jednego połączenia
-│       ├── recent-routes/               # Lista ostatnich tras
-│       └── ride-path.ts                 # Przystanki przejazdu (do rysowania)
+│       └── recent-routes/               # Lista ostatnich tras
 └── shared/
     ├── components/time-picker/          # Wybór „Teraz / Inny termin”
     ├── models/transit.models.ts         # Typy: Stop, Departure, TripExecutionResponse…
@@ -122,15 +122,15 @@ Przy wstawianiu tekstu do okienek Leaflet (`bindPopup`, `setContent`) zawsze uż
 
 ## Jak działa wyszukiwanie połączeń
 
-Algorytm siedzi w `RoutePlannerService`, dane daje `TimetableService` (z GTFS, w przeglądarce).
+Planer używa algorytmu **RAPTOR** (Round-bAsed Public Transit Optimized Router, Delling i in.) na lokalnym rozkładzie – `features/route-planner/raptor.ts`, opakowany w `RoutePlannerService`.
 
-1. **Kandydaci** – wybrany przystanek razem z jego drugim słupkiem (ta sama nazwa, do 400 m), albo 10 przystanków najbliższych punktu na mapie.
-2. **Połączenia bezpośrednie** – dla odjazdów z przystanków startowych planer bierze przebieg kursu (listę przystanków z godzinami) i sprawdza, czy autobus dojeżdża później do któregoś przystanku docelowego. Nie porównuje nazw kierunków, bo wiele linii jeździ w pętli i zmienia tablicę po drodze. Każdy kurs pojawia się raz, z najlepszym przystankiem wsiadania i wysiadania.
-3. **Przesiadki** – gdy połączeń bezpośrednich jest mniej niż 3 albo na najlepsze trzeba czekać ponad 20 minut. Planer jedzie kursem ze startu i na kolejnych przystankach szuka autobusu, który według przebiegu dojeżdża do celu (min. 2 minuty na przesiadkę). Pomija przesiadki, które nie mogą być szybsze od połączenia bezpośredniego, i takie, w których drugi autobus wraca przez przystanek startowy.
-4. **Brak kursów** – gdy nic nie odjeżdża w ciągu 3 godzin, planer pokazuje linie łączące przystanki z dopiskiem „Brak kursu”.
-5. **Sortowanie** – po łącznym czasie (dojście + czekanie + jazda + dojście), maks. 8 wyników. Dojście liczone jako 80 m/min w linii prostej.
+1. **Dojście** – wybrany przystanek razem z jego drugim słupkiem (ta sama nazwa, do 400 m), albo przystanki do 1 km od punktu na mapie (maks. 12 najbliższych). Tak samo na końcu trasy.
+2. **Rundy** – runda *k* wyznacza najwcześniejsze dotarcie do każdego przystanku *k* autobusami. Między rundami można przejść pieszo na inny przystanek do 500 m (przesiadka z dojściem). Na tym samym przystanku przesiadka wymaga min. 2 minut. Maksymalnie 4 przejazdy (3 przesiadki).
+3. **Wiele propozycji** – RAPTOR jest uruchamiany dla kolejnych momentów wyjścia (tak, żeby zdążyć na kolejne odjazdy z przystanków startowych) w oknie 3 godzin. Z wyników zostają te, których nic nie bije jednocześnie godziną wyjścia, przyjazdu i liczbą przesiadek. Maks. 6 propozycji.
+4. **Tryby** – „Wyjazd o” sortuje po najwcześniejszym przyjeździe; „Na miejscu o” szuka połączeń przyjeżdżających najpóźniej o podanej godzinie i sortuje od najpóźniejszego wyjścia z domu.
+5. **Pieszo** – gdy A i B dzieli do 25 minut marszu, wśród propozycji jest też dojście pieszo.
 
-Kursy po północy są uwzględniane (odjazdy z poprzedniego i następnego dnia, gdy okno 3 godzin przechodzi przez północ).
+Dojście liczone jest jako 80 m/min w linii prostej. Kursy po północy są uwzględniane (rozkład z poprzedniego i następnego dnia). Jedno wyszukiwanie trwa zwykle kilka–kilkadziesiąt milisekund.
 
 **Rysowanie trasy na mapie** nie korzysta z żadnego zewnętrznego serwera: przejazd autobusu to linia przez kolejne przystanki kursu z rozkładu (z kropkami na przystankach pośrednich), a dojście pieszo – przerywana linia prosta. Między przystankami odcinki są proste, więc w centrum linia czasem przecina kwartały zamiast iść ulicą.
 
@@ -147,7 +147,6 @@ Uwaga: `npm run gtfs:build` nadpisuje `stops-base.json` i `gtfs.json`, więc pop
 
 - Brak danych na żywo (opóźnień, pozycji autobusów) – MKS udostępnia je tylko przez płatny system kiedyprzyjedzie, bez publicznego API dla innych. Warstwa „Autobusy na żywo” była zrobiona na tym API i została usunięta; jej kod jest w historii git (commit `b790d54`), gdyby pojawiło się legalne źródło.
 - Numery linii są przypisane heurystycznie (patrz „Numery linii”).
-- Obsługiwana jest maksymalnie jedna przesiadka.
 - Jedyne zewnętrzne zasoby to kafelki mapy OpenStreetMap i czcionka Google Fonts. Kafelki OSM mają [zasady użycia](https://operations.osmfoundation.org/policies/tiles/) – przy publikacji z większym ruchem warto przejść na własnego lub płatnego dostawcę kafelków.
 - Trasa autobusu jest rysowana prostymi odcinkami między przystankami, nie po ulicach. Dokładny kształt dałby plik `shapes.txt` w GTFS (MKS go nie publikuje) albo własny serwer wyznaczania tras.
 

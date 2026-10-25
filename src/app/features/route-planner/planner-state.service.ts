@@ -4,7 +4,7 @@ import { StopsService } from '../../core/services/stops.service';
 import { TravelTimeService } from '../../core/services/travel-time.service';
 import { Stop } from '../../shared/models/transit.models';
 import { getNearestStops } from '../../shared/utils/geo.utils';
-import { Connection, ConnectionPoint } from './route-planner.models';
+import { Connection, ConnectionPoint, TimeMode } from './route-planner.models';
 import { RoutePlannerService } from './route-planner.service';
 
 export type PointType = 'start' | 'end';
@@ -34,6 +34,9 @@ export class PlannerStateService {
   readonly startText = signal('');
   readonly endText = signal('');
 
+  /** "Wyjazd o" (depart) or "Na miejscu o" (arrive) the chosen time */
+  readonly timeMode = signal<TimeMode>('depart');
+
   /** Which point the next map click sets */
   readonly picking = signal<PointType | null>(null);
 
@@ -55,8 +58,11 @@ export class PlannerStateService {
   constructor() {
     // Results are calculated for a specific moment – drop them when the user changes the time
     effect(() => {
-      this.travelTime.selected();
-      untracked(() => this.clearResults());
+      const time = this.travelTime.selected();
+      untracked(() => {
+        if (time === null && this.timeMode() === 'arrive') this.timeMode.set('depart'); // "arrive by now"
+        this.clearResults();
+      });
     });
   }
 
@@ -89,6 +95,21 @@ export class PlannerStateService {
   /** The user's GPS position – never saved to recent routes. */
   setUserLocation(type: PointType, lat: number, lng: number): void {
     this.setPoint(type, { lat, lng, name: 'Moja lokalizacja', isUserLocation: true });
+  }
+
+  /**
+   * Leave at / arrive by. "Arrive by now" makes no sense, so arriving switches from "now"
+   * to a chosen time an hour ahead.
+   */
+  setTimeMode(mode: TimeMode): void {
+    if (mode === this.timeMode()) return;
+    this.timeMode.set(mode);
+    if (mode === 'arrive' && !this.travelTime.isScheduled()) {
+      const t = new Date(Date.now() + 60 * 60_000);
+      t.setMinutes(Math.ceil(t.getMinutes() / 5) * 5, 0, 0);
+      this.travelTime.setTime(t);
+    }
+    this.clearResults();
   }
 
   startPicking(type: PointType): void {
@@ -140,7 +161,10 @@ export class PlannerStateService {
     this.selectedIndex.set(null);
 
     try {
-      const found = await this.planner.findConnections(start, end, this.stops.stops());
+      const found = await this.planner.findConnections(start, end, {
+        time: this.travelTime.referenceTime(),
+        mode: this.timeMode()
+      });
       if (searchId !== this.searchCounter) return; // points or time changed meanwhile
       this.connections.set(found);
       this.searchDone.set(true);
