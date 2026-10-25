@@ -1,0 +1,45 @@
+@if (stop(); as stop) {
+  <aside class="side-panel stop-panel" aria-label="Wybrany przystanek">
+    <header class="side-panel-header">
+      <span class="stop-icon" aria-hidden="true">🚏</span>
+      <div class="title">
+        <strong>{{ stop.name }}</strong>
+        @if (direction()) { <span>{{ direction() }}</span> }
+        @if (stop.onlyDisembarking) { <span class="badge-warn">Tylko wysiadanie</span> }
+      </div>
+      <button type="button" class="popup-fav" [class.active]="favorite()" (click)="toggleFavorite()"
+              [attr.aria-pressed]="favorite()" [title]="favorite() ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'">
+        {{ favorite() ? '★' : '☆' }}
+      </button>
+      <button type="button" class="side-panel-close" (click)="close()" aria-label="Zamknij">×</button>
+    </header>
+
+    <div class="popup-schedule-note">🕒
+      @if (travelTime.isScheduled()) { Rozkład: {{ travelTime.label() }} } @else { Według rozkładu jazdy (bez opóźnień) }
+    </div>
+
+    @if (state() === 'error') {
+      <div class="popup-error"><span>⚠️</span><p>Nie udało się pobrać odjazdów</p></div>
+    } @else if (state() === 'ready') {
+      @if (rows().length === 0) {
+        <div class="popup-empty">
+          <span class="empty-icon">🌙</span>
+          <p>{{ travelTime.isScheduled() ? 'Brak odjazdów w ciągu 3 godzin' : 'Brak najbliższych odjazdów' }}</p>
+          <p class="empty-hint">{{ travelTime.isScheduled() ? 'Wybierz inną godzinę lub dzień' : 'Sprawdź ponownie w godzinach kursowania' }}</p>
+        </div>
+      } @else {
+        <div class="departures">
+          @for (row of rows(); track $index) {
+            <div class="departure-row" [class.canceled]="row.canceled">
+              <span class="dep-line">{{ row.line }}</span>
+              <span class="dep-direction">{{ row.direction }}</span>
+              <span class="dep-time">{{ row.time }}@if (row.canceled) {<span class="badge-canceled">ODWOŁANY</span>}</span>
+            </div>
+          }
+        </div>
+      }
+    } @else {
+      <div class="popup-loading"><div class="loading-spinner"></div><span>Ładowanie odjazdów…</span></div>
+    }
+  </aside>
+}

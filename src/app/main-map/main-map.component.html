@@ -26,6 +26,7 @@
 
 @if (!editing) {
 <app-bus-panel />
+<app-stop-panel />
 
 <button type="button" class="vehicles-toggle" [class.active]="buses.enabled()" (click)="buses.toggle()"
         [attr.aria-pressed]="buses.enabled()" aria-label="Autobusy według rozkładu" id="vehicles-toggle-btn"

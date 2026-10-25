@@ -1,11 +1,13 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { Injectable, effect, inject, signal } from '@angular/core';
 import * as L from 'leaflet';
-import { Stop } from '../../../shared/models/transit.models';
-import { TimetableService } from '../../../core/services/timetable.service';
-import { escapeHtml } from '../../../shared/utils/text.utils';
-import { TravelTimeService } from '../../../core/services/travel-time.service';
 import { FavoritesService } from '../../../core/services/favorites.service';
+import { StopsService } from '../../../core/services/stops.service';
+import { Stop } from '../../../shared/models/transit.models';
 
+/**
+ * Stop markers on the map. Clicking one selects the stop: its departures are shown in the side
+ * panel (StopPanelComponent), and the stop editor (?dev) follows the selection.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -27,14 +29,19 @@ export class MapMarkerService {
     iconAnchor: [8, 8]
   });
 
-  /** Last stop whose marker was clicked (the stop editor follows it) */
-  readonly clickedStopId = signal<string | null>(null);
+  private favorites = inject(FavoritesService);
+  private stops = inject(StopsService);
+  private readonly highlightLayer = L.layerGroup();
 
-  constructor(
-    private timetableService: TimetableService,
-    private travelTime: TravelTimeService,
-    private favorites: FavoritesService
-  ) {
+  /** The clicked stop (shown in the side panel; the stop editor follows it) */
+  readonly selectedStopId = signal<string | null>(null);
+
+  constructor() {
+    effect(() => {
+      const id = this.selectedStopId();
+      this.highlight(id ? this.stops.byId().get(id) ?? null : null);
+    });
+
     // Favourite stops get a different marker – also when starred from the search list
     let shown = new Set<string>();
     effect(() => {
@@ -51,7 +58,7 @@ export class MapMarkerService {
     return this.favorites.isFavorite(stopId) ? this.favoriteIcon : this.stopIcon;
   }
 
-  /** Draws a marker for every stop; clicking one opens its departures. */
+  /** Draws a marker for every stop; clicking one selects it. */
   renderStops(map: L.Map, stops: Stop[]): void {
     this.map = map;
     this.clearMarkers();
@@ -64,7 +71,7 @@ export class MapMarkerService {
         title: stop.name
       });
 
-      marker.on('click', () => this.onStopClick(map, marker, stop));
+      marker.on('click', () => this.onStopClick(stop));
 
       marker.addTo(map);
       this.markers.push(marker);
@@ -72,10 +79,14 @@ export class MapMarkerService {
     }
   }
 
-  /** Opens the departures popup of a stop (as if its marker was clicked). */
+  /** Shows a stop's departures (as if its marker was clicked). */
   openStop(stopId: string): void {
     const marker = this.markerById.get(stopId);
     if (marker && this.map) marker.fire('click');
+  }
+
+  selectStop(stopId: string | null): void {
+    this.selectedStopId.set(stopId);
   }
 
   private clearMarkers(): void {
@@ -84,151 +95,17 @@ export class MapMarkerService {
     this.markerById.clear();
   }
 
-  private onStopClick(map: L.Map, marker: L.Marker, stop: Stop): void {
+  private onStopClick(stop: Stop): void {
     this.favorites.addRecentStop(stop.id);
-    this.clickedStopId.set(stop.id);
-
-    // Create a loading popup
-    const popup = L.popup({
-      maxWidth: 340,
-      minWidth: 280,
-      className: 'departure-popup'
-    })
-      .setLatLng(marker.getLatLng())
-      .setContent(this.buildLoadingPopup(stop))
-      .openOn(map);
-    this.bindFavoriteButton(popup, stop);
-
-    // Live departures for "now", planned ones from the timetable for a chosen time
-    this.timetableService.getDepartures(stop.id, this.travelTime.selected()).subscribe({
-      next: (data) => {
-        popup.setContent(this.buildDeparturePopup(stop, data));
-        this.bindFavoriteButton(popup, stop);
-      },
-      error: () => {
-        popup.setContent(this.buildErrorPopup(stop));
-        this.bindFavoriteButton(popup, stop);
-      }
-    });
+    this.selectedStopId.set(stop.id);
   }
 
-  private buildHeader(stop: Stop): string {
-    const fav = this.favorites.isFavorite(stop.id);
-    return `
-      <div class="popup-header">
-        <span class="popup-icon">🚏</span>
-        <h3 class="popup-title">${escapeHtml(stop.name)}</h3>
-        ${stop.onlyDisembarking ? '<span class="badge-warn">Tylko wysiadanie</span>' : ''}
-        ${directionBadge(stop)}
-        <button type="button" class="popup-fav${fav ? ' active' : ''}"
-                aria-pressed="${fav}" title="${fav ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'}">
-          ${fav ? '★' : '☆'}
-        </button>
-      </div>
-    `;
+  /** Ring around the selected stop */
+  private highlight(stop: Stop | null): void {
+    this.highlightLayer.clearLayers();
+    if (!stop || !this.map) return;
+    this.highlightLayer.addTo(this.map);
+    L.circleMarker([stop.lat, stop.lng], { radius: 13, color: '#2563eb', weight: 3, fill: false, interactive: false })
+      .addTo(this.highlightLayer);
   }
-
-  /** The popup is plain HTML, so the star's click handler is attached after each content update. */
-  private bindFavoriteButton(popup: L.Popup, stop: Stop): void {
-    const button = popup.getElement()?.querySelector<HTMLButtonElement>('.popup-fav');
-    if (!button) return;
-    L.DomEvent.disableClickPropagation(button);
-    button.addEventListener('click', () => {
-      const fav = this.favorites.toggleFavorite(stop.id);
-      button.classList.toggle('active', fav);
-      button.textContent = fav ? '★' : '☆';
-      button.title = fav ? 'Usuń z ulubionych' : 'Dodaj do ulubionych';
-      button.setAttribute('aria-pressed', String(fav));
-    });
-  }
-
-  private buildLoadingPopup(stop: Stop): string {
-    return `
-      <div class="popup-content">
-        ${this.buildHeader(stop)}
-        <div class="popup-loading">
-          <div class="loading-spinner"></div>
-          <span>Ładowanie odjazdów…</span>
-        </div>
-      </div>
-    `;
-  }
-
-  private buildDeparturePopup(stop: Stop, data: any): string {
-    const rows = data.rows || [];
-    const directions = data.directions || {};
-    const scheduled = this.travelTime.isScheduled();
-    let departures = '';
-
-    if (rows.length === 0) {
-      departures = `
-        <div class="popup-empty">
-          <span class="empty-icon">🌙</span>
-          <p>${scheduled ? 'Brak odjazdów w ciągu 3 godzin' : 'Brak najbliższych odjazdów'}</p>
-          <p class="empty-hint">${scheduled ? 'Wybierz inną godzinę lub dzień' : 'Sprawdź ponownie w godzinach kursowania'}</p>
-        </div>
-      `;
-    } else {
-      departures = `<div class="popup-departures">`;
-      for (const row of rows.slice(0, 8)) {
-        const estimatedBadge = row.canceled
-          ? '<span class="badge-canceled">ODWOŁANY</span>'
-          : row.is_estimated
-            ? '<span class="badge-live">LIVE</span>'
-            : '';
-        // Scheduled mode: clock time is more useful than "in N min" from a future moment
-        const timeDisplay = scheduled && row.static_time
-          ? row.static_time
-          : row.minutes_to_departure != null
-            ? `${row.minutes_to_departure} min`
-            : row.time || '—';
-
-        const line = row.line_name || row.line || '?';
-        const direction = (row.direction_id && directions[row.direction_id]) || row.direction || 'Brak kierunku';
-
-        departures += `
-          <div class="departure-row${row.canceled ? ' canceled' : ''}">
-            <span class="dep-line">${escapeHtml(line)}</span>
-            <span class="dep-direction">${escapeHtml(direction)}</span>
-            <span class="dep-time">${escapeHtml(timeDisplay)}${estimatedBadge}</span>
-          </div>
-        `;
-      }
-      departures += `</div>`;
-    }
-
-    return `
-      <div class="popup-content">
-        ${this.buildHeader(stop)}
-        <div class="popup-schedule-note">🕒 ${scheduled
-          ? `Rozkład: ${escapeHtml(this.travelTime.label())}`
-          : 'Według rozkładu jazdy (bez opóźnień)'}</div>
-        ${departures}
-      </div>
-    `;
-  }
-
-  private buildErrorPopup(stop: Stop): string {
-    return `
-      <div class="popup-content">
-        ${this.buildHeader(stop)}
-        <div class="popup-error">
-          <span>⚠️</span>
-          <p>Nie udało się pobrać odjazdów</p>
-        </div>
-      </div>
-    `;
-  }
-}
-
-/** "↔ oba kierunki" / "→ w stronę: …" under the stop name. */
-function directionBadge(stop: Stop): string {
-  if (stop.directions === 2) {
-    return '<span class="badge-direction" title="Autobusy zatrzymują się tu w obu kierunkach">↔ oba kierunki</span>';
-  }
-  if (stop.directions === 1) {
-    const towards = stop.towards ? ` w stronę: ${escapeHtml(stop.towards.replace('JASŁO,ul.', ''))}` : '';
-    return `<span class="badge-direction" title="Autobusy zatrzymują się tu tylko w jednym kierunku">→ jeden kierunek${towards}</span>`;
-  }
-  return '';
 }

@@ -40,7 +40,7 @@ export class StopEditorComponent {
     });
     // Clicking a stop on the map makes it the current one
     effect(() => {
-      const id = this.markers.clickedStopId();
+      const id = this.markers.selectedStopId();
       if (id) untracked(() => this.editor.go(id));
     });
   }

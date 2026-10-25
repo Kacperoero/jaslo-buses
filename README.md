@@ -7,7 +7,7 @@ Dane pochodzą z **oficjalnego rozkładu jazdy MKS Jasło w formacie GTFS** ([mk
 ## Funkcje
 
 - **Mapa przystanków** – Leaflet + kafelki OpenStreetMap, wyśrodkowana na Jaśle; 554 przystanki z GTFS.
-- **Odjazdy z przystanku** – kliknięcie przystanku otwiera okienko z najbliższymi odjazdami w ciągu 3 godzin (linia, kierunek, za ile minut / godzina).
+- **Odjazdy z przystanku** – kliknięcie przystanku otwiera panel po prawej (na telefonie u dołu) z najbliższymi odjazdami w ciągu 3 godzin (linia, kierunek, za ile minut / godzina; „za ile minut” odświeża się co 30 s). Panel przystanku i panel autobusu zajmują to samo miejsce – otwarcie jednego zamyka drugi; × albo Esc zamyka.
 - **Wyszukiwarka przystanków** – pole w lewym górnym rogu, po wybraniu mapa przelatuje do przystanku.
 - **Wybór daty i godziny** – przycisk „🕒 Teraz” pod wyszukiwarką i sekcja „Kiedy” w planerze. „Inny termin” przełącza okienka i planer na wybrany dzień i godzinę (do końca ważności rozkładu).
 - **Ulubione i ostatnie** – gwiazdka ☆ w okienku przystanku (ulubione mają na mapie żółtą kropkę). Po kliknięciu w puste pole wyszukiwarki widać ulubione i ostatnio oglądane przystanki. W planerze puste pola A/B podpowiadają ulubione, a pod formularzem jest lista ostatnich tras. Dane są w przeglądarce (`localStorage`); tras z „Moja lokalizacja” nie zapisujemy.
@@ -111,7 +111,8 @@ src/app/
 │   ├── vehicles/                        # Autobusy wg rozkładu: pozycje (scheduled-buses.ts), stan, warstwa mapy
 │   ├── stop-editor/                     # Edytor przystanków (?dev)
 │   ├── map/services/
-│   │   ├── map-marker.service.ts        # Znaczniki przystanków i okienka z odjazdami
+│   │   ├── map-marker.service.ts        # Znaczniki przystanków, wybrany przystanek
+│   │   ├── stop-panel/                  # Panel wybranego przystanku z odjazdami
 │   │   └── route-layer.service.ts       # Rysowanie punktów A/B i wybranego połączenia
 │   └── route-planner/
 │       ├── raptor.ts                    # Algorytm RAPTOR (sieć, rundy, odtwarzanie trasy)

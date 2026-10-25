@@ -6,6 +6,7 @@ import { ShapesService } from '../core/services/shapes.service';
 import { StopsService } from '../core/services/stops.service';
 import { MapMarkerService } from '../features/map/services/map-marker.service';
 import { RouteLayerService } from '../features/map/services/route-layer.service';
+import { StopPanelComponent } from '../features/map/stop-panel/stop-panel.component';
 import { PlannerPanelComponent } from '../features/route-planner/planner-panel/planner-panel.component';
 import { PlannerStateService } from '../features/route-planner/planner-state.service';
 import { StopEditorLayerService } from '../features/stop-editor/stop-editor-layer.service';
@@ -28,7 +29,7 @@ const BUS_PANEL_WIDTH_PX = 320;
 @Component({
   selector: 'app-main-map',
   standalone: true,
-  imports: [StopSearchComponent, PlannerPanelComponent, StopEditorComponent, BusPanelComponent],
+  imports: [StopSearchComponent, PlannerPanelComponent, StopEditorComponent, BusPanelComponent, StopPanelComponent],
   templateUrl: './main-map.component.html',
   styleUrl: './main-map.component.scss'
 })
@@ -65,6 +66,14 @@ export class MainMapComponent implements OnInit, OnDestroy {
       this.shapes.loaded(); // redraw along roads once the road lines arrive
       untracked(() => (conn ? this.routeLayer.drawConnection(conn) : this.routeLayer.clearRoute()));
     });
+    // One side panel at a time: a stop or a bus
+    effect(() => {
+      if (this.markers.selectedStopId()) untracked(() => this.buses.select(null));
+    });
+    effect(() => {
+      if (this.buses.selectedKey()) untracked(() => this.markers.selectStop(null));
+    });
+
     // Buses where the timetable says they are
     effect(() => {
       const buses = this.buses.buses();
