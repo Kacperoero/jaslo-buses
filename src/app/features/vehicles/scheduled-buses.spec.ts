@@ -31,6 +31,7 @@ describe('busesAt', () => {
     expect(bus.lng).toBeCloseTo(21.405, 6);  // half way A → B
     expect(bus.bearing).toBeCloseTo(90, 0); // heading east
     expect(bus.nextStop).toBe(1);
+    expect(bus.nextIndex).toBe(1);
     expect(bus.nextMinute).toBe(490);
   });
 

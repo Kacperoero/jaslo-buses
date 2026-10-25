@@ -20,6 +20,10 @@ export interface ScheduledBus {
   waiting: boolean;
   /** Stop position (in GtfsIndex.stops) the bus heads to next – or waits at */
   nextStop: number;
+  /** Index of that stop within the trip (trip.variant.stops / trip.times) */
+  nextIndex: number;
+  /** Service day of the trip relative to `at`'s day: 0 today, -1 yesterday (after midnight) */
+  dayOffset: number;
   /** When it leaves / reaches that stop, minutes after midnight of `at`'s day (may be < 0 or ≥ 1440) */
   nextMinute: number;
 }
@@ -48,13 +52,14 @@ export function busesAt(index: GtfsIndex, at: Date, pathBetween: PathBetween): S
       const base = {
         key: `${trip.index}@${dayOffset}`,
         trip: trip.index,
+        dayOffset,
         line: trip.variant.line ?? UNKNOWN_LINE,
         headsign: trip.variant.headsign
       };
 
       if (t < times[0]) {
         const [, , lat, lng] = index.stops[stops[0]];
-        buses.push({ ...base, lat, lng, bearing: null, waiting: true, nextStop: stops[0], nextMinute: times[0] + dayOffset * 1440 });
+        buses.push({ ...base, lat, lng, bearing: null, waiting: true, nextStop: stops[0], nextIndex: 0, nextMinute: times[0] + dayOffset * 1440 });
         continue;
       }
 
@@ -64,7 +69,7 @@ export function busesAt(index: GtfsIndex, at: Date, pathBetween: PathBetween): S
       const span = times[i + 1] - times[i];
       const fraction = span > 0 ? (t - times[i]) / span : 1;
       const [lat, lng, bearing] = pointAlong(pathBetween(stops[i], stops[i + 1]), fraction);
-      buses.push({ ...base, lat, lng, bearing, waiting: false, nextStop: stops[i + 1], nextMinute: times[i + 1] + dayOffset * 1440 });
+      buses.push({ ...base, lat, lng, bearing, waiting: false, nextStop: stops[i + 1], nextIndex: i + 1, nextMinute: times[i + 1] + dayOffset * 1440 });
     }
   }
   return buses;
