@@ -1,0 +1,78 @@
+@let c = conn();
+<div class="connection-card" [class.selected]="selected()">
+  <div class="card-left">
+    @if (c.isTransfer && c.legs) {
+      <div class="transfer-badges">
+        <span class="line-badge compact">{{ c.legs[0].line }}</span>
+        <span class="transfer-arrow">➔</span>
+        <span class="line-badge compact second">{{ c.legs[1].line }}</span>
+      </div>
+    } @else {
+      <span class="line-badge">{{ c.line }}</span>
+    }
+    <span class="time-summary">{{ c.totalTime }} min</span>
+    @if (c.departureTimeAbs && c.departureTimeAbs !== 'Brak kursu') {
+      <span class="time-range">{{ c.departureTimeAbs }} - {{ c.arrivalTimeAbs }}</span>
+    }
+  </div>
+
+  <div class="card-details">
+    <div class="detail-step text-muted">
+      🚶‍♂️ Idź do: <strong>{{ c.startStop.name }}</strong> ({{ c.walkTimeStart }} min)
+    </div>
+
+    @if (c.isTransfer && c.legs && c.legs.length >= 2) {
+      @if (c.legs[0].nextDeparture) {
+        <div class="detail-step wait-time-info">
+          ⏳ Oczekiwanie na przystanku: <strong>{{ c.waitingTimeAtStop }} min</strong>
+        </div>
+      }
+
+      <div class="detail-step">
+        🚌 Wsiądź w linię <strong>{{ c.legs[0].line }}</strong> do: <strong>{{ c.transferStop?.name }}</strong> ({{ c.legs[0].busTime }} min)
+        @if (c.legs[0].nextDeparture) {
+          <div class="departure-time">Odjazd: <strong>{{ c.legs[0].departureTimeAbs }}</strong></div>
+          <div class="arrival-time-info">Przyjazd na przesiadkę: <strong>{{ c.legs[0].arrivalTimeAbs }}</strong></div>
+        } @else {
+          <div class="departure-time missing">⚠️ Brak kursu dla tego etapu</div>
+        }
+      </div>
+
+      <div class="detail-step transfer-divider">
+        🔄 Przesiadka na przystanku: <strong>{{ c.transferStop?.name }}</strong>
+        @if (c.legs[0].nextDeparture && c.legs[1].nextDeparture) {
+          <span class="wait-transfer"> (czas na przesiadkę: <strong>{{ c.walkTimeTransfer }} min</strong>)</span>
+        }
+      </div>
+
+      <div class="detail-step">
+        🚌 Przesiądź się w linię <strong>{{ c.legs[1].line }}</strong> do: <strong>{{ c.endStop.name }}</strong> ({{ c.legs[1].busTime }} min)
+        @if (c.legs[1].nextDeparture) {
+          <div class="departure-time">Odjazd: <strong>{{ c.legs[1].departureTimeAbs }}</strong></div>
+          <div class="arrival-time-info">Przyjazd do celu: <strong>{{ c.legs[1].arrivalTimeAbs }}</strong></div>
+        } @else {
+          <div class="departure-time missing">⚠️ Brak kursu dla drugiego etapu</div>
+        }
+      </div>
+    } @else {
+      @if (c.nextDeparture) {
+        <div class="detail-step wait-time-info">
+          ⏳ Oczekiwanie na przystanku: <strong>{{ c.waitingTimeAtStop }} min</strong>
+        </div>
+      }
+      <div class="detail-step">
+        🚌 Jedź do: <strong>{{ c.endStop.name }}</strong> ({{ c.busTime }} min)
+        @if (c.nextDeparture) {
+          <div class="departure-time">Odjazd: <strong>{{ c.departureTimeAbs }}</strong> (za {{ c.nextDeparture.time }})</div>
+          <div class="arrival-time-info">Przyjazd: <strong>{{ c.arrivalTimeAbs }}</strong></div>
+        } @else {
+          <div class="departure-time missing">⚠️ Brak kursów w najbliższym czasie</div>
+        }
+      </div>
+    }
+
+    <div class="detail-step text-muted">
+      🚶‍♂️ Idź do celu ({{ c.walkTimeEnd }} min)
+    </div>
+  </div>
+</div>

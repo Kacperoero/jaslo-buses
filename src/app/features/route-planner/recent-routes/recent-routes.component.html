@@ -1,0 +1,12 @@
+<div class="results-header">Ostatnie trasy</div>
+<ul class="recent-routes">
+  @for (route of favorites.recentRoutes(); track $index) {
+    <li>
+      <button type="button" class="recent-route" (click)="use(route)">
+        <span class="route-point"><span class="pin-a">A</span>{{ route.from.name }}</span>
+        <span class="route-point"><span class="pin-b">B</span>{{ route.to.name }}</span>
+      </button>
+      <button type="button" class="recent-remove" aria-label="Usuń z ostatnich tras" (click)="remove(route, $event)">✕</button>
+    </li>
+  }
+</ul>

@@ -1,5 +1,7 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Stop } from '../../shared/models/transit.models';
+import { StopsService } from './stops.service';
 
 /** A start or end point of a remembered route. */
 export interface SavedPoint {
@@ -64,6 +66,18 @@ export class FavoritesService {
   readonly recentRoutes = computed(() => this.state().recentRoutes);
   private readonly favoriteSet = computed(() => new Set(this.state().favoriteStopIds));
 
+  private stopsService = inject(StopsService);
+
+  /** Favourite stops (in the order they were added) */
+  readonly favoriteStops = computed(() => this.toStops(this.favoriteStopIds()));
+
+  /** Recently viewed stops that are not favourites already */
+  readonly recentStops = computed(() =>
+    this.toStops(this.recentStopIds().filter(id => !this.favoriteSet().has(id))));
+
+  /** Favourites, then recent stops – suggestions for an empty stop field */
+  readonly quickStops = computed(() => [...this.favoriteStops(), ...this.recentStops()].slice(0, 8));
+
   isFavorite(stopId: string): boolean {
     return this.favoriteSet().has(stopId);
   }
@@ -101,6 +115,11 @@ export class FavoritesService {
   removeRecentRoute(route: RecentRoute): void {
     const key = routeKey(route);
     this.update(s => ({ ...s, recentRoutes: s.recentRoutes.filter(r => routeKey(r) !== key) }));
+  }
+
+  private toStops(ids: string[]): Stop[] {
+    const byId = this.stopsService.byId();
+    return ids.map(id => byId.get(id)).filter((s): s is Stop => !!s);
   }
 
   private update(change: (s: StoredState) => StoredState): void {

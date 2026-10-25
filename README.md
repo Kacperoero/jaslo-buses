@@ -80,21 +80,36 @@ Ciekawostka: kurs w GTFS to często cały przejazd autobusu przez kilka tras (np
 src/app/
 ├── app.ts / app.html                    # Główny komponent – renderuje tylko mapę
 ├── app.config.ts                        # Providery: router, HttpClient
-├── main-map/                            # Cały interfejs: mapa, wyszukiwarka, planer trasy
-│   └── main-map.component.ts            # Stan UI, rysowanie tras na mapie
+├── main-map/                            # Widok mapy: Leaflet, znaczniki, przyciski na mapie
 ├── core/services/
 │   ├── gtfs.service.ts                  # Wczytanie gtfs.json, indeks odjazdów i kalendarza
 │   ├── timetable.service.ts             # Odjazdy, linie przystanku, przebieg kursu (z GTFS)
+│   ├── stops.service.ts                 # Lista przystanków i wyszukiwanie (bez polskich znaków, po słowach)
 │   ├── travel-time.service.ts           # Wybrana data/godzina podróży (null = teraz)
-│   └── favorites.service.ts             # Ulubione, ostatnie przystanki i trasy (localStorage)
+│   ├── favorites.service.ts             # Ulubione, ostatnie przystanki i trasy (localStorage)
+│   └── geolocation.service.ts           # Lokalizacja użytkownika z przeglądarki
 ├── features/
-│   ├── map/services/map-marker.service.ts      # Rysowanie przystanków i okienek z odjazdami
-│   └── route-planner/route-planner.service.ts  # Algorytm wyszukiwania połączeń (+ testy)
+│   ├── stop-search/                     # Wyszukiwarka przystanków (lewy górny róg)
+│   ├── map/services/
+│   │   ├── map-marker.service.ts        # Znaczniki przystanków i okienka z odjazdami
+│   │   └── route-layer.service.ts       # Rysowanie punktów A/B i wybranego połączenia
+│   └── route-planner/
+│       ├── route-planner.service.ts     # Algorytm wyszukiwania połączeń
+│       ├── planner-state.service.ts     # Stan planera: punkty, wyszukiwanie, wyniki
+│       ├── planner-panel/               # Panel boczny planera
+│       ├── stop-input/                  # Pole przystanku z podpowiedziami (A / B)
+│       ├── connection-card/             # Karta jednego połączenia
+│       ├── recent-routes/               # Lista ostatnich tras
+│       └── ride-path.ts                 # Przystanki przejazdu (do rysowania)
 └── shared/
     ├── components/time-picker/          # Wybór „Teraz / Inny termin”
     ├── models/transit.models.ts         # Typy: Stop, Departure, TripExecutionResponse…
     └── utils/                           # Tekst (polskie znaki, escapowanie), geometria, czas
+```
 
+Stan planera trzyma `PlannerStateService`; komponenty panelu tylko go wyświetlają i wywołują jego metody, a `MainMapComponent` na podstawie tego samego stanu rysuje trasę na mapie (`RouteLayerService`). Listy podpowiedzi zamykają się po kliknięciu poza nimi albo klawiszem Esc.
+
+```
 scripts/gtfs/
 ├── build-gtfs.mjs                       # GTFS → public/assets/data (Node, bez zależności)
 ├── assign_lines.py                      # Numery linii z PDF → line-assignments.json

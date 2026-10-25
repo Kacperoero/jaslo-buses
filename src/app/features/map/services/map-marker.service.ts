@@ -1,5 +1,4 @@
 import { Injectable, effect } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 import { Stop } from '../../../shared/models/transit.models';
 import { TimetableService } from '../../../core/services/timetable.service';
@@ -13,7 +12,7 @@ import { FavoritesService } from '../../../core/services/favorites.service';
 export class MapMarkerService {
   private markers: L.Marker[] = [];
   private markerById = new Map<string, L.Marker>();
-  private stops: Stop[] = [];
+  private map: L.Map | null = null;
 
   private readonly stopIcon = L.divIcon({
     className: 'bus-stop-marker',
@@ -32,7 +31,6 @@ export class MapMarkerService {
   devMode = false;
 
   constructor(
-    private http: HttpClient,
     private timetableService: TimetableService,
     private travelTime: TravelTimeService,
     private favorites: FavoritesService
@@ -53,61 +51,40 @@ export class MapMarkerService {
     return this.favorites.isFavorite(stopId) ? this.favoriteIcon : this.stopIcon;
   }
 
-  /**
-   * Load stops from local JSON and render markers on the map.
-   * Returns the loaded stops array for use elsewhere.
-   */
-  renderStops(map: L.Map): Promise<Stop[]> {
-    return new Promise((resolve) => {
-      this.http.get<Stop[]>('assets/data/stops-base.json').subscribe({
-        next: (stops) => {
-          this.stops = stops;
-          this.clearMarkers();
+  /** Draws a marker for every stop; clicking one opens its departures. */
+  renderStops(map: L.Map, stops: Stop[]): void {
+    this.map = map;
+    this.clearMarkers();
 
-          for (const stop of stops) {
-            const marker = L.marker([stop.lat, stop.lng], {
-              icon: this.iconFor(stop.id),
-              // Favourites drawn above other stops
-              zIndexOffset: this.favorites.isFavorite(stop.id) ? 500 : 0,
-              draggable: this.devMode,
-              title: stop.name
-            });
-
-            marker.on('click', () => {
-              this.onStopClick(map, marker, stop);
-            });
-
-            if (this.devMode) {
-              marker.on('dragend', (e: L.LeafletEvent) => {
-                const m = e.target as L.Marker;
-                const pos = m.getLatLng();
-                console.log(
-                  `[DEV] Stop "${stop.name}" (${stop.id}) moved to:`,
-                  JSON.stringify({
-                    ...stop,
-                    lat: pos.lat,
-                    lng: pos.lng
-                  }, null, 2)
-                );
-              });
-            }
-
-            marker.addTo(map);
-            this.markers.push(marker);
-            this.markerById.set(stop.id, marker);
-          }
-          resolve(stops);
-        },
-        error: (err) => {
-          console.error('Failed to load stops:', err);
-          resolve([]);
-        }
+    for (const stop of stops) {
+      const marker = L.marker([stop.lat, stop.lng], {
+        icon: this.iconFor(stop.id),
+        // Favourites drawn above other stops
+        zIndexOffset: this.favorites.isFavorite(stop.id) ? 500 : 0,
+        draggable: this.devMode,
+        title: stop.name
       });
-    });
+
+      marker.on('click', () => this.onStopClick(map, marker, stop));
+
+      if (this.devMode) {
+        marker.on('dragend', (e: L.LeafletEvent) => {
+          const pos = (e.target as L.Marker).getLatLng();
+          console.log(`[DEV] Stop "${stop.name}" (${stop.id}) moved to:`,
+            JSON.stringify({ ...stop, lat: pos.lat, lng: pos.lng }, null, 2));
+        });
+      }
+
+      marker.addTo(map);
+      this.markers.push(marker);
+      this.markerById.set(stop.id, marker);
+    }
   }
 
-  getStops(): Stop[] {
-    return this.stops;
+  /** Opens the departures popup of a stop (as if its marker was clicked). */
+  openStop(stopId: string): void {
+    const marker = this.markerById.get(stopId);
+    if (marker && this.map) marker.fire('click');
   }
 
   private clearMarkers(): void {

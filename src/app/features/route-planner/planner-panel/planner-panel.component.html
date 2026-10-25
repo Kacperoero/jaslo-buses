@@ -1,0 +1,68 @@
+<div class="planner-sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-title">Planer podróży</span>
+    <button type="button" class="clear-all-btn" (click)="planner.clearAll()">Wyczyść</button>
+  </div>
+
+  <div class="inputs-container">
+    <app-stop-input label="Punkt startowy A" [(text)]="planner.startText" (selected)="planner.setStop('start', $event)">
+      <button type="button" class="map-pick-btn" [class.picking]="planner.picking() === 'start'"
+              (click)="planner.startPicking('start')" title="Wskaż na mapie" aria-label="Wskaż punkt A na mapie">📍</button>
+      <button type="button" class="my-location-btn" [class.busy]="locating()" (click)="useMyLocation()"
+              title="Użyj mojej lokalizacji" aria-label="Użyj mojej lokalizacji jako punktu A">🎯</button>
+    </app-stop-input>
+    @if (locationError()) {
+      <p class="location-error" role="alert">{{ locationError() }}</p>
+    }
+
+    <button type="button" class="swap-btn" (click)="planner.swap()" title="Zamień punkty" aria-label="Zamień punkty A i B">↕️</button>
+
+    <app-stop-input label="Punkt docelowy B" [(text)]="planner.endText" (selected)="planner.setStop('end', $event)">
+      <button type="button" class="map-pick-btn" [class.picking]="planner.picking() === 'end'"
+              (click)="planner.startPicking('end')" title="Wskaż na mapie" aria-label="Wskaż punkt B na mapie">📍</button>
+    </app-stop-input>
+
+    <div class="input-group">
+      <span class="group-label">Kiedy</span>
+      <app-time-picker variant="inline"></app-time-picker>
+    </div>
+
+    <button type="button" class="search-routes-btn" (click)="planner.search()" [disabled]="!planner.canSearch()">
+      Szukaj połączeń
+    </button>
+  </div>
+
+  @if (planner.picking(); as picking) {
+    <div class="picking-hint">
+      <span>Kliknij na mapie, aby ustawić punkt {{ picking === 'start' ? 'startowy A' : 'docelowy B' }}</span>
+    </div>
+  }
+
+  <div class="results-container">
+    @if (planner.searching()) {
+      <div class="results-loading">
+        <div class="loading-spinner"></div>
+        <span>Szukanie najszybszych połączeń…</span>
+      </div>
+    }
+
+    @if (!planner.searching() && planner.connections().length > 0) {
+      <div class="results-header">Proponowane połączenia</div>
+      <div class="connection-list">
+        @for (conn of planner.connections(); track $index) {
+          <app-connection-card [conn]="conn" [selected]="planner.selectedIndex() === $index" (chosen)="planner.select($index)" />
+        }
+      </div>
+    }
+
+    @if (planner.searchDone() && planner.connections().length === 0) {
+      <div class="results-empty">
+        <span>Brak połączeń autobusowych (nawet z przesiadką) między wybranymi punktami w najbliższym czasie.</span>
+      </div>
+    }
+
+    @if (showRecentRoutes()) {
+      <app-recent-routes />
+    }
+  </div>
+</div>

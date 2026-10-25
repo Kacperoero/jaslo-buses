@@ -1,107 +1,17 @@
-<!-- Single Search Box (Default view) -->
-@if (!routePlannerOpen()) {
-  <div class="search-overlay">
-    <div class="search-container" [class.search-open]="searchOpen()">
-      <div class="search-bar">
-        <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.3-4.3"/>
-        </svg>
-        <input
-          id="stop-search-input"
-          type="text"
-          placeholder="Szukaj przystanku…"
-          [value]="searchQuery()"
-          (input)="onSearchInput($event)"
-          (focus)="onSearchFocus()"
-          autocomplete="off"
-        />
-        @if (searchQuery()) {
-          <button class="clear-btn" (click)="clearSearch()" aria-label="Wyczyść">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
-              <path d="M18 6 6 18M6 6l12 12"/>
-            </svg>
-          </button>
-        }
-      </div>
-
-      @if (searchOpen() && searchQuery().trim() && filteredStops().length > 0) {
-        <ul class="search-results">
-          @for (stop of filteredStops(); track stop.id) {
-            <ng-container *ngTemplateOutlet="stopRow; context: { $implicit: stop }"></ng-container>
-          }
-        </ul>
-      }
-
-      <!-- Empty query: favourite and recently viewed stops -->
-      @if (searchOpen() && !searchQuery().trim()) {
-        @if (favoriteStops().length > 0 || recentStops().length > 0) {
-          <div class="quick-lists">
-            @if (favoriteStops().length > 0) {
-              <div class="list-heading">★ Ulubione</div>
-              <ul class="search-results">
-                @for (stop of favoriteStops(); track stop.id) {
-                  <ng-container *ngTemplateOutlet="stopRow; context: { $implicit: stop }"></ng-container>
-                }
-              </ul>
-            }
-            @if (recentStops().length > 0) {
-              <div class="list-heading">Ostatnio oglądane</div>
-              <ul class="search-results">
-                @for (stop of recentStops(); track stop.id) {
-                  <ng-container *ngTemplateOutlet="stopRow; context: { $implicit: stop }"></ng-container>
-                }
-              </ul>
-            }
-          </div>
-        } @else {
-          <div class="search-empty">
-            <span>Dodaj przystanek do ulubionych gwiazdką ☆ w jego okienku z odjazdami.</span>
-          </div>
-        }
-      }
-
-      <ng-template #stopRow let-stop>
-        <li (click)="selectStop(stop)">
-          <svg class="result-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
-            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          <div class="result-text">
-            <span class="result-name">{{ stop.name }}</span>
-            @if (stop.onlyDisembarking) {
-              <span class="result-badge">Tylko wysiadanie</span>
-            }
-          </div>
-          <button type="button" class="row-fav" [class.active]="favorites.isFavorite(stop.id)"
-                  [attr.aria-pressed]="favorites.isFavorite(stop.id)"
-                  [attr.aria-label]="favorites.isFavorite(stop.id) ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'"
-                  (click)="toggleFavorite(stop, $event)">
-            {{ favorites.isFavorite(stop.id) ? '★' : '☆' }}
-          </button>
-        </li>
-      </ng-template>
-
-      @if (searchOpen() && searchQuery() && filteredStops().length === 0) {
-        <div class="search-empty">
-          <span>Nie znaleziono przystanku „{{ searchQuery() }}"</span>
-        </div>
-      }
-    </div>
-
-    <!-- When: live ("Teraz") or a chosen date & time -->
-    <app-time-picker class="map-time-picker" variant="chip"></app-time-picker>
-  </div>
+@if (planner.open()) {
+  <app-planner-panel />
+} @else {
+  <app-stop-search (stopSelected)="showStop($event)" />
 }
 
-<!-- Route Planner Toggle Button -->
-<button class="route-planner-toggle" (click)="toggleRoutePlanner()" [class.active]="routePlannerOpen()" aria-label="Planer trasy" id="planner-toggle-btn">
-  @if (routePlannerOpen()) {
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+<button type="button" class="route-planner-toggle" (click)="planner.toggle()" [class.active]="planner.open()"
+        [attr.aria-pressed]="planner.open()" aria-label="Planer trasy" id="planner-toggle-btn">
+  @if (planner.open()) {
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true">
       <path d="M18 6 6 18M6 6l12 12"/>
     </svg>
   } @else {
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" aria-hidden="true">
       <path d="M9 18V5l12-2v13"/>
       <circle cx="6" cy="18" r="3"/>
       <circle cx="18" cy="16" r="3"/>
@@ -110,269 +20,23 @@
   }
 </button>
 
-<!-- Route Planner Sidebar -->
-@if (routePlannerOpen()) {
-  <div class="planner-sidebar">
-    <div class="sidebar-header">
-      <span class="sidebar-title">Planer podróży</span>
-      <button class="clear-all-btn" (click)="clearAllRoutes()">Wyczyść</button>
-    </div>
-
-    <div class="inputs-container">
-      <!-- Input A: Start -->
-      <div class="input-group">
-        <label>Punkt startowy A</label>
-        <div class="input-with-actions">
-          <input
-            type="text"
-            placeholder="Wpisz przystanek lub wybierz z mapy…"
-            [ngModel]="searchQueryStart()"
-            (ngModelChange)="searchQueryStart.set($event)"
-            (focus)="startSuggestionsOpen.set(true)"
-            (input)="startSuggestionsOpen.set(true)"
-          />
-          <button class="map-pick-btn" [class.picking]="isPickingStart()" (click)="startPickingStart()" title="Wskaż na mapie">
-            📍
-          </button>
-          <button class="my-location-btn" (click)="useMyLocationForStart()" title="Użyj mojej lokalizacji">
-            🎯
-          </button>
-        </div>
-        @if (startSuggestionsOpen() && startSuggestions().length > 0) {
-          <ul class="suggestion-list">
-            @for (stop of startSuggestions(); track stop.id) {
-              <li (click)="selectStartStop(stop)">
-                @if (favorites.isFavorite(stop.id)) { <span class="suggestion-fav">★</span> }
-                {{ stop.name }}
-              </li>
-            }
-          </ul>
-        }
-      </div>
-
-      <!-- Swap Points Button -->
-      <button class="swap-btn" (click)="swapPoints()" title="Zamień punkty">
-        ↕️
-      </button>
-
-      <!-- Input B: End -->
-      <div class="input-group">
-        <label>Punkt docelowy B</label>
-        <div class="input-with-actions">
-          <input
-            type="text"
-            placeholder="Wpisz przystanek lub wybierz z mapy…"
-            [ngModel]="searchQueryEnd()"
-            (ngModelChange)="searchQueryEnd.set($event)"
-            (focus)="endSuggestionsOpen.set(true)"
-            (input)="endSuggestionsOpen.set(true)"
-          />
-          <button class="map-pick-btn" [class.picking]="isPickingEnd()" (click)="startPickingEnd()" title="Wskaż na mapie">
-            📍
-          </button>
-        </div>
-        @if (endSuggestionsOpen() && endSuggestions().length > 0) {
-          <ul class="suggestion-list">
-            @for (stop of endSuggestions(); track stop.id) {
-              <li (click)="selectEndStop(stop)">
-                @if (favorites.isFavorite(stop.id)) { <span class="suggestion-fav">★</span> }
-                {{ stop.name }}
-              </li>
-            }
-          </ul>
-        }
-      </div>
-
-      <!-- When -->
-      <div class="input-group">
-        <label>Kiedy</label>
-        <app-time-picker variant="inline"></app-time-picker>
-      </div>
-
-      <button class="search-routes-btn" (click)="findConnection()" [disabled]="!startPoint() || !endPoint()">
-        Szukaj połączeń
-      </button>
-    </div>
-
-    <!-- Active Picking Hints -->
-    @if (isPickingStart()) {
-      <div class="picking-hint">
-        <span>Kliknij na mapie, aby ustawić punkt startowy A</span>
-      </div>
-    }
-    @if (isPickingEnd()) {
-      <div class="picking-hint">
-        <span>Kliknij na mapie, aby ustawić punkt docelowy B</span>
-      </div>
-    }
-
-    <!-- Search Results / Options -->
-    <div class="results-container">
-      @if (searchingConnections()) {
-        <div class="results-loading">
-          <div class="loading-spinner"></div>
-          <span>Szukanie najszybszych połączeń…</span>
-        </div>
-      }
-
-      @if (!searchingConnections() && connections().length > 0) {
-        <div class="results-header">Proponowane połączenia</div>
-        <div class="connection-list">
-          @for (conn of connections(); track $index) {
-            <div class="connection-card" [class.selected]="selectedConnectionIndex() === $index" (click)="selectConnection($index)">
-              <div class="card-left">
-                @if (conn.isTransfer && conn.legs) {
-                  <div class="transfer-badges" style="display: flex; align-items: center; gap: 4px;">
-                    <span class="line-badge compact" style="padding: 2px 6px; font-size: 0.75rem;">{{ conn.legs[0].line }}</span>
-                    <span class="transfer-arrow" style="font-size: 0.75rem; color: #a1a1aa; font-weight: bold;">➔</span>
-                    <span class="line-badge compact secondary" style="padding: 2px 6px; font-size: 0.75rem; background: rgba(6, 182, 212, 0.2); border-color: rgba(6, 182, 212, 0.4); color: #22d3ee;">{{ conn.legs[1].line }}</span>
-                  </div>
-                } @else {
-                  <span class="line-badge">{{ conn.line }}</span>
-                }
-                <span class="time-summary">{{ conn.totalTime }} min</span>
-                @if (conn.departureTimeAbs && conn.departureTimeAbs !== 'Brak kursu') {
-                  <span class="time-range">{{ conn.departureTimeAbs }} - {{ conn.arrivalTimeAbs }}</span>
-                }
-              </div>
-              <div class="card-details">
-                <!-- Step 1: Walk to start stop -->
-                <div class="detail-step text-muted">
-                  🚶‍♂️ Idź do: <strong>{{ conn.startStop.name }}</strong> ({{ conn.walkTimeStart }} min)
-                </div>
-
-                @if (!conn.isTransfer) {
-                  <!-- DIRECT ROUTE -->
-                  @if (conn.nextDeparture) {
-                    <div class="detail-step wait-time-info text-warning">
-                      ⏳ Oczekiwanie na przystanku: <strong>{{ conn.waitingTimeAtStop }} min</strong>
-                    </div>
-                  }
-                  <div class="detail-step">
-                    🚌 Jedź do: <strong>{{ conn.endStop.name }}</strong> ({{ conn.busTime }} min)
-                    @if (conn.nextDeparture) {
-                      <div class="live-departure-time text-success">
-                        Odjazd: <strong>{{ conn.departureTimeAbs }}</strong> (za {{ conn.nextDeparture.time }})
-                        @if (conn.nextDeparture.is_estimated) {
-                          <span class="live-blink">● LIVE</span>
-                        }
-                      </div>
-                      <div class="arrival-time-info text-success">
-                        Przyjazd: <strong>{{ conn.arrivalTimeAbs }}</strong>
-                      </div>
-                    } @else {
-                      <div class="live-departure-time text-danger">
-                        ⚠️ Brak kursów w najbliższym czasie
-                      </div>
-                    }
-                  </div>
-                } @else if (conn.isTransfer && conn.legs && conn.legs.length >= 2) {
-                  <!-- TRANSFER ROUTE -->
-                  @if (conn.legs[0].nextDeparture) {
-                    <div class="detail-step wait-time-info text-warning">
-                      ⏳ Oczekiwanie na przystanku: <strong>{{ conn.waitingTimeAtStop }} min</strong>
-                    </div>
-                  }
-                  
-                  <!-- Leg 1 -->
-                  <div class="detail-step">
-                    🚌 Wsiądź w linię <strong>{{ conn.legs[0].line }}</strong> do: <strong>{{ conn.transferStop?.name }}</strong> ({{ conn.legs[0].busTime }} min)
-                    @if (conn.legs[0].nextDeparture) {
-                      <div class="live-departure-time text-success">
-                        Odjazd: <strong>{{ conn.legs[0].departureTimeAbs }}</strong>
-                      </div>
-                      <div class="arrival-time-info text-success">
-                        Przyjazd na przesiadkę: <strong>{{ conn.legs[0].arrivalTimeAbs }}</strong>
-                      </div>
-                    } @else {
-                      <div class="live-departure-time text-danger">
-                        ⚠️ Brak kursu dla tego etapu
-                      </div>
-                    }
-                  </div>
-
-                  <!-- Transfer point -->
-                  <div class="detail-step transfer-divider" style="color: #f59e0b; border-left: 2px dashed #f59e0b; padding-left: 8px; margin: 4px 0 4px 8px;">
-                    🔄 Przesiadka na przystanku: <strong>{{ conn.transferStop?.name }}</strong>
-                    @if (conn.legs[0].nextDeparture && conn.legs[1].nextDeparture) {
-                      <span class="wait-transfer text-warning" style="font-size: 0.8rem;"> (czas na przesiadkę: <strong>{{ conn.walkTimeTransfer }} min</strong>)</span>
-                    }
-                  </div>
-
-                  <!-- Leg 2 -->
-                  <div class="detail-step">
-                    🚌 Przesiądź się w linię <strong>{{ conn.legs[1].line }}</strong> do: <strong>{{ conn.endStop.name }}</strong> ({{ conn.legs[1].busTime }} min)
-                    @if (conn.legs[1].nextDeparture) {
-                      <div class="live-departure-time text-success">
-                        Odjazd: <strong>{{ conn.legs[1].departureTimeAbs }}</strong>
-                      </div>
-                      <div class="arrival-time-info text-success">
-                        Przyjazd do celu: <strong>{{ conn.legs[1].arrivalTimeAbs }}</strong>
-                      </div>
-                    } @else {
-                      <div class="live-departure-time text-danger">
-                        ⚠️ Brak kursu dla drugiego etapu
-                      </div>
-                    }
-                  </div>
-                }
-
-                <!-- Walk to final destination -->
-                <div class="detail-step text-muted">
-                  🚶‍♂️ Idź do celu ({{ conn.walkTimeEnd }} min)
-                </div>
-              </div>
-            </div>
-          }
-        </div>
-      }
-
-      @if (searchDone() && connections().length === 0) {
-        <div class="results-empty">
-          <span>Brak połączeń autobusowych (nawet z przesiadką) między wybranymi punktami w najbliższym czasie.</span>
-        </div>
-      }
-
-      @if (!searchingConnections() && connections().length === 0 && favorites.recentRoutes().length > 0) {
-        <div class="results-header">Ostatnie trasy</div>
-        <ul class="recent-routes">
-          @for (route of favorites.recentRoutes(); track $index) {
-            <li>
-              <button type="button" class="recent-route" (click)="useRecentRoute(route)">
-                <span class="route-point"><span class="pin-a">A</span>{{ route.from.name }}</span>
-                <span class="route-point"><span class="pin-b">B</span>{{ route.to.name }}</span>
-              </button>
-              <button type="button" class="recent-remove" aria-label="Usuń z ostatnich tras"
-                      (click)="removeRecentRoute(route, $event)">✕</button>
-            </li>
-          }
-        </ul>
-      }
-    </div>
-  </div>
-}
-
-<!-- Locate Me Button -->
-<button class="locate-btn" (click)="locateUser()" aria-label="Moja lokalizacja" id="locate-me-btn">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22">
+<button type="button" class="locate-btn" (click)="locateUser()" aria-label="Pokaż moją lokalizację" id="locate-me-btn">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22" aria-hidden="true">
     <circle cx="12" cy="12" r="3"/>
     <path d="M12 2v4M12 18v4M2 12h4M18 12h4"/>
   </svg>
 </button>
 
-<!-- Loading indicator -->
-@if (loading()) {
+@if (stops.loading()) {
   <div class="map-loading">
     <div class="loading-spinner large"></div>
     <span>Ładowanie przystanków…</span>
   </div>
 }
 
-<!-- Branding -->
 <div class="app-brand">
   <span class="brand-icon">🚌</span>
   <span class="brand-text">JakDojade<strong>Jasło</strong></span>
 </div>
 
-<!-- Map Container -->
 <div id="map"></div>

@@ -1,0 +1,93 @@
+<div class="search-overlay">
+  <div class="search-container" [class.search-open]="open()">
+    <div class="search-bar">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="11" cy="11" r="8"/>
+        <path d="m21 21-4.3-4.3"/>
+      </svg>
+      <input
+        id="stop-search-input"
+        type="text"
+        placeholder="Szukaj przystanku…"
+        aria-label="Szukaj przystanku"
+        [value]="query()"
+        (input)="onInput($any($event.target).value)"
+        (focus)="open.set(true)"
+        autocomplete="off"
+      />
+      @if (query()) {
+        <button type="button" class="clear-btn" (click)="clear()" aria-label="Wyczyść">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      }
+    </div>
+
+    @if (open() && hasQuery()) {
+      @if (results().length > 0) {
+        <ul class="search-results">
+          @for (stop of results(); track stop.id) {
+            <ng-container *ngTemplateOutlet="stopRow; context: { $implicit: stop }"></ng-container>
+          }
+        </ul>
+      } @else {
+        <div class="search-empty">
+          <span>Nie znaleziono przystanku „{{ query() }}"</span>
+        </div>
+      }
+    }
+
+    <!-- Empty query: favourite and recently viewed stops -->
+    @if (open() && !hasQuery()) {
+      @if (favorites.favoriteStops().length > 0 || favorites.recentStops().length > 0) {
+        <div class="quick-lists">
+          @if (favorites.favoriteStops().length > 0) {
+            <div class="list-heading">★ Ulubione</div>
+            <ul class="search-results">
+              @for (stop of favorites.favoriteStops(); track stop.id) {
+                <ng-container *ngTemplateOutlet="stopRow; context: { $implicit: stop }"></ng-container>
+              }
+            </ul>
+          }
+          @if (favorites.recentStops().length > 0) {
+            <div class="list-heading">Ostatnio oglądane</div>
+            <ul class="search-results">
+              @for (stop of favorites.recentStops(); track stop.id) {
+                <ng-container *ngTemplateOutlet="stopRow; context: { $implicit: stop }"></ng-container>
+              }
+            </ul>
+          }
+        </div>
+      } @else {
+        <div class="search-empty">
+          <span>Dodaj przystanek do ulubionych gwiazdką ☆ w jego okienku z odjazdami.</span>
+        </div>
+      }
+    }
+
+    <ng-template #stopRow let-stop>
+      <li (click)="select(stop)">
+        <svg class="result-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20" aria-hidden="true">
+          <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+        <div class="result-text">
+          <span class="result-name">{{ stop.name }}</span>
+          @if (stop.onlyDisembarking) {
+            <span class="result-badge">Tylko wysiadanie</span>
+          }
+        </div>
+        <button type="button" class="row-fav" [class.active]="favorites.isFavorite(stop.id)"
+                [attr.aria-pressed]="favorites.isFavorite(stop.id)"
+                [attr.aria-label]="favorites.isFavorite(stop.id) ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'"
+                (click)="toggleFavorite(stop, $event)">
+          {{ favorites.isFavorite(stop.id) ? '★' : '☆' }}
+        </button>
+      </li>
+    </ng-template>
+  </div>
+
+  <!-- When: now or a chosen date & time -->
+  <app-time-picker class="map-time-picker" variant="chip"></app-time-picker>
+</div>

@@ -1,0 +1,25 @@
+<div class="input-group">
+  <label [for]="inputId">{{ label() }}</label>
+  <div class="input-with-actions">
+    <input
+      [id]="inputId"
+      type="text"
+      [placeholder]="placeholder()"
+      [value]="text()"
+      (input)="onInput($any($event.target).value)"
+      (focus)="open.set(true)"
+      autocomplete="off"
+    />
+    <ng-content />
+  </div>
+  @if (open() && suggestions().length > 0) {
+    <ul class="suggestion-list">
+      @for (stop of suggestions(); track stop.id) {
+        <li (click)="pick(stop)">
+          @if (favorites.isFavorite(stop.id)) { <span class="suggestion-fav">★</span> }
+          {{ stop.name }}
+        </li>
+      }
+    </ul>
+  }
+</div>

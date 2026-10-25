@@ -1,0 +1,224 @@
+// Route planner side panel
+
+// ─── Sidebar Planner UI ──────────────────────
+.planner-sidebar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 440px;
+  z-index: 999;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  box-shadow: 4px 0 32px rgba(0, 0, 0, 0.08);
+  border-right: 1px solid rgba(241, 245, 249, 0.8);
+  display: flex;
+  flex-direction: column;
+  padding: 80px 20px 20px;
+  overflow-y: auto;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding-top: 90px;
+  }
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.sidebar-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  letter-spacing: -0.02em;
+}
+
+.clear-all-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+
+  &:hover {
+    color: #ef4444;
+  }
+}
+
+.inputs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+
+  label, .group-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    letter-spacing: 0.05em;
+  }
+}
+
+
+.map-pick-btn, .my-location-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+  }
+
+  &.picking {
+    background: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+    animation: pulse-picker 1.5s infinite;
+  }
+}
+
+@keyframes pulse-picker {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.swap-btn {
+  align-self: center;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    transform: rotate(180deg) scale(1.05);
+    background: #f8fafc;
+  }
+}
+
+
+.search-routes-btn {
+  height: 44px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+  transition: all 0.2s;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.3);
+  }
+
+  &:disabled {
+    background: #cbd5e1;
+    color: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+}
+
+// Picking hint overlay
+.picking-hint {
+  background: rgba(239, 68, 68, 0.9);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 12px;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+// ─── Results Containers ──────────────────────
+.results-container {
+  margin-top: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.results-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 20px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+
+.results-header {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.connection-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+
+.results-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.location-error {
+  margin-top: -8px;
+  font-size: 12px;
+  color: #dc2626;
+}
+
+.my-location-btn.busy {
+  opacity: 0.6;
+  cursor: progress;
+}
